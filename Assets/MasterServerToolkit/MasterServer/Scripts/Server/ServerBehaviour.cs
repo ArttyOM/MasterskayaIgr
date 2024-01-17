@@ -822,7 +822,7 @@ namespace MasterServerToolkit.MasterServer
             var xs = new System.Xml.Serialization.XmlSerializer(typeof(RSAParameters));
             var clientsPublicKey = (RSAParameters) xs.Deserialize(sr);
 
-            var encryptedAes = await Task.Run(() =>
+            byte[] encryptedAes = await Task.Run(() =>
             {
                 using (var csp = new RSACryptoServiceProvider())
                 {
