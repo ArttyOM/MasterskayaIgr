@@ -5,6 +5,7 @@
         Menu = 0,
         Defeat = 1,
         Victory = 2,
-        LevelSelector = 3
+        LevelSelector = 3,
+        PreparationForTheGame = 4,
     }
 }
