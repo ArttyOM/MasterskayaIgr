@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Code.DebugTools.Logger;
+using Code.Enemies;
 using Code.Events;
 using Code.GameLoop;
 using Code.HUD;
@@ -23,6 +24,9 @@ namespace Code.Main
 {
     public class LevelEntryPoint : MonoBehaviour
     {
+        [SerializeField] private CommonEnemy _commonEnemyPrefab;
+        [SerializeField] private float _moveSpeed = 1f;
+        
         private ScreenSwitcher _screenSwitcher;
         private InGameEvents _events;
         private int _sceneIndex;
@@ -36,7 +40,8 @@ namespace Code.Main
         private LoseScreenActivator _loseScreenActivator;
         private WinScreenActivator _winScreenActivator;
 
-
+        private CommonEnemyMover _commonEnemyMover;
+        
         public async UniTask Init(InGameEvents events, ScreenSwitcher screenSwitcher, int sceneIndex)
         {
             ">>LevelEntryPoint.Init".Colored(Color.red).Log();
@@ -56,6 +61,8 @@ namespace Code.Main
 
             _screenSwitcher.ReInit();
             _screenSwitcher.ShowScreen(ScreenType.PreparationForTheGame);
+
+            _commonEnemyMover = new CommonEnemyMover(_commonEnemyPrefab, _moveSpeed);
 
             InitButtons();
             InitScreenActivators();
@@ -91,6 +98,7 @@ namespace Code.Main
             ">>LevelEntryPoint OnDestroy".Log();
             _loseScreenActivator?.Dispose();
             _winScreenActivator?.Dispose();
+            _commonEnemyMover?.Dispose();
         }
 
         private void InitButtons()
