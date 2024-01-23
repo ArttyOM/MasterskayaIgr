@@ -55,6 +55,7 @@ namespace Code.Main
             _screenSwitcher = screenSwitcher;
 
             _screenSwitcher.ReInit();
+            _screenSwitcher.ShowScreen(ScreenType.PreparationForTheGame);
 
             InitButtons();
             InitScreenActivators();
