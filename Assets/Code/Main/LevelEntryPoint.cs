@@ -18,7 +18,7 @@ using Unity.VisualScripting;
 using UnityEngine.EventSystems;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
-
+using Code.Wall;
 
 namespace Code.Main
 {
@@ -26,7 +26,9 @@ namespace Code.Main
     {
         [SerializeField] private CommonEnemy _commonEnemyPrefab;
         [SerializeField] private float _moveSpeed = 1f;
-        
+
+        [SerializeField] private CommonWall _commonWall;
+
         private ScreenSwitcher _screenSwitcher;
         private InGameEvents _events;
         private int _sceneIndex;
@@ -41,6 +43,7 @@ namespace Code.Main
         private WinScreenActivator _winScreenActivator;
 
         private CommonEnemyMover _commonEnemyMover;
+
         
         public async UniTask Init(InGameEvents events, ScreenSwitcher screenSwitcher, int sceneIndex)
         {
@@ -63,6 +66,8 @@ namespace Code.Main
             _screenSwitcher.ShowScreen(ScreenType.PreparationForTheGame);
 
             _commonEnemyMover = new CommonEnemyMover(_commonEnemyPrefab, _moveSpeed);
+
+            _commonWall.WallStopper(_commonEnemyPrefab);
 
             InitButtons();
             InitScreenActivators();
