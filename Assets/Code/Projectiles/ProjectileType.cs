@@ -2,8 +2,11 @@
 {
     public enum ProjectileType
     {
-        Tire,
+        Bottle,
         Sneaker,
-        DeadBeaver
+        Beaver,
+        Propeller,
+        Container,
+        Tire,
     }
 }
