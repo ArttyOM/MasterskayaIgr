@@ -11,17 +11,6 @@ namespace Code.Projectiles
 {
     public class WeaponRandomGenerator: IDisposable
     {
-        private readonly Dictionary<ProjectileType, WeaponPool> _weaponPools = new();
-        private readonly WeaponSpawnChanceConfig _weaponSpawnChanceConfig;
-
-        private readonly IDisposable _onNextWeaponSubsctiption;
-
-        private readonly NextWeaponSpawnPoint _nextWeaponSpawnPoint;
-        private readonly CurrentWeaponSpawnPoint _currentWeaponSpawnPoint;
-
-        private Weapon _currentWeapon;
-        private Weapon _nextWeapon;
-        
         public WeaponRandomGenerator(WeaponSpawnChanceConfig weaponSpawnChanceConfig)
         {
             _nextWeaponSpawnPoint = Object.FindObjectOfType<NextWeaponSpawnPoint>();
@@ -34,6 +23,17 @@ namespace Code.Projectiles
                 .Where(_ => Input.GetKeyUp(KeyCode.Space))
                 .Subscribe(_ => GenerateWeapon());
         }
+        
+        private readonly Dictionary<ProjectileType, WeaponPool> _weaponPools = new();
+        private readonly WeaponSpawnChanceConfig _weaponSpawnChanceConfig;
+
+        private readonly IDisposable _onNextWeaponSubsctiption;
+
+        private readonly NextWeaponSpawnPoint _nextWeaponSpawnPoint;
+        private readonly CurrentWeaponSpawnPoint _currentWeaponSpawnPoint;
+
+        private Weapon _currentWeapon;
+        private Weapon _nextWeapon;
         
         
         public void Dispose()
@@ -61,8 +61,6 @@ namespace Code.Projectiles
             ProjectileType typeOfWeapon = GenarateRandomNextWeapon();
             _nextWeapon = _weaponPools[typeOfWeapon].Rent();
             _nextWeapon.transform.position = _nextWeaponSpawnPoint.transform.position;
-
-            
         }
 
         private ProjectileType GenarateRandomNextWeapon()

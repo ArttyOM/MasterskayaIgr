@@ -12,16 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60ff132a359b419dab97dedf525faf30, type: 3}
   m_Name: BaseWeaponConfig
   m_EditorClassIdentifier: 
-  weaponPriorityPair:
+  weaponPriorityPairs:
   - weaponPrefab: {fileID: -170878560710270974, guid: 6949b9a72198da3429707be74dc05497, type: 3}
     priority: 1
   - weaponPrefab: {fileID: 3713656484832161140, guid: 4eb3bcabc0e21cb45b901f05ff224958, type: 3}
     priority: 1
   - weaponPrefab: {fileID: 3713656484832161140, guid: d3f048526bca6a742bbd41bf8368254c, type: 3}
     priority: 1
-  - weaponPrefab: {fileID: 3713656484832161140, guid: b6d58a919b8673249bb2ecb63d0e0251, type: 3}
-    priority: 1
   - weaponPrefab: {fileID: 3713656484832161140, guid: d9a9eea7cdb3ddd489b4c5ea37e4a452, type: 3}
+    priority: 1
+  - weaponPrefab: {fileID: 3713656484832161140, guid: b6d58a919b8673249bb2ecb63d0e0251, type: 3}
     priority: 1
   - weaponPrefab: {fileID: 3713656484832161140, guid: 61ad9fddca0261e449ee0c343736adc6, type: 3}
     priority: 1

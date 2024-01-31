@@ -10,6 +10,7 @@ using Code.GameLoop;
 using Code.HUD;
 using Code.HUD.ScreenActivators;
 using Code.Projectiles;
+using Code.Spells;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -26,10 +27,13 @@ namespace Code.Main
     public class LevelEntryPoint : MonoBehaviour
     {
         [SerializeField] private WeaponSpawnChanceConfig _weaponSpawnChanceConfig;
+        [SerializeField] private SpellsConfig _spellsConfig;
         [SerializeField] private CommonEnemy _commonEnemyPrefab;
         [SerializeField] private float _moveSpeed = 1f;
 
         private WeaponRandomGenerator _weaponRandomGenerator;
+        private SpellVfxGenerator _spellVfxGenerator;
+        
         private ScreenSwitcher _screenSwitcher;
         private InGameEvents _events;
         private int _sceneIndex;
@@ -50,6 +54,7 @@ namespace Code.Main
             ">>LevelEntryPoint.Init".Colored(Color.red).Log();
 
             _weaponRandomGenerator = new WeaponRandomGenerator(_weaponSpawnChanceConfig);
+            _spellVfxGenerator = new SpellVfxGenerator(_spellsConfig, _events.OnSpellSelected);
             
             var eventSystem = FindObjectOfType<EventSystem>();
             if (eventSystem is null)
@@ -109,6 +114,11 @@ namespace Code.Main
 
         private void InitButtons()
         {
+            var spellButtons = Object.FindObjectsOfType<UISelectSpellButton>(true)
+                .AsEnumerable();
+            if (spellButtons != null)
+                spellButtons.ToUniTaskAsyncEnumerable()
+                    .ForEachAsync(x => x.Init(_events.OnSpellSelected));
         }
 
 

@@ -1,5 +1,6 @@
 using System;
 using Code.GameLoop;
+using Code.Spells;
 using UniRx;
 using UnityEngine;
 
@@ -17,6 +18,7 @@ namespace Code.Events
         public readonly Subject<Unit> OnLevelSelection = new();
 
         public readonly Subject<LevelEndResult> OnLevelEnd = new();
+        public readonly Subject<SpellType> OnSpellSelected = new();
 
 
         public void Dispose()

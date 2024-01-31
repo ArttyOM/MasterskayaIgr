@@ -12,7 +12,6 @@ namespace Code.Projectiles
         /// prioriy = 0 - не спаунить совсем
         /// чем выше prioriy, тем выше вероятность спауна по сравнению с остальными айтемами 
         /// </summary>
-        [FormerlySerializedAs("weaponPriorityPair")]
         [Tooltip("чем выше prioriy, тем выше вероятность спауна по сравнению с остальными айтемами")]
         [SerializeField] public List<WeaponSpawnPriorityPair> weaponPriorityPairs;
     }
