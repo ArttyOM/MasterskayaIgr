@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
+﻿using System.Linq;
 using Code.DebugTools.Logger;
 using Code.Enemies;
 using Code.Events;
@@ -16,7 +12,6 @@ using UnityEngine;
 using Object = UnityEngine.Object;
 using Cysharp.Threading.Tasks.Linq;
 using UniRx;
-using Unity.VisualScripting;
 using UnityEngine.EventSystems;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
@@ -33,7 +28,8 @@ namespace Code.Main
 
         private WeaponRandomGenerator _weaponRandomGenerator;
         private SpellVfxGenerator _spellVfxGenerator;
-        
+        private GridPointSelector _gridPointSelector;
+
         private ScreenSwitcher _screenSwitcher;
         private InGameEvents _events;
         private int _sceneIndex;
@@ -53,6 +49,7 @@ namespace Code.Main
         {
             ">>LevelEntryPoint.Init".Colored(Color.red).Log();
 
+            _gridPointSelector = new();
             _weaponRandomGenerator = new WeaponRandomGenerator(_weaponSpawnChanceConfig);
             _spellVfxGenerator = new SpellVfxGenerator(_spellsConfig, _events.OnSpellSelected);
             
@@ -110,6 +107,9 @@ namespace Code.Main
             _winScreenActivator?.Dispose();
             _commonEnemyMover?.Dispose();
             _weaponRandomGenerator?.Dispose();
+            
+            _gridPointSelector?.Dispose();
+            _spellVfxGenerator?.Dispose();
         }
 
         private void InitButtons()

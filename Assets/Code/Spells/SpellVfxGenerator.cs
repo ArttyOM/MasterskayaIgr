@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Code.Projectiles;
+using GameAnalyticsSDK.Setup;
 using UniRx;
 using UnityEngine;
 
@@ -46,6 +47,7 @@ namespace Code.Spells
                 .FindObjectOfType<CurrentWeaponSpawnPoint>().transform.position;
             newPosition.x += 3f;
             vfx.transform.position = newPosition;
+
         }
     }
 }

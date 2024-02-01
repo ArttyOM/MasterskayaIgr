@@ -60,7 +60,9 @@ namespace Code.Projectiles
 
             ProjectileType typeOfWeapon = GenarateRandomNextWeapon();
             _nextWeapon = _weaponPools[typeOfWeapon].Rent();
+            
             _nextWeapon.transform.position = _nextWeaponSpawnPoint.transform.position;
+
         }
 
         private ProjectileType GenarateRandomNextWeapon()
