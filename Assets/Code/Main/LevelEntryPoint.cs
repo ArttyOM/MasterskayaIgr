@@ -1,4 +1,8 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using Code.DebugTools.Logger;
 using Code.Enemies;
 using Code.Events;
@@ -12,6 +16,7 @@ using UnityEngine;
 using Object = UnityEngine.Object;
 using Cysharp.Threading.Tasks.Linq;
 using UniRx;
+using Unity.VisualScripting;
 using UnityEngine.EventSystems;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
@@ -114,6 +119,8 @@ namespace Code.Main
 
         private void InitButtons()
         {
+            var startSessionButton = FindObjectOfType<StartSessionButton>();
+            startSessionButton.Init(_events.OnSessionStart);
             var spellButtons = Object.FindObjectsOfType<UISelectSpellButton>(true)
                 .AsEnumerable();
             if (spellButtons != null)
