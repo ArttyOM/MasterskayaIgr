@@ -7,7 +7,7 @@ namespace Code.Enemies
 {
     public class CommonEnemyMover: IDisposable
     {
-        public CommonEnemyMover(CommonEnemy prefab, float moveSpeed, Subject<int> eventsSessionStart)
+        public CommonEnemyMover(CommonEnemy prefab, float moveSpeed, IObservable<int> eventsSessionStart)
         {
             _enemyPool = new CommonEnemyPool(prefab);
 
