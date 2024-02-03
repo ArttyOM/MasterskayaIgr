@@ -25,15 +25,24 @@ namespace Code.Enemies
 
         private List<Rigidbody2D> _enemiesRigidbody2Ds = new ();
         private float _moveSpeed;
+        private bool _is_active = false;
         
         private void Move()
         {
-            foreach (var rigidbody2D in _enemiesRigidbody2Ds)
+            if (_is_active)
             {
-                rigidbody2D.velocity = new Vector2(-_moveSpeed, 0f);
+                foreach (var rigidbody2D in _enemiesRigidbody2Ds)
+                {
+                    rigidbody2D.velocity = new Vector2(-_moveSpeed, 0f);
+                }
             }
         }
-        
+
+        public void Activate()
+        {
+            _is_active = true;
+        }
+
         public void Dispose()
         {
             _enemyPool.Dispose();
