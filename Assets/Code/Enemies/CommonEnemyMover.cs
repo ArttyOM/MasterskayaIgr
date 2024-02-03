@@ -7,7 +7,7 @@ namespace Code.Enemies
 {
     public class CommonEnemyMover: IDisposable
     {
-        public CommonEnemyMover(CommonEnemy prefab, float moveSpeed)
+        public CommonEnemyMover(CommonEnemy prefab, float moveSpeed, Subject<int> eventsSessionStart)
         {
             _enemyPool = new CommonEnemyPool(prefab);
 
@@ -18,9 +18,13 @@ namespace Code.Enemies
             }
 
             _moveSpeed = moveSpeed;
+                
+            _startSessionSubscription = eventsSessionStart.Subscribe(x => Activate());
             Observable.EveryFixedUpdate().Subscribe(x => Move());
         }
 
+        private IDisposable _startSessionSubscription;
+        
         private CommonEnemyPool _enemyPool;
 
         private List<Rigidbody2D> _enemiesRigidbody2Ds = new ();
@@ -38,14 +42,15 @@ namespace Code.Enemies
             }
         }
 
-        public void Activate()
+        private void Activate()
         {
             _is_active = true;
         }
 
         public void Dispose()
         {
-            _enemyPool.Dispose();
+            _enemyPool?.Dispose();
+            _startSessionSubscription?.Dispose();
         }
     }
 }
