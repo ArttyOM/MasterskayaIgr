@@ -41,7 +41,7 @@ namespace Code.Main
         private WinScreenActivator _winScreenActivator;
 
         private CommonEnemyMover _commonEnemyMover;
-        
+
         public async UniTask Init(InGameEvents events, ScreenSwitcher screenSwitcher, int sceneIndex)
         {
             ">>LevelEntryPoint.Init".Colored(Color.red).Log();
@@ -62,7 +62,7 @@ namespace Code.Main
             _screenSwitcher.ReInit();
             _screenSwitcher.ShowScreen(ScreenType.PreparationForTheGame);
 
-            _commonEnemyMover = new CommonEnemyMover(_commonEnemyPrefab, _moveSpeed);
+            _commonEnemyMover = new CommonEnemyMover(_commonEnemyPrefab, _moveSpeed, _events.OnSessionStart);
 
             InitButtons();
             InitScreenActivators();
@@ -103,6 +103,8 @@ namespace Code.Main
 
         private void InitButtons()
         {
+            var startSessionButton = FindObjectOfType<StartSessionButton>();
+            startSessionButton.Init(_events.OnSessionStart);
         }
 
 
