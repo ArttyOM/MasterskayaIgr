@@ -17,17 +17,17 @@ MonoBehaviour:
     spellVfxPrefab: {fileID: -122031665928744457, guid: 337a1ccd9e38b5843b5deb5833f953b8, type: 3}
     megaCastWeaponType: 0
   - spellType: 1
-    spellVfxPrefab: {fileID: 0}
+    spellVfxPrefab: {fileID: -122031665928744457, guid: 337a1ccd9e38b5843b5deb5833f953b8, type: 3}
     megaCastWeaponType: 1
   - spellType: 2
-    spellVfxPrefab: {fileID: 0}
+    spellVfxPrefab: {fileID: -122031665928744457, guid: 337a1ccd9e38b5843b5deb5833f953b8, type: 3}
     megaCastWeaponType: 4
   - spellType: 3
-    spellVfxPrefab: {fileID: 0}
+    spellVfxPrefab: {fileID: -122031665928744457, guid: 337a1ccd9e38b5843b5deb5833f953b8, type: 3}
     megaCastWeaponType: 2
   - spellType: 4
-    spellVfxPrefab: {fileID: 0}
+    spellVfxPrefab: {fileID: -122031665928744457, guid: 337a1ccd9e38b5843b5deb5833f953b8, type: 3}
     megaCastWeaponType: 5
   - spellType: 5
-    spellVfxPrefab: {fileID: 0}
+    spellVfxPrefab: {fileID: -122031665928744457, guid: 337a1ccd9e38b5843b5deb5833f953b8, type: 3}
     megaCastWeaponType: 3
