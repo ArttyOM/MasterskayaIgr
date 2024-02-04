@@ -34,6 +34,7 @@ namespace Code.Main
         private WeaponRandomGenerator _weaponRandomGenerator;
         private SpellVfxGenerator _spellVfxGenerator;
         private GridPointSelector _gridPointSelector;
+        private ProjectileThrower _projectileThrower;
 
         private ScreenSwitcher _screenSwitcher;
         private InGameEvents _events;
@@ -53,11 +54,12 @@ namespace Code.Main
         public async UniTask Init(InGameEvents events, ScreenSwitcher screenSwitcher, int sceneIndex)
         {
             ">>LevelEntryPoint.Init".Colored(Color.red).Log();
-
-            _gridPointSelector = new();
+            
             _weaponRandomGenerator = new WeaponRandomGenerator(_weaponSpawnChanceConfig, _events.OnSpellSelected, _events.OnSessionStart);
             _spellVfxGenerator = new SpellVfxGenerator(_spellsConfig, _events.OnSpellSelected, _events.OnSessionStart);
-            
+            _gridPointSelector = new(_events.OnProjectileDestinationSelected);
+            _projectileThrower = new(_events.OnProjectileDestinationSelected);
+
             var eventSystem = FindObjectOfType<EventSystem>();
             if (eventSystem is null)
             {
@@ -115,6 +117,7 @@ namespace Code.Main
             
             _gridPointSelector?.Dispose();
             _spellVfxGenerator?.Dispose();
+            _projectileThrower?.Dispose();
         }
 
         private void InitButtons()

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Code.DebugTools.Logger;
+using GameAnalyticsSDK.Setup;
 using UniRx;
 using UnityEngine;
 
@@ -8,13 +9,18 @@ namespace Code.Projectiles
 {
     public class GridPointSelector:IDisposable
     {
-        public GridPointSelector()
+        public GridPointSelector(IObserver<(Vector2Int,Vector3)> onCursorInactive)
         {
+            _playZoneCollider = GameObject.FindObjectOfType<PlayZone>().GetCollider;
+            _camera = Camera.main;
+
+            _onCursorInactive = onCursorInactive;
+            
             _grid = GameObject.FindObjectOfType<Grid>();
             _aimCursor = GameObject.FindObjectOfType<AimCursor>();
             
             _onGetMouseButtonDownSubscription = Observable.EveryUpdate()
-                .Where(_ => Input.GetMouseButtonDown(0))
+                .Where(_ => Input.GetMouseButtonDown(0) && _playZoneCollider.OverlapPoint(_camera.ScreenToWorldPoint(Input.mousePosition)))
                 .Subscribe(_ => SetCursorActive());
 
             _onGetMouseButtonPressedSubscription = Observable.EveryUpdate()
@@ -45,6 +51,8 @@ namespace Code.Projectiles
 
         private static readonly Vector2Int _nonActivePosition = new Vector2Int(-100, -100);
 
+        private readonly IObserver<(Vector2Int gridCoords, Vector3 worldCoords)> _onCursorInactive; 
+
         private readonly IDisposable _onGetMouseButtonUpSubscription;
         private readonly IDisposable _onGetMouseButtonDownSubscription;
         private readonly IDisposable _onGetMouseButtonPressedSubscription;
@@ -54,7 +62,11 @@ namespace Code.Projectiles
         
         private readonly AimCursor _aimCursor;
 
+        private readonly Collider2D _playZoneCollider;
+
         private bool _isCursorActive = false;
+
+        private readonly Camera _camera;
         
         public void Dispose()
         {
@@ -75,6 +87,16 @@ namespace Code.Projectiles
         {
             _isCursorActive = false;
             _aimCursor.Hide();
+            if (_mouseGridPosition.Value != _nonActivePosition && 
+                _playZoneCollider.OverlapPoint(_camera.ScreenToWorldPoint(Input.mousePosition)))
+            {
+                
+                var worldPosition = GetWorldPosition(_mouseGridPosition.Value);
+                _onCursorInactive.OnNext((_mouseGridPosition.Value, worldPosition));
+                $"_mouseGridPosition.Value = {_mouseGridPosition.Value}, GetWorldPosition(_mouseGridPosition.Value))= {worldPosition}".Colored(Color.cyan).Log();
+
+            }
+ 
             _mouseGridPosition.Value = _nonActivePosition;
         }
 
@@ -90,7 +112,7 @@ namespace Code.Projectiles
         
         private Vector2Int GetMouseGridCoords()
         {
-            Vector3 pointerPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector3 pointerPosition = _camera.ScreenToWorldPoint(Input.mousePosition);
             pointerPosition.z = 0f;
             //$"Позиция на сетке: {_grid.WorldToCell(pointerPosition).ToString()}".Colored(Color.cyan).Log();
             Vector3Int result = _grid.WorldToCell(pointerPosition);

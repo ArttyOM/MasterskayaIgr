@@ -21,6 +21,7 @@ namespace Code.Events
 
         public readonly Subject<LevelEndResult> OnLevelEnd = new();
         public readonly Subject<SpellType> OnSpellSelected = new();
+        public readonly Subject<(Vector2Int, Vector3)> OnProjectileDestinationSelected =  new();
 
 
         public void Dispose()

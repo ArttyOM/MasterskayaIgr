@@ -66,7 +66,6 @@ namespace Code.Projectiles
             _nextWeapon = _weaponPools[typeOfWeapon].Rent();
             
             _nextWeapon.transform.position = _nextWeaponSpawnPoint.transform.position;
-
         }
 
         private ProjectileType GenarateRandomNextWeapon()
@@ -103,6 +102,7 @@ namespace Code.Projectiles
                     _weaponPools[_currentWeapon.GetProjectileType].Return(_currentWeapon);
                 }
                 _currentWeapon = _nextWeapon;
+                _currentWeapon.transform.SetParent(_currentWeaponSpawnPoint.transform);
                 _currentWeapon.transform.DOMove(_currentWeaponSpawnPoint.transform.position, 0.4f);
             }
         }

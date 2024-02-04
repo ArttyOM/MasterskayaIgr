@@ -12,6 +12,8 @@ namespace Code.Spells
         public SpellVfxGenerator(SpellsConfig spellsConfig, IObservable<SpellType> onSpellSelected,
             IObservable<int> eventsSessionStart)
         {
+            _currentWeaponSpawnPoint = GameObject
+                .FindObjectOfType<CurrentWeaponSpawnPoint>();
             CreatePools(spellsConfig);
             
             _onSpellSelectedSubsctiption = onSpellSelected.SkipUntil(eventsSessionStart).Subscribe(ApplyVfxToCurrentItem);
@@ -21,8 +23,7 @@ namespace Code.Spells
 
         private readonly Dictionary<SpellType, SpellPool> _spellPools = new();
 
-        private Weapon _currentWeapon;
-        private Weapon _nextWeapon;
+        private readonly CurrentWeaponSpawnPoint _currentWeaponSpawnPoint;
 
         private void CreatePools(SpellsConfig spellsConfig)
         {
@@ -44,11 +45,13 @@ namespace Code.Spells
         private void ApplyVfxToCurrentItem(SpellType spellType)
         {
             var vfx = _spellPools[spellType].Rent();
-            Vector3 newPosition = GameObject
-                .FindObjectOfType<CurrentWeaponSpawnPoint>().transform.position;
+
+            var spawnPointTransform = _currentWeaponSpawnPoint.transform;
+            Vector3 newPosition = spawnPointTransform.position;
             newPosition.x += 3f;
             vfx.transform.position = newPosition;
-
+            vfx.transform.SetParent(spawnPointTransform);
+            
         }
     }
 }
