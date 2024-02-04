@@ -74,7 +74,7 @@ namespace Code.Main
             _screenSwitcher.ReInit();
             _screenSwitcher.ShowScreen(ScreenType.PreparationForTheGame);
 
-            _commonEnemyMover = new CommonEnemyMover(_commonEnemyPrefab, _moveSpeed);
+            _commonEnemyMover = new CommonEnemyMover(_commonEnemyPrefab, _moveSpeed, _events.OnSessionStart);
 
             InitButtons();
             InitScreenActivators();

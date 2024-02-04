@@ -18,16 +18,14 @@ namespace Code.Projectiles
 
         public void ShowOnPosition(Vector3 position)
         {
-            if (_spriteRenderer.enabled)
-            {
-                _thisTransform.DOMove(position,0.3f);
-            }
-            else
-            {
-                _thisTransform.position = position;
-            }
+            _thisTransform.position = position;
             _spriteRenderer.enabled = true;
             
+        }
+
+        public void MoveToPosition(Vector3 position)
+        {
+            _thisTransform.DOMove(position,0.3f);
         }
 
 
