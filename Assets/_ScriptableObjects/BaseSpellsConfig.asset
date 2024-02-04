@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a893bfc629745fa8d10d8b256891948, type: 3}
+  m_Name: BaseSpellsConfig
+  m_EditorClassIdentifier: 
+  spellConfigs:
+  - spellType: 0
+    spellVfxPrefab: {fileID: -122031665928744457, guid: 337a1ccd9e38b5843b5deb5833f953b8, type: 3}
+    megaCastWeaponType: 0
+  - spellType: 1
+    spellVfxPrefab: {fileID: 5609960483709638669, guid: 21391bceaa9a816429630977e3b55c28, type: 3}
+    megaCastWeaponType: 1
+  - spellType: 2
+    spellVfxPrefab: {fileID: 5609960483709638669, guid: a3e21cd76300bd14a9417a7cb4fa88e4, type: 3}
+    megaCastWeaponType: 4
+  - spellType: 3
+    spellVfxPrefab: {fileID: 5609960483709638669, guid: 9c27a5cee3a2e4f49af3e54b70c5adda, type: 3}
+    megaCastWeaponType: 2
+  - spellType: 4
+    spellVfxPrefab: {fileID: 5609960483709638669, guid: 9636d70099ccc6c44819ae7c3022f7b5, type: 3}
+    megaCastWeaponType: 5
+  - spellType: 5
+    spellVfxPrefab: {fileID: 5609960483709638669, guid: 8b259a373bc75d540b1cab1f0838b4fd, type: 3}
+    megaCastWeaponType: 3
