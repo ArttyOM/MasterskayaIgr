@@ -38,7 +38,9 @@ namespace Code.Projectiles
 
         private Weapon _currentWeapon;
         private Weapon _nextWeapon;
-        
+
+
+        public IReadOnlyDictionary<ProjectileType, WeaponPool> GetWeaponPools => _weaponPools;
         
         public void Dispose()
         {

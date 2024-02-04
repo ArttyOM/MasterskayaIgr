@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Code.DebugTools.Logger;
 using Code.Spells;
 using DG.Tweening;
@@ -9,8 +10,13 @@ namespace Code.Projectiles
 {
     public class ProjectileThrower: IDisposable
     {
-        public ProjectileThrower(IObservable<(Vector2Int, Vector3)> eventsProjectileDestinationSelected)
+        private readonly IReadOnlyDictionary<ProjectileType, WeaponPool> _weaponPools;
+        private readonly IReadOnlyDictionary<SpellType, SpellPool> _spellPools;
+
+        public ProjectileThrower(Subject<(Vector2Int, Vector3)> eventsProjectileDestinationSelected, IReadOnlyDictionary<ProjectileType, WeaponPool> weaponPools, IReadOnlyDictionary<SpellType, SpellPool> spellPools)
         {
+            _weaponPools = weaponPools;
+            _spellPools = spellPools;
             _projectilePool = new();
             
             _spawnPoint = GameObject.FindObjectOfType<CurrentWeaponSpawnPoint>();
@@ -19,11 +25,10 @@ namespace Code.Projectiles
                 .Throttle(TimeSpan.FromMilliseconds(300f))
                 .Subscribe(x => BuildProjectileThenThrow(x));
         }
-
+        
         private readonly IDisposable _onFireSubsctription;
         private readonly CurrentWeaponSpawnPoint _spawnPoint;
         private readonly ProjectilePool _projectilePool;
-
 
         public void Dispose()
         {
@@ -44,7 +49,12 @@ namespace Code.Projectiles
             spell.transform.SetParent(currentProjectile.transform, true);
 
             $"destination worlposition = {destinationPoint.worldPosition}".Colored(Color.cyan).Log();
-            currentProjectile.transform.DOMove(destinationPoint.worldPosition, 0.3f);
+            currentProjectile.transform.DOMove(destinationPoint.worldPosition, 0.3f).OnComplete(() =>
+            {
+                "Выстрел совершен".Colored(Color.cyan).Log();
+                _weaponPools[weapon.GetProjectileType].Return(weapon);
+                _spellPools[spell.GetSpellType].Return(spell);
+            });
         }
     }
 }

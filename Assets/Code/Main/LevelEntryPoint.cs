@@ -58,7 +58,10 @@ namespace Code.Main
             _weaponRandomGenerator = new WeaponRandomGenerator(_weaponSpawnChanceConfig, _events.OnSpellSelected, _events.OnSessionStart);
             _spellVfxGenerator = new SpellVfxGenerator(_spellsConfig, _events.OnSpellSelected, _events.OnSessionStart);
             _gridPointSelector = new(_events.OnProjectileDestinationSelected);
-            _projectileThrower = new(_events.OnProjectileDestinationSelected);
+            
+            var weaponPools = _weaponRandomGenerator.GetWeaponPools;
+            var spellPools = _spellVfxGenerator.GetSpellPools;
+            _projectileThrower = new(_events.OnProjectileDestinationSelected, weaponPools, spellPools);
 
             var eventSystem = FindObjectOfType<EventSystem>();
             if (eventSystem is null)

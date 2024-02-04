@@ -25,6 +25,13 @@ namespace Code.Spells
 
         private readonly CurrentWeaponSpawnPoint _currentWeaponSpawnPoint;
 
+        public IReadOnlyDictionary<SpellType, SpellPool> GetSpellPools => _spellPools;
+
+        public void Dispose()
+        {
+            _onSpellSelectedSubsctiption?.Dispose();
+        }
+        
         private void CreatePools(SpellsConfig spellsConfig)
         {
             Spell prefab;
@@ -35,11 +42,6 @@ namespace Code.Spells
                 spellType = spellConfig.spellType;
                 _spellPools.Add(spellType, new SpellPool(prefab));
             }
-        }
-        
-        public void Dispose()
-        {
-            _onSpellSelectedSubsctiption?.Dispose();
         }
 
         private void ApplyVfxToCurrentItem(SpellType spellType)
