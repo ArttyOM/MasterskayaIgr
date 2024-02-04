@@ -55,8 +55,8 @@ namespace Code.Main
             ">>LevelEntryPoint.Init".Colored(Color.red).Log();
 
             _gridPointSelector = new();
-            _weaponRandomGenerator = new WeaponRandomGenerator(_weaponSpawnChanceConfig);
-            _spellVfxGenerator = new SpellVfxGenerator(_spellsConfig, _events.OnSpellSelected);
+            _weaponRandomGenerator = new WeaponRandomGenerator(_weaponSpawnChanceConfig, _events.OnSpellSelected, _events.OnSessionStart);
+            _spellVfxGenerator = new SpellVfxGenerator(_spellsConfig, _events.OnSpellSelected, _events.OnSessionStart);
             
             var eventSystem = FindObjectOfType<EventSystem>();
             if (eventSystem is null)

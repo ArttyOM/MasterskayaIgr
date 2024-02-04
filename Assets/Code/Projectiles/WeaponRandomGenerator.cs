@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Code.DebugTools.Logger;
+using Code.Spells;
 using DG.Tweening;
 using UniRx;
 using UnityEngine;
@@ -11,7 +12,8 @@ namespace Code.Projectiles
 {
     public class WeaponRandomGenerator: IDisposable
     {
-        public WeaponRandomGenerator(WeaponSpawnChanceConfig weaponSpawnChanceConfig)
+        public WeaponRandomGenerator(WeaponSpawnChanceConfig weaponSpawnChanceConfig,
+            IObservable<SpellType> onSpellSelected, IObservable<int> eventsSessionStart)
         {
             _nextWeaponSpawnPoint = Object.FindObjectOfType<NextWeaponSpawnPoint>();
             _currentWeaponSpawnPoint = Object.FindObjectOfType<CurrentWeaponSpawnPoint>();
@@ -19,15 +21,17 @@ namespace Code.Projectiles
             _weaponSpawnChanceConfig = weaponSpawnChanceConfig;
             CreatePools(weaponSpawnChanceConfig);
 
-            _onNextWeaponSubsctiption = Observable.EveryUpdate()
-                .Where(_ => Input.GetKeyUp(KeyCode.Space))
+            GenerateWeapon();
+            _onNextWeaponSubsctiption = onSpellSelected
+                .SkipUntil(eventsSessionStart)
                 .Subscribe(_ => GenerateWeapon());
+
         }
         
         private readonly Dictionary<ProjectileType, WeaponPool> _weaponPools = new();
         private readonly WeaponSpawnChanceConfig _weaponSpawnChanceConfig;
 
-        private readonly IDisposable _onNextWeaponSubsctiption;
+        private IDisposable _onNextWeaponSubsctiption;
 
         private readonly NextWeaponSpawnPoint _nextWeaponSpawnPoint;
         private readonly CurrentWeaponSpawnPoint _currentWeaponSpawnPoint;

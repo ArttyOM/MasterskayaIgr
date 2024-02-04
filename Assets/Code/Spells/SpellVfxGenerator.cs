@@ -9,11 +9,12 @@ namespace Code.Spells
 {
     public class SpellVfxGenerator: IDisposable
     {
-        public SpellVfxGenerator(SpellsConfig spellsConfig, IObservable<SpellType> onSpellSelected)
+        public SpellVfxGenerator(SpellsConfig spellsConfig, IObservable<SpellType> onSpellSelected,
+            IObservable<int> eventsSessionStart)
         {
             CreatePools(spellsConfig);
             
-            _onSpellSelectedSubsctiption = onSpellSelected.Subscribe(ApplyVfxToCurrentItem);
+            _onSpellSelectedSubsctiption = onSpellSelected.SkipUntil(eventsSessionStart).Subscribe(ApplyVfxToCurrentItem);
         }
 
         private IDisposable _onSpellSelectedSubsctiption;
