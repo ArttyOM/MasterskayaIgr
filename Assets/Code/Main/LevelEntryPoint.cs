@@ -48,6 +48,7 @@ namespace Code.Main
 
         private LoseScreenActivator _loseScreenActivator;
         private WinScreenActivator _winScreenActivator;
+        private SpellsPanelActivator _spellsPanelActivator;
 
         private CommonEnemyMover _commonEnemyMover;
         
@@ -56,7 +57,7 @@ namespace Code.Main
             ">>LevelEntryPoint.Init".Colored(Color.red).Log();
             
             _weaponRandomGenerator = new WeaponRandomGenerator(_weaponSpawnChanceConfig, _events.OnSpellSelected, _events.OnSessionStart);
-            _spellVfxGenerator = new SpellVfxGenerator(_spellsConfig, _events.OnSpellSelected, _events.OnSessionStart);
+            _spellVfxGenerator = new SpellVfxGenerator(_spellsConfig, _events.OnSpellSelected, _events.OnSessionStart, _events.OnProjectileDestinationSelected);
             _gridPointSelector = new(_events.OnProjectileDestinationSelected);
             
             var weaponPools = _weaponRandomGenerator.GetWeaponPools;
@@ -115,6 +116,8 @@ namespace Code.Main
             ">>LevelEntryPoint OnDestroy".Log();
             _loseScreenActivator?.Dispose();
             _winScreenActivator?.Dispose();
+            _spellsPanelActivator?.Dispose();
+            
             _commonEnemyMover?.Dispose();
             _weaponRandomGenerator?.Dispose();
             
@@ -137,8 +140,14 @@ namespace Code.Main
 
         private void InitScreenActivators()
         {
+            _loseScreenActivator?.Dispose();
             _loseScreenActivator = new LoseScreenActivator(_screenSwitcher, _events.OnLevelEnd);
+            _winScreenActivator?.Dispose();
             _winScreenActivator = new WinScreenActivator(_screenSwitcher, _events.OnLevelEnd);
+            
+            _spellsPanelActivator?.Dispose();
+            _spellsPanelActivator = new SpellsPanelActivator(_events.OnSessionStart, _events.OnSpellSelected, _events.OnProjectileDestinationSelected);
+
         }
     }
 }

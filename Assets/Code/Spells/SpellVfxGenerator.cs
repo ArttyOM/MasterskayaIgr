@@ -10,13 +10,15 @@ namespace Code.Spells
     public class SpellVfxGenerator: IDisposable
     {
         public SpellVfxGenerator(SpellsConfig spellsConfig, IObservable<SpellType> onSpellSelected,
-            IObservable<int> eventsSessionStart)
+            IObservable<int> eventsSessionStart, 
+            IObservable<(Vector2Int, Vector3)> eventsProjectileDestinationSelected)
         {
             _currentWeaponSpawnPoint = GameObject
                 .FindObjectOfType<CurrentWeaponSpawnPoint>();
             CreatePools(spellsConfig);
             
-            _onSpellSelectedSubsctiption = onSpellSelected.SkipUntil(eventsSessionStart).Subscribe(ApplyVfxToCurrentItem);
+            _onSpellSelectedSubsctiption = onSpellSelected.SkipUntil(eventsSessionStart)
+                .Subscribe(ApplyVfxToCurrentItem);
         }
 
         private IDisposable _onSpellSelectedSubsctiption;
