@@ -40,7 +40,7 @@ namespace Code.Spells
             SpellType spellType;
             foreach (var spellConfig in  spellsConfig.spellConfigs)
             {
-                prefab = spellConfig.spellVfxPrefab;
+                prefab = spellConfig.spellPreparationVfxPrefab;
                 spellType = spellConfig.spellType;
                 _spellPools.Add(spellType, new SpellPool(prefab));
             }

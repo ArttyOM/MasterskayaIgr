@@ -1,5 +1,6 @@
 using System;
 using Code.GameLoop;
+using Code.Projectiles;
 using Code.Spells;
 using UniRx;
 using UnityEngine;
@@ -22,6 +23,8 @@ namespace Code.Events
         public readonly Subject<LevelEndResult> OnLevelEnd = new();
         public readonly Subject<SpellType> OnSpellSelected = new();
         public readonly Subject<(Vector2Int, Vector3)> OnProjectileDestinationSelected =  new();
+        
+        public readonly Subject<ExplosionData> OnProjectileExploded =  new();
 
 
         public void Dispose()

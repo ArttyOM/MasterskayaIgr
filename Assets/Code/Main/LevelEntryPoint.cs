@@ -35,6 +35,7 @@ namespace Code.Main
         private SpellVfxGenerator _spellVfxGenerator;
         private GridPointSelector _gridPointSelector;
         private ProjectileThrower _projectileThrower;
+        private ExplosionHandler _explosionHandler;
 
         private ScreenSwitcher _screenSwitcher;
         private InGameEvents _events;
@@ -62,7 +63,8 @@ namespace Code.Main
             
             var weaponPools = _weaponRandomGenerator.GetWeaponPools;
             var spellPools = _spellVfxGenerator.GetSpellPools;
-            _projectileThrower = new(_events.OnProjectileDestinationSelected, weaponPools, spellPools);
+            _projectileThrower = new(_events.OnProjectileDestinationSelected, _events.OnProjectileExploded, weaponPools, spellPools);
+            _explosionHandler = new(_events.OnProjectileExploded, _spellsConfig);
 
             var eventSystem = FindObjectOfType<EventSystem>();
             if (eventSystem is null)
@@ -124,6 +126,7 @@ namespace Code.Main
             _gridPointSelector?.Dispose();
             _spellVfxGenerator?.Dispose();
             _projectileThrower?.Dispose();
+            _explosionHandler?.Dispose();
         }
 
         private void InitButtons()
@@ -146,7 +149,7 @@ namespace Code.Main
             _winScreenActivator = new WinScreenActivator(_screenSwitcher, _events.OnLevelEnd);
             
             _spellsPanelActivator?.Dispose();
-            _spellsPanelActivator = new SpellsPanelActivator(_events.OnSessionStart, _events.OnSpellSelected, _events.OnProjectileDestinationSelected);
+            _spellsPanelActivator = new SpellsPanelActivator(_events.OnSessionStart, _events.OnSpellSelected, _events.OnProjectileExploded);
 
         }
     }

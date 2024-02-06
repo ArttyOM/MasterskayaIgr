@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Code.Projectiles;
 using UniRx;
 using UnityEngine;
 
@@ -8,7 +9,7 @@ namespace Code.Spells
     public class SpellsPanelActivator: IDisposable
     {
         public SpellsPanelActivator(IObservable<int> eventsSessionStart, IObservable<SpellType> eventsSpellSelected,
-            IObservable<(Vector2Int, Vector3)> eventsProjectileDestinationSelected)
+            IObservable<ExplosionData> onProjectileExploded)
         {
             _spellsPanel = GameObject.FindObjectOfType<SpellsPanel>();
             _spellsPanel.gameObject.SetActive(false);
@@ -21,7 +22,7 @@ namespace Code.Spells
             _blockSpellsPanelSubscription = eventsSpellSelected
                 .Subscribe(_ => SetSpellButtonsInteravctable(false));
 
-            _unblockSpellsPanelSubscription = eventsProjectileDestinationSelected
+            _unblockSpellsPanelSubscription = onProjectileExploded
                 .Subscribe(_ => SetSpellButtonsInteravctable(true));
         }
 
