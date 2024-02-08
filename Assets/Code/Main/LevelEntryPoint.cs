@@ -52,6 +52,7 @@ namespace Code.Main
         private SpellsPanelActivator _spellsPanelActivator;
 
         private CommonEnemyMover _commonEnemyMover;
+        private EnemySpellEffectApplicator _enemySpellEffectApplicator;
         
         public async UniTask Init(InGameEvents events, ScreenSwitcher screenSwitcher, int sceneIndex)
         {
@@ -83,6 +84,7 @@ namespace Code.Main
             _screenSwitcher.ShowScreen(ScreenType.PreparationForTheGame);
 
             _commonEnemyMover = new CommonEnemyMover(_commonEnemyPrefab, _moveSpeed, _events.OnSessionStart);
+            _enemySpellEffectApplicator = new EnemySpellEffectApplicator(_spellsConfig);
 
             InitButtons();
             InitScreenActivators();
@@ -120,13 +122,15 @@ namespace Code.Main
             _winScreenActivator?.Dispose();
             _spellsPanelActivator?.Dispose();
             
-            _commonEnemyMover?.Dispose();
             _weaponRandomGenerator?.Dispose();
             
             _gridPointSelector?.Dispose();
             _spellVfxGenerator?.Dispose();
             _projectileThrower?.Dispose();
             _explosionHandler?.Dispose();
+            
+            _commonEnemyMover?.Dispose();
+            _enemySpellEffectApplicator?.Dispose();
         }
 
         private void InitButtons()
