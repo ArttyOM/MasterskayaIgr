@@ -9,6 +9,8 @@ using Code.Events;
 using Code.GameLoop;
 using Code.HUD;
 using Code.HUD.ScreenActivators;
+using Code.Projectiles;
+using Code.Spells;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -18,16 +20,22 @@ using Unity.VisualScripting;
 using UnityEngine.EventSystems;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
-using Code.Wall;
+
 
 namespace Code.Main
 {
     public class LevelEntryPoint : MonoBehaviour
     {
+        [SerializeField] private WeaponSpawnChanceConfig _weaponSpawnChanceConfig;
+        [SerializeField] private SpellsConfig _spellsConfig;
         [SerializeField] private CommonEnemy _commonEnemyPrefab;
         [SerializeField] private float _moveSpeed = 1f;
 
-        [SerializeField] private CommonWall _commonWall;
+        private WeaponRandomGenerator _weaponRandomGenerator;
+        private SpellVfxGenerator _spellVfxGenerator;
+        private GridPointSelector _gridPointSelector;
+        private ProjectileThrower _projectileThrower;
+        private ExplosionHandler _explosionHandler;
 
         private ScreenSwitcher _screenSwitcher;
         private InGameEvents _events;
@@ -41,13 +49,22 @@ namespace Code.Main
 
         private LoseScreenActivator _loseScreenActivator;
         private WinScreenActivator _winScreenActivator;
+        private SpellsPanelActivator _spellsPanelActivator;
 
         private CommonEnemyMover _commonEnemyMover;
 
-        
         public async UniTask Init(InGameEvents events, ScreenSwitcher screenSwitcher, int sceneIndex)
         {
             ">>LevelEntryPoint.Init".Colored(Color.red).Log();
+            
+            _weaponRandomGenerator = new WeaponRandomGenerator(_weaponSpawnChanceConfig, _events.OnSpellSelected, _events.OnSessionStart);
+            _spellVfxGenerator = new SpellVfxGenerator(_spellsConfig, _events.OnSpellSelected, _events.OnSessionStart);
+            _gridPointSelector = new(_events.OnProjectileDestinationSelected);
+            
+            var weaponPools = _weaponRandomGenerator.GetWeaponPools;
+            var spellPools = _spellVfxGenerator.GetSpellPools;
+            _projectileThrower = new(_events.OnProjectileDestinationSelected, _events.OnProjectileExploded, weaponPools, spellPools);
+            _explosionHandler = new(_events.OnProjectileExploded, _spellsConfig);
 
             var eventSystem = FindObjectOfType<EventSystem>();
             if (eventSystem is null)
@@ -65,9 +82,7 @@ namespace Code.Main
             _screenSwitcher.ReInit();
             _screenSwitcher.ShowScreen(ScreenType.PreparationForTheGame);
 
-            _commonEnemyMover = new CommonEnemyMover(_commonEnemyPrefab, _moveSpeed);
-
-            _commonWall.WallStopper(_commonEnemyPrefab);
+            _commonEnemyMover = new CommonEnemyMover(_commonEnemyPrefab, _moveSpeed, _events.OnSessionStart);
 
             InitButtons();
             InitScreenActivators();
@@ -103,18 +118,40 @@ namespace Code.Main
             ">>LevelEntryPoint OnDestroy".Log();
             _loseScreenActivator?.Dispose();
             _winScreenActivator?.Dispose();
+            _spellsPanelActivator?.Dispose();
+            
+            _weaponRandomGenerator?.Dispose();
+            
+            _gridPointSelector?.Dispose();
+            _spellVfxGenerator?.Dispose();
+            _projectileThrower?.Dispose();
+            _explosionHandler?.Dispose();
+            
             _commonEnemyMover?.Dispose();
         }
 
         private void InitButtons()
         {
+            var startSessionButton = FindObjectOfType<StartSessionButton>();
+            startSessionButton.Init(_events.OnSessionStart);
+            var spellButtons = Object.FindObjectsOfType<UISelectSpellButton>(true)
+                .AsEnumerable();
+            if (spellButtons != null)
+                spellButtons.ToUniTaskAsyncEnumerable()
+                    .ForEachAsync(x => x.Init(_events.OnSpellSelected));
         }
 
 
         private void InitScreenActivators()
         {
+            _loseScreenActivator?.Dispose();
             _loseScreenActivator = new LoseScreenActivator(_screenSwitcher, _events.OnLevelEnd);
+            _winScreenActivator?.Dispose();
             _winScreenActivator = new WinScreenActivator(_screenSwitcher, _events.OnLevelEnd);
+            
+            _spellsPanelActivator?.Dispose();
+            _spellsPanelActivator = new SpellsPanelActivator(_events.OnSessionStart, _events.OnSpellSelected, _events.OnProjectileExploded);
+
         }
     }
 }
