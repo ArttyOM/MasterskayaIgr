@@ -10,8 +10,7 @@ namespace Code.Spells
     public class SpellVfxGenerator: IDisposable
     {
         public SpellVfxGenerator(SpellsConfig spellsConfig, IObservable<SpellType> onSpellSelected,
-            IObservable<int> eventsSessionStart, 
-            IObservable<(Vector2Int, Vector3)> eventsProjectileDestinationSelected)
+            IObservable<int> eventsSessionStart)
         {
             _currentWeaponSpawnPoint = GameObject
                 .FindObjectOfType<CurrentWeaponSpawnPoint>();

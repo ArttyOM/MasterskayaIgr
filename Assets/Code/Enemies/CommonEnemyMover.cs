@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using Code.DebugTools.Logger;
+using MyBox;
 using UniRx;
+using UniRx.Triggers;
 using UnityEngine;
 
 namespace Code.Enemies
@@ -15,6 +18,12 @@ namespace Code.Enemies
             foreach (var commonEnemy in alreadyExistingEnemies)
             {
                 _enemiesRigidbody2Ds.Add(commonEnemy.GetKinematicRigidbody());
+                ObservableCollision2DTrigger onCollision = commonEnemy.GetComponentInChildren<ObservableCollision2DTrigger>();
+                $"{onCollision.name} initialized".Colored(Colors.aqua).Log();
+                onCollision.OnCollisionEnter2DAsObservable().Subscribe(x =>
+                {
+                    $"OnCollision {x.collider.name}".Colored(Colors.aqua).Log();
+                });
             }
 
             _moveSpeed = moveSpeed;

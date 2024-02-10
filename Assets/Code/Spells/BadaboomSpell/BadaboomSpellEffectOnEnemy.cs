@@ -2,9 +2,9 @@
 
 namespace Code.Spells
 {
-    public class BadaboomSpell: IDisposable
+    public class BadaboomSpellEffectOnEnemy: IDisposable
     {
-        public BadaboomSpell()
+        public BadaboomSpellEffectOnEnemy()
         {
             
         }

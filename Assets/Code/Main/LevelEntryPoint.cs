@@ -52,14 +52,13 @@ namespace Code.Main
         private SpellsPanelActivator _spellsPanelActivator;
 
         private CommonEnemyMover _commonEnemyMover;
-        private EnemySpellEffectApplicator _enemySpellEffectApplicator;
-        
+
         public async UniTask Init(InGameEvents events, ScreenSwitcher screenSwitcher, int sceneIndex)
         {
             ">>LevelEntryPoint.Init".Colored(Color.red).Log();
             
             _weaponRandomGenerator = new WeaponRandomGenerator(_weaponSpawnChanceConfig, _events.OnSpellSelected, _events.OnSessionStart);
-            _spellVfxGenerator = new SpellVfxGenerator(_spellsConfig, _events.OnSpellSelected, _events.OnSessionStart, _events.OnProjectileDestinationSelected);
+            _spellVfxGenerator = new SpellVfxGenerator(_spellsConfig, _events.OnSpellSelected, _events.OnSessionStart);
             _gridPointSelector = new(_events.OnProjectileDestinationSelected);
             
             var weaponPools = _weaponRandomGenerator.GetWeaponPools;
@@ -84,7 +83,6 @@ namespace Code.Main
             _screenSwitcher.ShowScreen(ScreenType.PreparationForTheGame);
 
             _commonEnemyMover = new CommonEnemyMover(_commonEnemyPrefab, _moveSpeed, _events.OnSessionStart);
-            _enemySpellEffectApplicator = new EnemySpellEffectApplicator(_spellsConfig);
 
             InitButtons();
             InitScreenActivators();
@@ -130,7 +128,6 @@ namespace Code.Main
             _explosionHandler?.Dispose();
             
             _commonEnemyMover?.Dispose();
-            _enemySpellEffectApplicator?.Dispose();
         }
 
         private void InitButtons()
