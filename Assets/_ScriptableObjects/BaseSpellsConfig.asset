@@ -17,7 +17,7 @@ MonoBehaviour:
     spellPreparationVfxPrefab: {fileID: -122031665928744457, guid: 337a1ccd9e38b5843b5deb5833f953b8, type: 3}
     megaCastWeaponType: 0
     commonSpellBalance:
-      spellExplosionVfxPrefab: {fileID: 8475403327809913548, guid: e9d6430d710972c4aa086ed6e4814bf2, type: 3}
+      spellExplosionVfxPrefab: {fileID: 4567616274961972469, guid: ede3beb2a3a46744fac75714d8495545, type: 3}
       spellType: 0
       radius: 0
       duration: 0
@@ -27,7 +27,7 @@ MonoBehaviour:
       throttleTimeOfExplosion: 0
       cooldown: 0
     megaSpellBalance:
-      spellExplosionVfxPrefab: {fileID: 8475403327809913548, guid: eb88f78ffc210fe418bc3aef6ee91715, type: 3}
+      spellExplosionVfxPrefab: {fileID: 4622010461751231616, guid: 4c169ad4baa361647b655dcd796e7224, type: 3}
       spellType: 0
       radius: 1
       duration: 0
@@ -40,7 +40,7 @@ MonoBehaviour:
     spellPreparationVfxPrefab: {fileID: 5609960483709638669, guid: 21391bceaa9a816429630977e3b55c28, type: 3}
     megaCastWeaponType: 1
     commonSpellBalance:
-      spellExplosionVfxPrefab: {fileID: 7357726383835885359, guid: 976a5c71cdea0f94289a5159517ef643, type: 3}
+      spellExplosionVfxPrefab: {fileID: 4567616274961972469, guid: 29f46ced8e5684c4d90206c2ba7f8c50, type: 3}
       spellType: 1
       radius: 1
       duration: 5
@@ -50,7 +50,7 @@ MonoBehaviour:
       throttleTimeOfExplosion: 0
       cooldown: 0
     megaSpellBalance:
-      spellExplosionVfxPrefab: {fileID: 2656014917180569330, guid: bf5eeeab062e5574891fe75a66f47a5b, type: 3}
+      spellExplosionVfxPrefab: {fileID: 6776487761002917681, guid: a7263cf1f37bb164e8de971da019573a, type: 3}
       spellType: 1
       radius: 1
       duration: 8
@@ -63,7 +63,7 @@ MonoBehaviour:
     spellPreparationVfxPrefab: {fileID: 5609960483709638669, guid: a3e21cd76300bd14a9417a7cb4fa88e4, type: 3}
     megaCastWeaponType: 4
     commonSpellBalance:
-      spellExplosionVfxPrefab: {fileID: 7357726383835885359, guid: c473dc9f1e8efda4795e58566885bbf5, type: 3}
+      spellExplosionVfxPrefab: {fileID: 4567616274961972469, guid: 8ddfb64517593914689fc930f13f9eea, type: 3}
       spellType: 2
       radius: 1
       duration: 5
@@ -73,7 +73,7 @@ MonoBehaviour:
       throttleTimeOfExplosion: 0
       cooldown: 0
     megaSpellBalance:
-      spellExplosionVfxPrefab: {fileID: 2656014917180569330, guid: 0c122454e6f297e4fbc15bb975378a6c, type: 3}
+      spellExplosionVfxPrefab: {fileID: 289044611648317479, guid: 29f7a3ac991f6ee478349077ac374a79, type: 3}
       spellType: 2
       radius: 1
       duration: 8
@@ -86,7 +86,7 @@ MonoBehaviour:
     spellPreparationVfxPrefab: {fileID: 5609960483709638669, guid: 9c27a5cee3a2e4f49af3e54b70c5adda, type: 3}
     megaCastWeaponType: 2
     commonSpellBalance:
-      spellExplosionVfxPrefab: {fileID: 7357726383835885359, guid: 34246600b3dbc44449153413f7343eec, type: 3}
+      spellExplosionVfxPrefab: {fileID: 4567616274961972469, guid: b90b530d46bd7e9489685be8f988826f, type: 3}
       spellType: 3
       radius: 0
       duration: 0
@@ -96,7 +96,7 @@ MonoBehaviour:
       throttleTimeOfExplosion: 4
       cooldown: 0
     megaSpellBalance:
-      spellExplosionVfxPrefab: {fileID: 2656014917180569330, guid: 250870ea62354e249be81b035fb1fe6f, type: 3}
+      spellExplosionVfxPrefab: {fileID: 7124122976263009507, guid: 3a8396b81ce3510418f8348fc41d86e3, type: 3}
       spellType: 3
       radius: 1
       duration: 0
@@ -109,7 +109,7 @@ MonoBehaviour:
     spellPreparationVfxPrefab: {fileID: 5609960483709638669, guid: 9636d70099ccc6c44819ae7c3022f7b5, type: 3}
     megaCastWeaponType: 5
     commonSpellBalance:
-      spellExplosionVfxPrefab: {fileID: 7357726383835885359, guid: c9c162aabfa65114c89f9e73601bb652, type: 3}
+      spellExplosionVfxPrefab: {fileID: 4567616274961972469, guid: a21be7da719976345a48461fbe24e8e3, type: 3}
       spellType: 4
       radius: 1
       duration: 0
@@ -119,7 +119,7 @@ MonoBehaviour:
       throttleTimeOfExplosion: 0
       cooldown: 0
     megaSpellBalance:
-      spellExplosionVfxPrefab: {fileID: 2656014917180569330, guid: 99a40d5cd705bb8468cf0a545f4054dd, type: 3}
+      spellExplosionVfxPrefab: {fileID: 1393734849113063966, guid: a5b12888cbcdb4b4baf15fd0fedd17c0, type: 3}
       spellType: 4
       radius: 1
       duration: 0
@@ -132,7 +132,7 @@ MonoBehaviour:
     spellPreparationVfxPrefab: {fileID: 5609960483709638669, guid: 8b259a373bc75d540b1cab1f0838b4fd, type: 3}
     megaCastWeaponType: 3
     commonSpellBalance:
-      spellExplosionVfxPrefab: {fileID: 7357726383835885359, guid: 211153d960bc6554d95212ab0ebdc33b, type: 3}
+      spellExplosionVfxPrefab: {fileID: 4567616274961972469, guid: da295a0c6f353e445a11913572cb9205, type: 3}
       spellType: 5
       radius: 0
       duration: 0
@@ -142,7 +142,7 @@ MonoBehaviour:
       throttleTimeOfExplosion: 0
       cooldown: 0
     megaSpellBalance:
-      spellExplosionVfxPrefab: {fileID: 2656014917180569330, guid: be22fe4c4f705ec439ba95c1aecf6700, type: 3}
+      spellExplosionVfxPrefab: {fileID: 7137209472583159189, guid: 5f68db7cc265d4745aff702eef6936c3, type: 3}
       spellType: 5
       radius: 0
       duration: 0
