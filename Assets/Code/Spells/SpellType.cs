@@ -6,7 +6,7 @@
         Poison,
         Ice,
         Mine,
-        Artillery,
+        Shrapnel,
         LineAttack
     }
 }

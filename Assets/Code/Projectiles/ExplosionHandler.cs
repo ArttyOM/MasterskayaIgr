@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using Code.DebugTools.Logger;
 using Code.Spells;
+using Code.Spells.IceSpell;
+using Code.Spells.LineAttackSpell;
+using Code.Spells.MinesSpell;
+using Code.Spells.PoisonSpell;
+using Code.Spells.ShrapnelSpell;
 using MyBox;
 using UniRx;
 
@@ -19,6 +24,16 @@ namespace Code.Projectiles
 
         private readonly Dictionary<SpellType, SpellExplosionPool> _commonSpellExplosionPool = new();
         private readonly Dictionary<SpellType, SpellExplosionPool> _megaSpellExplosionPool = new();
+
+        private readonly Dictionary<SpellType, ISpellActingOnEnemy> _interationWithEnemies = new()
+        {
+            {SpellType.Badaboom, new BadaboomSpellActingOnEnemy()},
+            {SpellType.Poison, new PoisonSpellActingOnEnemy()},
+            {SpellType.Shrapnel, new ShrapnelSpellActingOnEnemy()},
+            {SpellType.LineAttack, new LineAttackSpellActingOnEnemy()},
+            {SpellType.Ice, new IceSpellActingOnEnemy()},
+            {SpellType.Mine, new MineSpellActingOnEnemy()}
+        };
         private readonly SpellsConfig _spellsConfig;
         private readonly IDisposable _onExplosionSubscription;
         
@@ -48,26 +63,28 @@ namespace Code.Projectiles
             SpellConfig spellConfig = _spellsConfig.spellConfigs.Find(x => x.spellType == spellType);
 
             bool isMega = spellConfig.megaCastWeaponType == explosionData.GetProjectileType;
-            ShowExplosionAnimation(isMega, explosionData);
+            var explosion = InstantiateExplosion(isMega, explosionData);
             if (isMega)
             {
+                _interationWithEnemies[spellType].Act(explosion, spellConfig.megaSpellBalance);
                 "Mega explosion".Colored(Colors.aqua).Log();
             }
             else
             {
+                _interationWithEnemies[spellType].Act(explosion, spellConfig.commonSpellBalance);
                 "common explosion".Colored(Colors.aqua).Log();
             }
         }
 
-        private void ShowExplosionAnimation(bool isMega, ExplosionData explosionData)
+        private SpellExplosion InstantiateExplosion(bool isMega, ExplosionData explosionData)
         {
             if (isMega)
             {
-                _megaSpellExplosionPool[explosionData.GetSpellType].Rent(explosionData.GetWorldPosition);
+                return _megaSpellExplosionPool[explosionData.GetSpellType].Rent(explosionData.GetWorldPosition);
             }
             else
             {
-                _commonSpellExplosionPool[explosionData.GetSpellType].Rent(explosionData.GetWorldPosition);
+                return _commonSpellExplosionPool[explosionData.GetSpellType].Rent(explosionData.GetWorldPosition);
             }
         }
     }
