@@ -22,5 +22,8 @@ namespace Code.Enemies
                 return null;
             }
         }
+
+        public float Speed { get; set; }
+        
     }
 }
