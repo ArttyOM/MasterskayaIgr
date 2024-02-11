@@ -19,14 +19,15 @@ namespace Code.Spells
             List<CommonEnemy> enemies = GameObject.FindObjectsByType<CommonEnemy>(FindObjectsSortMode.None).ToList();
             foreach (CommonEnemy enemy in enemies)
             {
-                enemy.GetObservableTrigger2DTrigger.OnTriggerEnter2DAsObservable()
+                enemy.GetObservableTrigger2DTrigger.OnTriggerEnter2DAsObservable().First()
                     .Subscribe(onNext: collider2D =>
                     {
                         enemy.GetHit(spellConfig.damage);
                     });
             }
-            var provider = explosion.GetColliderProvider;
-            var collider = provider.GetCollider2D;
+            var ps = explosion.GetComponentInChildren<ParticleSystem>();
+            Observable.EveryUpdate().SkipWhile(x => ps.IsAlive(true)).First()
+                .Subscribe(_ => GameObject.Destroy(explosion.gameObject));
         }
     }
 }
