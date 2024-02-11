@@ -35,6 +35,7 @@ namespace Code.Main
         private SpellVfxGenerator _spellVfxGenerator;
         private GridPointSelector _gridPointSelector;
         private ProjectileThrower _projectileThrower;
+        private ExplosionHandler _explosionHandler;
 
         private ScreenSwitcher _screenSwitcher;
         private InGameEvents _events;
@@ -48,9 +49,10 @@ namespace Code.Main
 
         private LoseScreenActivator _loseScreenActivator;
         private WinScreenActivator _winScreenActivator;
+        private SpellsPanelActivator _spellsPanelActivator;
 
         private CommonEnemyMover _commonEnemyMover;
-        
+
         public async UniTask Init(InGameEvents events, ScreenSwitcher screenSwitcher, int sceneIndex)
         {
             ">>LevelEntryPoint.Init".Colored(Color.red).Log();
@@ -61,7 +63,8 @@ namespace Code.Main
             
             var weaponPools = _weaponRandomGenerator.GetWeaponPools;
             var spellPools = _spellVfxGenerator.GetSpellPools;
-            _projectileThrower = new(_events.OnProjectileDestinationSelected, weaponPools, spellPools);
+            _projectileThrower = new(_events.OnProjectileDestinationSelected, _events.OnProjectileExploded, weaponPools, spellPools);
+            _explosionHandler = new(_events.OnProjectileExploded, _spellsConfig);
 
             var eventSystem = FindObjectOfType<EventSystem>();
             if (eventSystem is null)
@@ -115,12 +118,16 @@ namespace Code.Main
             ">>LevelEntryPoint OnDestroy".Log();
             _loseScreenActivator?.Dispose();
             _winScreenActivator?.Dispose();
-            _commonEnemyMover?.Dispose();
+            _spellsPanelActivator?.Dispose();
+            
             _weaponRandomGenerator?.Dispose();
             
             _gridPointSelector?.Dispose();
             _spellVfxGenerator?.Dispose();
             _projectileThrower?.Dispose();
+            _explosionHandler?.Dispose();
+            
+            _commonEnemyMover?.Dispose();
         }
 
         private void InitButtons()
@@ -137,8 +144,14 @@ namespace Code.Main
 
         private void InitScreenActivators()
         {
+            _loseScreenActivator?.Dispose();
             _loseScreenActivator = new LoseScreenActivator(_screenSwitcher, _events.OnLevelEnd);
+            _winScreenActivator?.Dispose();
             _winScreenActivator = new WinScreenActivator(_screenSwitcher, _events.OnLevelEnd);
+            
+            _spellsPanelActivator?.Dispose();
+            _spellsPanelActivator = new SpellsPanelActivator(_events.OnSessionStart, _events.OnSpellSelected, _events.OnProjectileExploded);
+
         }
     }
 }

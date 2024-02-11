@@ -16,7 +16,7 @@ namespace Code.Spells
         private IObserver<SpellType> _onClick;
 
         public SpellType GetSpellType => _spellType;
-        
+
         public void Init(IObserver<SpellType> onClick)
         {
             _onClick = onClick;
@@ -30,6 +30,11 @@ namespace Code.Spells
             //         onClick.OnNext(_spellType);
             //     });
             // }
+        }
+
+        public void SetButtonInteractable(bool isInteractable)
+        {
+            _thisButton.interactable = isInteractable;
         }
 
         private void SendOnNext()

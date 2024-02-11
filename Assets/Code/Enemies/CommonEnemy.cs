@@ -1,11 +1,33 @@
 ﻿using Code.DebugTools.Logger;
+using UniRx.Triggers;
 using UnityEngine;
 
 namespace Code.Enemies
 {
     public class CommonEnemy:MonoBehaviour
     {
-        public Rigidbody2D GetKinematicRigidbody()
+        public ObservableCollision2DTrigger GetObservableCollision2DTrigger { get; private set;}
+        public ObservableTrigger2DTrigger GetObservableTrigger2DTrigger { get; private set; }
+
+
+        public Rigidbody2D GetKinematicRigidbody
+        {
+            get
+            {
+                if (_rigidbody2D is null) _rigidbody2D = FindKinematicRigidbody();
+                return _rigidbody2D;
+            }
+        }
+
+        private Rigidbody2D _rigidbody2D;
+        
+        public void GetHit(float damage)
+        {
+            var name = this.name;
+            $">>GetHit {name} got {damage} damage".Colored(Color.cyan).Log();
+        }
+        
+        private Rigidbody2D FindKinematicRigidbody()
         {
             var allRigidbodies = GetComponentsInChildren<Rigidbody2D>();
             if (allRigidbodies == null || allRigidbodies.Length == 0)
@@ -13,14 +35,21 @@ namespace Code.Enemies
                 "GetComponentsInChildren<Rigidbody2D> вернул пустой список".Colored(Color.red).LogError();
                 return null;
             }
-            foreach (Rigidbody2D rigidbody2D in allRigidbodies)
-            {
-                if (rigidbody2D.isKinematic) return rigidbody2D;
-            }
+
+            foreach (var rigidbody2D in allRigidbodies)
+                if (rigidbody2D.isKinematic)
+                    return rigidbody2D;
             {
                 "Среди rigidbody2d в дочерних объектах ни одного кинематичного".Colored(Color.red).LogError();
                 return null;
             }
+        }
+        
+        private void Awake()
+        {
+            if (_rigidbody2D is null) _rigidbody2D = FindKinematicRigidbody();
+            GetObservableCollision2DTrigger = GetComponentInChildren<ObservableCollision2DTrigger>();
+            GetObservableTrigger2DTrigger = GetComponentInChildren<ObservableTrigger2DTrigger>();
         }
     }
 }
