@@ -1,4 +1,5 @@
-﻿using Code.DebugTools.Logger;
+﻿using System;
+using Code.DebugTools.Logger;
 using UniRx.Triggers;
 using UnityEngine;
 
@@ -6,6 +7,10 @@ namespace Code.Enemies
 {
     public class CommonEnemy:MonoBehaviour
     {
+        private Rigidbody2D _rigidbody2D;
+        private float _currentHP;
+        private float _maxHP = 20f;
+        
         public ObservableCollision2DTrigger GetObservableCollision2DTrigger { get; private set;}
         public ObservableTrigger2DTrigger GetObservableTrigger2DTrigger { get; private set; }
 
@@ -19,12 +24,13 @@ namespace Code.Enemies
             }
         }
 
-        private Rigidbody2D _rigidbody2D;
-        
         public void GetHit(float damage)
         {
             var name = this.name;
             $">>GetHit {name} got {damage} damage".Colored(Color.cyan).Log();
+
+            _currentHP -= damage;
+            if (_currentHP<=0) Destroy(this.gameObject);
         }
         
         private Rigidbody2D FindKinematicRigidbody()
@@ -44,12 +50,20 @@ namespace Code.Enemies
                 return null;
             }
         }
+<<<<<<< HEAD
         
         private void Awake()
         {
             if (_rigidbody2D is null) _rigidbody2D = FindKinematicRigidbody();
             GetObservableCollision2DTrigger = GetComponentInChildren<ObservableCollision2DTrigger>();
             GetObservableTrigger2DTrigger = GetComponentInChildren<ObservableTrigger2DTrigger>();
+
+            _currentHP = _maxHP;
         }
+=======
+
+        public float Speed { get; set; }
+        
+>>>>>>> origin/iusup-stenka
     }
 }
