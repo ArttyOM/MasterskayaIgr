@@ -50,8 +50,7 @@ namespace Code.Enemies
                 return null;
             }
         }
-<<<<<<< HEAD
-        
+
         private void Awake()
         {
             if (_rigidbody2D is null) _rigidbody2D = FindKinematicRigidbody();
@@ -60,10 +59,8 @@ namespace Code.Enemies
 
             _currentHP = _maxHP;
         }
-=======
 
         public float Speed { get; set; }
         
->>>>>>> origin/iusup-stenka
     }
 }
