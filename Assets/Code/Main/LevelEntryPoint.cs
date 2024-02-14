@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
+﻿using System.Linq;
 using Code.DebugTools.Logger;
 using Code.Enemies;
 using Code.Events;
@@ -16,7 +12,6 @@ using UnityEngine;
 using Object = UnityEngine.Object;
 using Cysharp.Threading.Tasks.Linq;
 using UniRx;
-using Unity.VisualScripting;
 using UnityEngine.EventSystems;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
@@ -56,6 +51,9 @@ namespace Code.Main
         public async UniTask Init(InGameEvents events, ScreenSwitcher screenSwitcher, int sceneIndex)
         {
             ">>LevelEntryPoint.Init".Colored(Color.red).Log();
+         
+            CreateEventSystemIfNeeded();
+            InitLight2D();
             
             _weaponRandomGenerator = new WeaponRandomGenerator(_weaponSpawnChanceConfig, _events.OnSpellSelected, _events.OnSessionStart);
             _spellVfxGenerator = new SpellVfxGenerator(_spellsConfig, _events.OnSpellSelected, _events.OnSessionStart);
@@ -65,14 +63,6 @@ namespace Code.Main
             var spellPools = _spellVfxGenerator.GetSpellPools;
             _projectileThrower = new(_events.OnProjectileDestinationSelected, _events.OnProjectileExploded, weaponPools, spellPools);
             _explosionHandler = new(_events.OnProjectileExploded, _spellsConfig);
-
-            var eventSystem = FindObjectOfType<EventSystem>();
-            if (eventSystem is null)
-            {
-                var uiEvents = new GameObject("UiInputEvents");
-                uiEvents.AddComponent<EventSystem>();
-                uiEvents.AddComponent<StandaloneInputModule>();
-            }
 
             _sceneIndex = sceneIndex;
 
@@ -86,15 +76,7 @@ namespace Code.Main
 
             InitButtons();
             InitScreenActivators();
-
-            foreach (var light2D in FindObjectsOfType<Light2D>(true))
-                if (light2D.lightType == Light2D.LightType.Global)
-                {
-                    _globalLight = light2D;
-                    _globalLight.enabled = true;
-                    break;
-                }
-
+            
             _isInit = true;
         }
 
@@ -130,6 +112,28 @@ namespace Code.Main
             _commonEnemyMover?.Dispose();
         }
 
+        private void InitLight2D()
+        {
+            foreach (var light2D in FindObjectsOfType<Light2D>(true))
+                if (light2D.lightType == Light2D.LightType.Global)
+                {
+                    _globalLight = light2D;
+                    _globalLight.enabled = true;
+                    break;
+                }
+        }
+        
+        private void CreateEventSystemIfNeeded()
+        {
+            var eventSystem = FindObjectOfType<EventSystem>();
+            if (eventSystem is null)
+            {
+                var uiEvents = new GameObject("UiInputEvents");
+                uiEvents.AddComponent<EventSystem>();
+                uiEvents.AddComponent<StandaloneInputModule>();
+            }
+        }
+        
         private void InitButtons()
         {
             var startSessionButton = FindObjectOfType<StartSessionButton>();

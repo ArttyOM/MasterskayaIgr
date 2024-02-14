@@ -1,5 +1,8 @@
 ﻿using System;
 using Code.DebugTools.Logger;
+using Code.Spells;
+using UniRx;
+using UniRx.Diagnostics;
 using UniRx.Triggers;
 using UnityEngine;
 
@@ -10,11 +13,39 @@ namespace Code.Enemies
         private Rigidbody2D _rigidbody2D;
         private float _currentHP;
         private float _maxHP = 20f;
+
+        private IDisposable _onTriggerEnterSubscription;
+
+        private IObserver<(CommonEnemy, SpellExplosion)> _onExplosionEnter;
         
         public ObservableCollision2DTrigger GetObservableCollision2DTrigger { get; private set;}
         public ObservableTrigger2DTrigger GetObservableTrigger2DTrigger { get; private set; }
 
+        public float Speed { get; set; }
 
+
+        public void Init(IObserver<(CommonEnemy, SpellExplosion)> onExplosionEnter)
+        {
+            _onExplosionEnter = onExplosionEnter;
+            
+            if (_rigidbody2D is null) _rigidbody2D = FindKinematicRigidbody();
+            GetObservableCollision2DTrigger = GetComponentInChildren<ObservableCollision2DTrigger>();
+            GetObservableTrigger2DTrigger = GetComponentInChildren<ObservableTrigger2DTrigger>();
+
+            _currentHP = _maxHP;
+
+            _onTriggerEnterSubscription = GetObservableTrigger2DTrigger.OnTriggerEnter2DAsObservable()
+                .Subscribe(trigger =>
+                {
+                    var explosion = trigger.GetComponent<SpellColliderProvider>().GetComponentInParent<SpellExplosion>();
+                    if (explosion is not null)
+                    {
+                        _onExplosionEnter.OnNext(new (this,explosion));
+                    }
+                    "OnTriggerEnter>>".Colored(Color.red).Log();
+                });
+        }
+        
         public Rigidbody2D GetKinematicRigidbody
         {
             get
@@ -33,6 +64,7 @@ namespace Code.Enemies
             if (_currentHP<=0) Destroy(this.gameObject);
         }
         
+        
         private Rigidbody2D FindKinematicRigidbody()
         {
             var allRigidbodies = GetComponentsInChildren<Rigidbody2D>();
@@ -50,17 +82,11 @@ namespace Code.Enemies
                 return null;
             }
         }
-
-        private void Awake()
-        {
-            if (_rigidbody2D is null) _rigidbody2D = FindKinematicRigidbody();
-            GetObservableCollision2DTrigger = GetComponentInChildren<ObservableCollision2DTrigger>();
-            GetObservableTrigger2DTrigger = GetComponentInChildren<ObservableTrigger2DTrigger>();
-
-            _currentHP = _maxHP;
-        }
-
-        public float Speed { get; set; }
         
+
+        private void OnDestroy()
+        {
+            _onTriggerEnterSubscription?.Dispose();
+        }
     }
 }
