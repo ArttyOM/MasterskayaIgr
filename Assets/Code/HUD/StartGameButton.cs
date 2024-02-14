@@ -1,3 +1,4 @@
+using System;
 using Code.DebugTools.Logger;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,12 +10,12 @@ namespace Code.HUD
     {
         private Button _startButton;
 
-        private ScreenSwitcher _screenSwitcher;
+        private Action _action;
 
 
-        public void Init(ScreenSwitcher screenSwitcher)
+        public void Init(Action action)
         {
-            _screenSwitcher = screenSwitcher;
+            _action = action;
             _startButton = gameObject.GetComponent<Button>();
             _startButton.onClick.AddListener(LaunchGame);
         }
@@ -22,7 +23,7 @@ namespace Code.HUD
         private void LaunchGame()
         {
             ">> LaunchGame".Log();
-            _screenSwitcher.HideAllScreensInstantly();
+            _action?.Invoke();
         }
     }
 }

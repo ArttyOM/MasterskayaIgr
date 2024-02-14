@@ -2,7 +2,6 @@
 using Code.DebugTools.Logger;
 using Code.Events;
 using Code.HUD;
-using Code.HUD.ScreenActivators;
 using Code.Main;
 using Cysharp.Threading.Tasks;
 using UniRx;
@@ -18,19 +17,17 @@ namespace Code.GameLoop
     /// </summary>
     public class LevelLoader
     {
-        public LevelLoader(ScreenSwitcher screenSwitcher, InGameEvents events, int sceneIndex)
+        public LevelLoader(ScreenSwitcher screenSwitcher, InGameEvents events)
         {
             _events = events;
-
-            _sceneIndex = sceneIndex;
             _screenSwitcher = screenSwitcher;
-
             _toMenuSubscription = _events.OnMenu.Subscribe(x =>
             {
                 LoadLevel(x).ToObservable()
                     .Subscribe(_ =>
                     {
                         ">>ShowScreen Menu".Colored(Color.red).Log();
+                        _screenSwitcher.ReInit();
                         _screenSwitcher.ShowScreen(ScreenType.Menu);
                     });
             });

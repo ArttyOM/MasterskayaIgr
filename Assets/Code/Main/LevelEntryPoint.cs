@@ -55,6 +55,7 @@ namespace Code.Main
 
         public async UniTask Init(InGameEvents events, ScreenSwitcher screenSwitcher, int sceneIndex)
         {
+            _events = events;
             ">>LevelEntryPoint.Init".Colored(Color.red).Log();
             
             _weaponRandomGenerator = new WeaponRandomGenerator(_weaponSpawnChanceConfig, _events.OnSpellSelected, _events.OnSessionStart);
@@ -109,7 +110,7 @@ namespace Code.Main
 
                 Init(_events, _screenSwitcher, _sceneIndex);
 
-                _levelLoader = new LevelLoader(_screenSwitcher, _events, _sceneIndex);
+                _levelLoader = new LevelLoader(_screenSwitcher, _events);
             });
         }
 
