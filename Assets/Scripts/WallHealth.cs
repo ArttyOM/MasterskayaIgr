@@ -1,4 +1,6 @@
+using Code.DebugTools.Logger;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 [System.Serializable]
 public class EnemyType
@@ -16,7 +18,7 @@ public class EnemyType
 public class WallHealth : MonoBehaviour
 {
     [SerializeField] private float healthPoints = 200f;
-    [SerializeField] private EnemyType[] enemies;
+    [SerializeField] private EnemyType[] enemyTypes;
 
     SpriteRenderer spriteRenderer;
 
@@ -24,7 +26,7 @@ public class WallHealth : MonoBehaviour
 
     private void Start()
     {
-        foreach (var enemy in enemies)
+        foreach (var enemy in enemyTypes)
         {
             enemy.CalculateDamagePerSecond(healthPoints); 
         }
@@ -35,11 +37,13 @@ public class WallHealth : MonoBehaviour
 
     private void OnCollisionStay2D(Collision2D collision)
     {
-        foreach (var enemy in enemies)
+        
+        foreach (var enemyType in enemyTypes)
         {
-            if (collision.gameObject.tag == enemy.name)
+            if (collision.gameObject.tag == enemyType.name)
             {
-                healthPoints -= enemy.damagePerSecond * Time.deltaTime;
+                healthPoints -= enemyType.damagePerSecond * Time.deltaTime;
+                $"healthPoints = {healthPoints}".Log();
                 UpdateSprite();
                 break;
             }
