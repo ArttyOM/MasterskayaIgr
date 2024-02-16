@@ -44,13 +44,13 @@ namespace Code.Main
 
         private async void Start()
         {
-            MainEntryPoint services;
+            ServiceLocator serviceLocator;
             do
             {
-                services = MainEntryPoint.Instance;
+                serviceLocator = ServiceLocator.Instance;
                 await UniTask.Yield();
-            } while (services == null);
-            Init(services.Events, services.ScreenSwitcher);
+            } while (serviceLocator == null);
+            Init(serviceLocator.Events, serviceLocator.ScreenSwitcher);
         }
 
         public void Init(InGameEvents events, ScreenSwitcher screenSwitcher)

@@ -51,8 +51,8 @@ namespace Code.HUD.Start
 
         private void OnAccountTerminationClicked()
         {
-            MainEntryPoint.Instance.Profile.Clear();
-            MainEntryPoint.Instance.Settings.Clear();
+            Main.ServiceLocator.Instance.Profile.Clear();
+            Main.ServiceLocator.Instance.Settings.Clear();
         }
 
         public void Hide()

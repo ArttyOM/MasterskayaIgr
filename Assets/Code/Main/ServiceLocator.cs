@@ -17,7 +17,7 @@ using UnityEngine;
 namespace Code.Main
 {
     [DisallowMultipleComponent]
-    public class MainEntryPoint : MonoBehaviour
+    public class ServiceLocator : MonoBehaviour
     {
         [field: SerializeField] public PoolCommonParent PoolCommonParent { get; private set; }
         [SerializeField] private LevelProgression _levelProgression;
@@ -35,7 +35,7 @@ namespace Code.Main
         private PlayerProfile _profile;
         private LevelSelectionScreenActivator _levelSelectionScreenActivator;
         private PlayerSettings _settings;
-        public static MainEntryPoint Instance { get; private set; }= null;
+        public static ServiceLocator Instance { get; private set; }= null;
         public InGameEvents Events => _events;
         public ScreenSwitcher ScreenSwitcher => _screenSwitcher;
         public AudioManager AudioManager => _audioManager;

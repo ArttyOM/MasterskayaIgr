@@ -11,8 +11,8 @@ namespace Code.HUD
 
         private void Update()
         {
-            if (MainEntryPoint.Instance == null) return;
-            _text.text = MainEntryPoint.Instance.Profile.GetLaunchCount().ToString();
+            if (Main.ServiceLocator.Instance == null) return;
+            _text.text = Main.ServiceLocator.Instance.Profile.GetLaunchCount().ToString();
         }
     }
 }

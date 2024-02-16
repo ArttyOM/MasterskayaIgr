@@ -6,7 +6,7 @@ namespace Code.Main
 {
     public class MenuEntryPoint : MonoBehaviour
     {
-        private MainEntryPoint _services;
+        private ServiceLocator _serviceLocator;
 
         private void Start()
         {
@@ -17,28 +17,28 @@ namespace Code.Main
         {
             do
             {
-                _services = MainEntryPoint.Instance;
+                _serviceLocator = ServiceLocator.Instance;
                 await UniTask.Yield();
-            } while (_services == null);
+            } while (_serviceLocator == null);
             RestoreSettings();
-            if (_services.Profile.IsFirstLaunch()) LaunchTutorial();
+            if (_serviceLocator.Profile.IsFirstLaunch()) LaunchTutorial();
             else
             {
-                _services.ScreenSwitcher.ShowScreen(ScreenType.Menu);
+                _serviceLocator.ScreenSwitcher.ShowScreen(ScreenType.Menu);
             }
-            _services.Profile.IncrementLaunchCount();
+            _serviceLocator.Profile.IncrementLaunchCount();
         }
 
         private void RestoreSettings()
         {
-            _services.AudioManager.SetMusicVolumeFromNormalized(_services.Settings.GetMusicVolume());
-            _services.AudioManager.SetSoundVolumeFromNormalized(_services.Settings.GetSoundVolume());
+            _serviceLocator.AudioManager.SetMusicVolumeFromNormalized(_serviceLocator.Settings.GetMusicVolume());
+            _serviceLocator.AudioManager.SetSoundVolumeFromNormalized(_serviceLocator.Settings.GetSoundVolume());
         }
 
         private void LaunchTutorial()
         {
-            var defaultLevel = _services.LevelProgression.DefaultLevel;
-            _services.LevelLoader.LoadLevelWithSceneIndex(defaultLevel.BuildIndex).Forget();
+            var defaultLevel = _serviceLocator.LevelProgression.DefaultLevel;
+            _serviceLocator.LevelLoader.LoadLevelWithSceneIndex(defaultLevel.BuildIndex).Forget();
         }
     }
 }
