@@ -63,7 +63,7 @@ namespace Code.Main
             _settingsModal.Init(_settings, _audioManager);
             _startScreen.Init(_events, _screenSwitcher, _settingsModal, _offersManager);
             
-            _levelLoader = new LevelLoader(_screenSwitcher, _events);
+            _levelLoader = new LevelLoader(_events);
             _events.OnLevelStart.Subscribe(StartLevel);
             Instance = this;
         }
