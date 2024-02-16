@@ -20,18 +20,13 @@ namespace Code.Main
                 _services = MainEntryPoint.Instance;
                 await UniTask.Yield();
             } while (_services == null);
-            Debug.Log("RestoreSettings!");
             RestoreSettings();
             if (_services.Profile.IsFirstLaunch()) LaunchTutorial();
             else
             {
-                Debug.Log($"ScreenSwitcher is {_services.ScreenSwitcher != null}");
-                Debug.Log($"services is {_services != null}");
                 _services.ScreenSwitcher.ShowScreen(ScreenType.Menu);
-                Debug.Log("SHOW MENU SCREEN!");
             }
             _services.Profile.IncrementLaunchCount();
-            Debug.Log("LAUNCH COUNT!");
         }
 
         private void RestoreSettings()

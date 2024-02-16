@@ -1,4 +1,5 @@
 using Code.Audio;
+using Code.DebugTools.Logger;
 using Code.Events;
 using Code.GameLoop;
 using Code.HUD;
@@ -47,12 +48,11 @@ namespace Code.Main
         {
             if (Instance != null)
             {
-                Debug.LogError("There already are MainEntryPoint, duplicate", gameObject);
+                "There already are MainEntryPoint, duplicate".LogWarning(gameObject);
                 Destroy(gameObject);
                 return;
             }
             DontDestroyOnLoad(gameObject);
-            Debug.Log("INITIALIZED!");
             
             _events = new InGameEvents();
             _storage = new PlayerPrefsStorage();
