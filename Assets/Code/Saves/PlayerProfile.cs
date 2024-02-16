@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEngine;
 
 namespace Code.Saves
 {
@@ -22,6 +23,10 @@ namespace Code.Saves
             Data.LaunchCount++;
             Save();
         }
+
+        public int GetLaunchCount() => Data.LaunchCount;
+
+        
     }
 
     [Serializable]

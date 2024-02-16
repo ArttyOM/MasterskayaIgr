@@ -1,4 +1,5 @@
 ﻿using Code.Audio;
+using Code.Main;
 using Code.Saves;
 using UnityEngine;
 using UnityEngine.UI;
@@ -50,7 +51,8 @@ namespace Code.HUD.Start
 
         private void OnAccountTerminationClicked()
         {
-            Debug.Log("This is not Implemented");
+            MainEntryPoint.Instance.Profile.Clear();
+            MainEntryPoint.Instance.Settings.Clear();
         }
 
         public void Hide()

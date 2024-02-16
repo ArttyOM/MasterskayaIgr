@@ -16,9 +16,3 @@ MonoBehaviour:
   - SceneName: Assets/Scenes/Level1.unity
     BuildIndex: 1
     SceneAsset: {fileID: 102900000, guid: 3e0e428a3bf63e74dba76262f84fab48, type: 3}
-  - SceneName: Assets/Scenes/Level2.unity
-    BuildIndex: 2
-    SceneAsset: {fileID: 102900000, guid: e2099f128f3ff4c438f8b5d9da595c73, type: 3}
-  - SceneName: Assets/Scenes/Level3.unity
-    BuildIndex: 3
-    SceneAsset: {fileID: 102900000, guid: 2d7bb1bc32b1ac14987445b184e0325f, type: 3}

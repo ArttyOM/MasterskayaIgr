@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
+﻿using System.Linq;
 using Code.DebugTools.Logger;
 using Code.Enemies;
 using Code.Events;
@@ -15,11 +11,7 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Object = UnityEngine.Object;
 using Cysharp.Threading.Tasks.Linq;
-using UniRx;
-using Unity.VisualScripting;
-using UnityEngine.EventSystems;
 using UnityEngine.Rendering.Universal;
-using UnityEngine.SceneManagement;
 
 
 namespace Code.Main
@@ -39,10 +31,6 @@ namespace Code.Main
 
         private ScreenSwitcher _screenSwitcher;
         private InGameEvents _events;
-        private int _sceneIndex;
-
-        private bool _isInit = false;
-
         private LevelLoader _levelLoader;
 
         private Light2D _globalLight;
@@ -53,7 +41,19 @@ namespace Code.Main
 
         private CommonEnemyMover _commonEnemyMover;
 
-        public async UniTask Init(InGameEvents events, ScreenSwitcher screenSwitcher, int sceneIndex)
+
+        private async void Start()
+        {
+            MainEntryPoint services;
+            do
+            {
+                services = MainEntryPoint.Instance;
+                await UniTask.Yield();
+            } while (services == null);
+            Init(services.Events, services.ScreenSwitcher);
+        }
+
+        public void Init(InGameEvents events, ScreenSwitcher screenSwitcher)
         {
             _events = events;
             ">>LevelEntryPoint.Init".Colored(Color.red).Log();
@@ -67,51 +67,13 @@ namespace Code.Main
             _projectileThrower = new(_events.OnProjectileDestinationSelected, _events.OnProjectileExploded, weaponPools, spellPools);
             _explosionHandler = new(_events.OnProjectileExploded, _spellsConfig);
 
-            var eventSystem = FindObjectOfType<EventSystem>();
-            if (eventSystem is null)
-            {
-                var uiEvents = new GameObject("UiInputEvents");
-                uiEvents.AddComponent<EventSystem>();
-                uiEvents.AddComponent<StandaloneInputModule>();
-            }
-
-            _sceneIndex = sceneIndex;
-
             _events = events;
             _screenSwitcher = screenSwitcher;
-
-            _screenSwitcher.ReInit();
+            _screenSwitcher.HideAllScreensInstantly();
             _screenSwitcher.ShowScreen(ScreenType.PreparationForTheGame);
-
             _commonEnemyMover = new CommonEnemyMover(_commonEnemyPrefab, _moveSpeed, _events.OnSessionStart);
-
             InitButtons();
             InitScreenActivators();
-
-            foreach (var light2D in FindObjectsOfType<Light2D>(true))
-                if (light2D.lightType == Light2D.LightType.Global)
-                {
-                    _globalLight = light2D;
-                    _globalLight.enabled = true;
-                    break;
-                }
-
-            _isInit = true;
-        }
-
-        private void Awake()
-        {
-            Observable.TimerFrame(3).First().Where(_ => !_isInit).Subscribe(_ =>
-            {
-                "WARNING! Автоинициализация уровня запущена".Colored(Color.yellow).LogWarning();
-                _events = new InGameEvents();
-                _screenSwitcher = new ScreenSwitcher();
-                _sceneIndex = SceneManager.GetActiveScene().buildIndex;
-
-                Init(_events, _screenSwitcher, _sceneIndex);
-
-                _levelLoader = new LevelLoader(_screenSwitcher, _events);
-            });
         }
 
         private void OnDestroy()

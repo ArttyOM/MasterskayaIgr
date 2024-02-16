@@ -1,5 +1,3 @@
-using System;
-using System.Linq;
 using Code.Audio;
 using Code.Events;
 using Code.GameLoop;
@@ -11,10 +9,8 @@ using Code.HUD.Start;
 using Code.Levels;
 using Code.Pools;
 using Code.Saves;
-using Cysharp.Threading.Tasks;
 using UniRx;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 
 namespace Code.Main
@@ -38,9 +34,26 @@ namespace Code.Main
         private PlayerProfile _profile;
         private LevelSelectionScreenActivator _levelSelectionScreenActivator;
         private PlayerSettings _settings;
+        public static MainEntryPoint Instance { get; private set; }= null;
+        public InGameEvents Events => _events;
+        public ScreenSwitcher ScreenSwitcher => _screenSwitcher;
+        public AudioManager AudioManager => _audioManager;
+        public PlayerSettings Settings => _settings;
+        public PlayerProfile Profile => _profile;
+        public LevelProgression LevelProgression => _levelProgression;
+        public LevelLoader LevelLoader => _levelLoader;
 
-        private async void Awake()
+        private void Awake()
         {
+            if (Instance != null)
+            {
+                Debug.LogError("There already are MainEntryPoint, duplicate", gameObject);
+                Destroy(gameObject);
+                return;
+            }
+            DontDestroyOnLoad(gameObject);
+            Debug.Log("INITIALIZED!");
+            
             _events = new InGameEvents();
             _storage = new PlayerPrefsStorage();
             _profile = new PlayerProfile(_storage);
@@ -51,20 +64,10 @@ namespace Code.Main
             _startScreen.Init(_events, _screenSwitcher, _settingsModal, _offersManager);
             
             _levelLoader = new LevelLoader(_screenSwitcher, _events);
-            _events.OnLevelStart.Subscribe(levelIndex => _levelLoader.LoadLevelWithSceneIndex(levelIndex).Forget());
-            if (_profile.IsFirstLaunch())
-            {
-                var defaultLevel = _levelProgression.DefaultLevel;
-                await _levelLoader.LoadLevelWithSceneIndex(defaultLevel.BuildIndex);
-            }
-                
-            _profile.IncrementLaunchCount();
+            _events.OnLevelStart.Subscribe(StartLevel);
+            Instance = this;
         }
 
-        private void Start()
-        {
-            _audioManager.SetMusicVolumeFromNormalized(_settings.GetMusicVolume());
-            _audioManager.SetSoundVolumeFromNormalized(_settings.GetSoundVolume());
-        }
+        private async void StartLevel(int levelIndex) => await _levelLoader.LoadLevelWithSceneIndex(levelIndex);
     }
 }

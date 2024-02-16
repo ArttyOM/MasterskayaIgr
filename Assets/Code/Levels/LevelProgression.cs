@@ -28,9 +28,10 @@ namespace Code.Levels
         public SceneAsset SceneAsset;
          
 #endif
-#if UNITY_EDITOR
+
         public void OnBeforeSerialize()
         {
+        #if UNITY_EDITOR
             if (SceneAsset != null)
             {
                 SceneName = AssetDatabase.GetAssetPath(SceneAsset);
@@ -41,8 +42,9 @@ namespace Code.Levels
                 SceneName = null;
                 BuildIndex = -1;
             }
+        #endif
         }
-#endif
+
         public void OnAfterDeserialize()
         {
         }

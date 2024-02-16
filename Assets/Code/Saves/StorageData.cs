@@ -27,6 +27,8 @@
             Data = CreateNew();
             Save();
         }
+        
+        public void Clear() => _storage.DeleteData(StorageKey);
 
         public void Save() => _storage.StoreData(StorageKey, Data);
     }
