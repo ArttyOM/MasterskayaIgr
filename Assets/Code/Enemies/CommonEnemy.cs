@@ -5,26 +5,30 @@ using UniRx;
 using UniRx.Diagnostics;
 using UniRx.Triggers;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Code.Enemies
 {
     public class CommonEnemy:MonoBehaviour
     {
+        [SerializeField] private EnemyType _enemyType;
         private Rigidbody2D _rigidbody2D;
         private float _currentHP;
         private float _maxHP = 20f;
+        private float _baseSpeed;
+        public float currentSpeed;
 
         private IDisposable _onTriggerEnterSubscription;
-
+        private IDisposable _onCollisionEnterSubscription;
+        private IDisposable _onCollisionExitSubsruption;
+        
         private IObserver<(CommonEnemy, SpellExplosion)> _onExplosionEnter;
         
         public ObservableCollision2DTrigger GetObservableCollision2DTrigger { get; private set;}
         public ObservableTrigger2DTrigger GetObservableTrigger2DTrigger { get; private set; }
+        public EnemyType GetEnemyType => _enemyType;
 
-        public float Speed { get; set; }
-
-
-        public void Init(IObserver<(CommonEnemy, SpellExplosion)> onExplosionEnter)
+        public void Init(IObserver<(CommonEnemy, SpellExplosion)> onExplosionEnter, EnemyStats config)
         {
             _onExplosionEnter = onExplosionEnter;
             
@@ -32,6 +36,9 @@ namespace Code.Enemies
             GetObservableCollision2DTrigger = GetComponentInChildren<ObservableCollision2DTrigger>();
             GetObservableTrigger2DTrigger = GetComponentInChildren<ObservableTrigger2DTrigger>();
 
+            _baseSpeed = config.moveSpeed;
+            currentSpeed = _baseSpeed;
+            _maxHP = config.hitPoints;
             _currentHP = _maxHP;
 
             _onTriggerEnterSubscription = GetObservableTrigger2DTrigger.OnTriggerEnter2DAsObservable()
@@ -43,6 +50,17 @@ namespace Code.Enemies
                         _onExplosionEnter.OnNext(new (this,explosion));
                     }
                     "OnTriggerEnter>>".Colored(Color.red).Log();
+                });
+
+            _onCollisionEnterSubscription = GetObservableCollision2DTrigger.OnCollisionEnter2DAsObservable()
+                .Subscribe(_ =>
+                {
+                    currentSpeed = 0;
+                });
+            _onCollisionExitSubsruption = GetObservableCollision2DTrigger.OnCollisionExit2DAsObservable()
+                .Subscribe(_ =>
+                {
+                    currentSpeed = _baseSpeed;
                 });
         }
         
@@ -87,6 +105,8 @@ namespace Code.Enemies
         private void OnDestroy()
         {
             _onTriggerEnterSubscription?.Dispose();
+            _onCollisionExitSubsruption?.Dispose();
+            _onCollisionEnterSubscription?.Dispose();
         }
     }
 }
