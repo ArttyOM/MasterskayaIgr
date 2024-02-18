@@ -25,8 +25,11 @@ namespace Code.Spells.LineAttackSpell
                         enemy.GetHit(spellConfig.damage);
                     });
             }
-            var provider = explosion.GetColliderProvider;
-            var collider = provider.GetCollider2D;
+        }
+
+        public void Init(IObservable<(CommonEnemy, SpellExplosion)> onEnemyExploded,
+            SpellBalanceConfig commonSpellBalance, SpellBalanceConfig megaSpellConfig)
+        {
         }
     }
 }

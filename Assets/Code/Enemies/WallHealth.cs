@@ -2,23 +2,10 @@ using Code.DebugTools.Logger;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-[System.Serializable]
-public class EnemyType
-{
-    public string name; 
-    public float destroyInSec;
-    [HideInInspector] public float damagePerSecond;
-
-    public void CalculateDamagePerSecond(float wallHealth)
-    {
-        damagePerSecond = wallHealth / destroyInSec;
-    }
-}
-
 public class WallHealth : MonoBehaviour
 {
     [SerializeField] private float healthPoints = 200f;
-    [SerializeField] private EnemyType[] enemyTypes;
+    [SerializeField] private EnemyStats[] enemyTypes;
 
     SpriteRenderer spriteRenderer;
 

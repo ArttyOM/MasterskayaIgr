@@ -13,8 +13,11 @@ GameObject:
   - component: {fileID: 6338023213458629223}
   - component: {fileID: 7730937164651801881}
   - component: {fileID: 7570621351684711901}
-  - component: {fileID: 4308381912584938303}
-  m_Layer: 0
+  - component: {fileID: 2952056462997522785}
+  - component: {fileID: 2320970803429265612}
+  - component: {fileID: 461802627751420070}
+  - component: {fileID: 196591994820799947}
+  m_Layer: 16
   m_Name: Rider
   m_TagString: rider
   m_Icon: {fileID: 0}
@@ -31,7 +34,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 13.44, y: -3.6, z: 0}
-  m_LocalScale: {x: 0.55, y: 0.55, z: 0.55}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
@@ -74,10 +77,10 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 1006330289
-  m_SortingLayer: 1
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: c4f7446afc12c458ca9d6c929073db3d, type: 3}
+  m_Sprite: {fileID: 21300000, guid: ce789d3e69b29480992b84c5339a96c8, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -120,18 +123,18 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.72674567, y: -0.37509483}
+  m_Offset: {x: 0.04493618, y: -1.2084167}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 3.72, y: 4.03}
+    oldSize: {x: 5.94, y: 5.55}
     newSize: {x: 3.72, y: 4.03}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.7038676, y: 1.4981133}
+  m_Size: {x: 2.9376202, y: 3.1647573}
   m_EdgeRadius: 0
 --- !u!50 &7730937164651801881
 Rigidbody2D:
@@ -141,9 +144,9 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2988622968305195182}
-  m_BodyType: 0
+  m_BodyType: 1
   m_Simulated: 1
-  m_UseFullKinematicContacts: 0
+  m_UseFullKinematicContacts: 1
   m_UseAutoMass: 0
   m_Mass: 1
   m_LinearDrag: 0
@@ -172,11 +175,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46d736786b1a4477ab5dd56971494ae1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  monsterSpeed: 0
-  monsterHP: 0
-  depthScale: -0.1
-  monsterTypes: []
---- !u!95 &4308381912584938303
+--- !u!95 &2952056462997522785
 Animator:
   serializedVersion: 5
   m_ObjectHideFlags: 0
@@ -186,7 +185,7 @@ Animator:
   m_GameObject: {fileID: 2988622968305195182}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 1b30ee3c40655448493a6c225b7836d6, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -197,3 +196,41 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &2320970803429265612
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2988622968305195182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d446cd83777448f9f9fb0e1d9130434, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _enemyType: 2
+  currentSpeed: 0
+--- !u!114 &461802627751420070
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2988622968305195182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1aad3129752ef804999a880a7b2d72ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &196591994820799947
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2988622968305195182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1be7847b61f30f24daa5762db87a5b19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

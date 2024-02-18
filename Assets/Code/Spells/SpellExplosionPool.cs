@@ -16,10 +16,12 @@ namespace Code.Spells
             return Object.Instantiate(_prefab);
         }
 
-        public SpellExplosion Rent(Vector3 explosionDataWorldPosition)
+        public SpellExplosion Rent(Vector3 explosionDataWorldPosition, bool isMega)
         {
             var result = Rent();
             result.transform.position = explosionDataWorldPosition;
+            result.isMega = isMega;
+            result.VfxDestroyWithDelay();
             return result;
         }
     }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Code.DebugTools.Logger;
+using Code.Enemies;
 using Code.Spells;
 using Code.Spells.IceSpell;
 using Code.Spells.LineAttackSpell;
@@ -15,25 +16,35 @@ namespace Code.Projectiles
 {
     public class ExplosionHandler: IDisposable
     {
-        public ExplosionHandler(IObservable<ExplosionData> onExplosion, SpellsConfig spellsConfig)
+        public ExplosionHandler(IObservable<ExplosionData> onExplosion, IObservable<(CommonEnemy, SpellExplosion)> onEnemyExploded, SpellsConfig spellsConfig)
         {
             _spellsConfig = spellsConfig;
             CreatePools();
             _onExplosionSubscription = onExplosion.Subscribe(ShowExplosionAnimationAndEffortOnEnemies);
+            _interationWithEnemies = new()
+            {
+                {SpellType.Badaboom, new BadaboomSpellActingOnEnemy()},
+                {SpellType.Poison, new PoisonSpellActingOnEnemy()},
+                {SpellType.Shrapnel, new ShrapnelSpellActingOnEnemy()},
+                {SpellType.LineAttack, new LineAttackSpellActingOnEnemy()},
+                {SpellType.Ice, new IceSpellActingOnEnemy()},
+                {SpellType.Mine, new MineSpellActingOnEnemy()}
+            };
+
+            foreach (var config in spellsConfig.spellConfigs)
+            {
+                _interationWithEnemies[config.spellType].Init(onEnemyExploded, config.commonSpellBalance, config.megaSpellBalance);
+                //_interationWithEnemies[config.spellType] 
+            }
+            //onEnemyExploded, spellsConfig.spellConfigs.
+           
+            
         }
 
         private readonly Dictionary<SpellType, SpellExplosionPool> _commonSpellExplosionPool = new();
         private readonly Dictionary<SpellType, SpellExplosionPool> _megaSpellExplosionPool = new();
 
-        private readonly Dictionary<SpellType, ISpellActingOnEnemy> _interationWithEnemies = new()
-        {
-            {SpellType.Badaboom, new BadaboomSpellActingOnEnemy()},
-            {SpellType.Poison, new PoisonSpellActingOnEnemy()},
-            {SpellType.Shrapnel, new ShrapnelSpellActingOnEnemy()},
-            {SpellType.LineAttack, new LineAttackSpellActingOnEnemy()},
-            {SpellType.Ice, new IceSpellActingOnEnemy()},
-            {SpellType.Mine, new MineSpellActingOnEnemy()}
-        };
+        private readonly Dictionary<SpellType, ISpellActingOnEnemy> _interationWithEnemies;
         private readonly SpellsConfig _spellsConfig;
         private readonly IDisposable _onExplosionSubscription;
         
@@ -80,11 +91,11 @@ namespace Code.Projectiles
         {
             if (isMega)
             {
-                return _megaSpellExplosionPool[explosionData.GetSpellType].Rent(explosionData.GetWorldPosition);
+                return _megaSpellExplosionPool[explosionData.GetSpellType].Rent(explosionData.GetWorldPosition, true);
             }
             else
             {
-                return _commonSpellExplosionPool[explosionData.GetSpellType].Rent(explosionData.GetWorldPosition);
+                return _commonSpellExplosionPool[explosionData.GetSpellType].Rent(explosionData.GetWorldPosition, false);
             }
         }
     }

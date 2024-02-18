@@ -23,8 +23,7 @@ namespace Code.Main
     {
         [SerializeField] private WeaponSpawnChanceConfig _weaponSpawnChanceConfig;
         [SerializeField] private SpellsConfig _spellsConfig;
-        [SerializeField] private CommonEnemy _commonEnemyPrefab;
-        [SerializeField] private float _moveSpeed = 1f;
+        [SerializeField] private EnemiesConfig _enemiesConfig;
 
         private WeaponRandomGenerator _weaponRandomGenerator;
         private SpellVfxGenerator _spellVfxGenerator;
@@ -47,6 +46,7 @@ namespace Code.Main
         private SpellsPanelActivator _spellsPanelActivator;
 
         private CommonEnemyMover _commonEnemyMover;
+        private Enemies.Enemies _enemies;
 
         public async UniTask Init(InGameEvents events, ScreenSwitcher screenSwitcher, int sceneIndex)
         {
@@ -54,29 +54,31 @@ namespace Code.Main
          
             CreateEventSystemIfNeeded();
             InitLight2D();
-            
+
+            _enemies = new Enemies.Enemies(_enemiesConfig);
             _weaponRandomGenerator = new WeaponRandomGenerator(_weaponSpawnChanceConfig, _events.OnSpellSelected, _events.OnSessionStart);
             _spellVfxGenerator = new SpellVfxGenerator(_spellsConfig, _events.OnSpellSelected, _events.OnSessionStart);
             _gridPointSelector = new(_events.OnProjectileDestinationSelected);
             
+            
+            
             var weaponPools = _weaponRandomGenerator.GetWeaponPools;
             var spellPools = _spellVfxGenerator.GetSpellPools;
             _projectileThrower = new(_events.OnProjectileDestinationSelected, _events.OnProjectileExploded, weaponPools, spellPools);
-            _explosionHandler = new(_events.OnProjectileExploded, _spellsConfig);
+            _explosionHandler = new(_events.OnProjectileExploded, _events.OnExplosionEnter, _spellsConfig);
 
             _sceneIndex = sceneIndex;
 
             _events = events;
             _screenSwitcher = screenSwitcher;
 
+            _commonEnemyMover = new CommonEnemyMover(_enemiesConfig, _enemies, _events.OnSessionStart);
+            
             _screenSwitcher.ReInit();
             _screenSwitcher.ShowScreen(ScreenType.PreparationForTheGame);
-
-            _commonEnemyMover = new CommonEnemyMover(_commonEnemyPrefab, _moveSpeed, _events.OnSessionStart);
-
             InitButtons();
             InitScreenActivators();
-            
+            InitEnemies();
             _isInit = true;
         }
 
@@ -121,6 +123,14 @@ namespace Code.Main
                     _globalLight.enabled = true;
                     break;
                 }
+        }
+
+        private void InitEnemies()
+        {
+            foreach (var enemy in _enemies.GetAliveEnemies)
+            {
+                enemy.Init(_events.OnExplosionEnter, _enemies.GetEnemyStats[enemy.GetEnemyType]);
+            }
         }
         
         private void CreateEventSystemIfNeeded()

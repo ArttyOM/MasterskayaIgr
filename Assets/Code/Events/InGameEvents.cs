@@ -1,4 +1,5 @@
 using System;
+using Code.Enemies;
 using Code.GameLoop;
 using Code.Projectiles;
 using Code.Spells;
@@ -25,6 +26,7 @@ namespace Code.Events
         public readonly Subject<(Vector2Int, Vector3)> OnProjectileDestinationSelected =  new();
         
         public readonly Subject<ExplosionData> OnProjectileExploded =  new();
+        public readonly Subject<(CommonEnemy, SpellExplosion)> OnExplosionEnter = new();
 
 
         public void Dispose()

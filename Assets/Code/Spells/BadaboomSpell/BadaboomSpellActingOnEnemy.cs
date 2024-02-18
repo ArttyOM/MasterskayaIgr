@@ -12,39 +12,47 @@ namespace Code.Spells
 {
     public class BadaboomSpellActingOnEnemy: IDisposable, ISpellActingOnEnemy
     {
+        
+        private IDisposable _onEnemyExploadedSubscription;
+        private IObservable<(CommonEnemy, SpellExplosion)> _onEnemyExploded;
+        private SpellBalanceConfig _megaSpellConfig;
+        private SpellBalanceConfig _commonSpellConfig;
+
+        public void Init(IObservable<(CommonEnemy, SpellExplosion)> onEnemyExploded,
+            SpellBalanceConfig commonSpellBalance, SpellBalanceConfig megaSpellConfig)
+        {
+            _megaSpellConfig = megaSpellConfig;
+            _commonSpellConfig = commonSpellBalance;
+            _onEnemyExploded = onEnemyExploded;
+            _onEnemyExploadedSubscription = _onEnemyExploded.Subscribe(OnExplosion);
+        }
+        
         public void Dispose()
+        {
+            _onEnemyExploadedSubscription?.Dispose();
+        }
+
+        public void Act(SpellExplosion explosion, SpellBalanceConfig spellConfig)
         {
             
         }
 
-        public void Act(CommonEnemy enemy)
+        private void OnExplosion((CommonEnemy enemy, SpellExplosion explosion) enemySpellPair)
         {
+            var explosion = enemySpellPair.explosion;
+            var enemy = enemySpellPair.enemy;
             
-        }
-        
-        public void Act(SpellExplosion explosion, SpellBalanceConfig spellConfig)
-        {
-            "Act>>>".Colored(Colors.red).Log();
-            List<CommonEnemy> enemies = GameObject.FindObjectsByType<CommonEnemy>(FindObjectsSortMode.None).ToList();
-            foreach (CommonEnemy enemy in enemies)
-             {
-                 //enemy.SSSS();
-            //     enemy.GetObservableTrigger2DTrigger.OnTriggerEnter2DAsObservable().First()
-            //         .Debug()
-            //         .Subscribe(onNext: collider2D =>
-            //         {
-            //             enemy.GetHit(spellConfig.damage);
-            //         });
-             }
-            // enemies[0].GetObservableTrigger2DTrigger.OnTriggerEnter2DAsObservable().First()
-            //     .Debug()
-            //     .Subscribe(onNext: collider2D =>
-            //     {
-            //         enemies[0].GetHit(spellConfig.damage);
-            //     });
-            var ps = explosion.GetComponentInChildren<ParticleSystem>();
-            Observable.EveryUpdate().SkipWhile(x => ps.IsAlive(true)).First()
-                .Subscribe(_ => GameObject.Destroy(explosion.gameObject));
+
+            float damage;
+            if (explosion.isMega)
+            {
+                damage = _megaSpellConfig.damage;
+            }
+            else
+            {
+                damage = _commonSpellConfig.damage;
+            }
+            enemy.GetHit(damage);
         }
     }
 }

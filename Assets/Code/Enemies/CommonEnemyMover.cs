@@ -12,62 +12,47 @@ namespace Code.Enemies
 {
     public class CommonEnemyMover : IDisposable
     {
-        public CommonEnemyMover(CommonEnemy prefab, float moveSpeed, IObservable<int> eventsSessionStart)
+        public CommonEnemyMover(EnemiesConfig enemiesConfig, Enemies enemies, Subject<int> eventsSessionStart)
         {
-            _enemyPool = new CommonEnemyPool(prefab);
-            _baseMoveSpeed = moveSpeed;
-            _currentMoveSpeed = _baseMoveSpeed;
-            
-            var alreadyExistingEnemies = Object.FindObjectsByType<CommonEnemy>(FindObjectsSortMode.None);
-            foreach (var enemy in alreadyExistingEnemies)
+            _enemies = enemies;
+            var aliveEnemies = _enemies.GetAliveEnemies;
+            foreach (var enemy in aliveEnemies)
             {
-                enemy.Speed = _baseMoveSpeed; // Установка базовой скорости для каждого врага
-                _enemies.Add(enemy);
+                _enemiesToMove.Add(enemy);
 
                 var onCollision = enemy.GetComponentInChildren<ObservableCollision2DTrigger>();
-                onCollision.OnCollisionEnter2DAsObservable().Subscribe(x =>
-                {
-                    enemy.Speed = 0; // Обнуление скорости при столкновении
-                });
+                // onCollision.OnCollisionEnter2DAsObservable().Subscribe(x =>
+                // {
+                //     enemy.CurrentSpeed = 0; // Обнуление скорости при столкновении
+                // });
             }
-            _startSessionSubscription = eventsSessionStart.Subscribe(x => Activate());
-            Observable.EveryFixedUpdate().Subscribe(x => Move());
+            _movementSubscription = Observable.EveryFixedUpdate()
+                .SkipUntil(eventsSessionStart)
+                .Subscribe(x => Move());
         }
-
-        private IDisposable _startSessionSubscription;
-        private CommonEnemyPool _enemyPool;
-        private List<CommonEnemy> _enemies = new List<CommonEnemy>();
+        
+        private readonly IDisposable _movementSubscription;
+        private List<CommonEnemy> _enemiesToMove = new();
         private float _baseMoveSpeed;
         private float _currentMoveSpeed;
-        private bool _is_active = false;
+        private readonly Enemies _enemies;
+
         private void Move()
         {
-            if (!_is_active) return;
-
-            foreach (var enemy in _enemies)
+            foreach (var enemy in _enemiesToMove)
             {
                 var rb = enemy.GetKinematicRigidbody;
                 if (rb != null)
                 {
-                    rb.velocity = new Vector2(-enemy.Speed, 0); // Использование индивидуальной скорости
+                    rb.velocity = new Vector2(-enemy.currentSpeed, 0); // Использование индивидуальной скорости
                 }
             }
         }
-
-        private void Activate()
-        {
-            _is_active = true;
-            // Восстановление текущей скорости до базовой для всех врагов при активации
-            foreach (var enemy in _enemies)
-            {
-                enemy.Speed = _baseMoveSpeed;
-            }
-        }
+        
 
         public void Dispose()
         {
-            _enemyPool?.Dispose();
-            _startSessionSubscription?.Dispose();
+            _movementSubscription?.Dispose();
         }
     }
 }

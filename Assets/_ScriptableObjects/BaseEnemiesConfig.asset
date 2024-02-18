@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 034fb75f6c004b19a98a0b0cf7909385, type: 3}
+  m_Name: BaseEnemiesConfig
+  m_EditorClassIdentifier: 
+  enemyConfigs:
+  - enemyType: 0
+    _prefab: {fileID: 3059764289421639699, guid: 22a9f60eb28194f39932e8926869437a, type: 3}
+    enemyStats:
+      name: zombie
+      destroyInSec: 60
+      hitPoints: 40
+      moveSpeed: 1
+      damagePerSecond: 0
+  - enemyType: 1
+    _prefab: {fileID: 7941115708784967379, guid: ad6b0d10946d145c5b99d24b70d0c932, type: 3}
+    enemyStats:
+      name: soldier
+      destroyInSec: 120
+      hitPoints: 20
+      moveSpeed: 2
+      damagePerSecond: 0
+  - enemyType: 2
+    _prefab: {fileID: 2320970803429265612, guid: 2f91ca8780e4c4289819086874b3a1e8, type: 3}
+    enemyStats:
+      name: rider
+      destroyInSec: 120
+      hitPoints: 20
+      moveSpeed: 3
+      damagePerSecond: 0
