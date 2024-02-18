@@ -17,19 +17,11 @@ namespace Code.Spells.IceSpell
         
         public void Dispose()
         {
+            _onEnemyExploadedSubscription?.Dispose();
         }
 
         public void Act(SpellExplosion explosion, SpellBalanceConfig spellConfig)
         {
-            List<CommonEnemy> enemies = GameObject.FindObjectsByType<CommonEnemy>(FindObjectsSortMode.None).ToList();
-            foreach (CommonEnemy enemy in enemies)
-            {
-                enemy.GetObservableTrigger2DTrigger.OnTriggerEnter2DAsObservable()
-                    .Subscribe(onNext: collider2D =>
-                    {
-                        enemy.GetHit(spellConfig.damage);
-                    });
-            }
         }
 
         public void Init(IObservable<(CommonEnemy, SpellExplosion)> onEnemyExploded,
@@ -55,7 +47,7 @@ namespace Code.Spells.IceSpell
             if (explosion.isMega)
             {
                 damage = _megaSpellConfig.damage;
-                slowValue= _megaSpellConfig.slowValue;
+                slowValue= _megaSpellConfig.damagePerSecond;
                 slowDuration = _megaSpellConfig.duration;
             }
             else
@@ -79,7 +71,10 @@ namespace Code.Spells.IceSpell
                 slowDuration -= Time.deltaTime;
                 yield return null;
             }
-            enemy.currentSpeed = enemy.GetBaseSpeed;
+            if (enemy != null)
+            {
+                enemy.currentSpeed = enemy.GetBaseSpeed;
+            }
         }
     }
 }
