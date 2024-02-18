@@ -16,8 +16,7 @@ namespace Code.GameLoop
         }
 
         private IDisposable _subscription;
-
-
+        
         public void Dispose()
         {
             _subscription?.Dispose();

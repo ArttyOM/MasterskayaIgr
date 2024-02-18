@@ -31,6 +31,7 @@ namespace Code.Main
         private ProjectileThrower _projectileThrower;
         private ExplosionHandler _explosionHandler;
         private WinDetector _winDetector;
+        private LoseDetector _loseDetector;
 
         private ScreenSwitcher _screenSwitcher;
         private InGameEvents _events;
@@ -62,7 +63,7 @@ namespace Code.Main
             _gridPointSelector = new(_events.OnProjectileDestinationSelected);
 
             _winDetector = new WinDetector(_enemies, _events.OnLevelEnd);
-            
+            _loseDetector = new LoseDetector(_events.OnLevelEnd);
             
             var weaponPools = _weaponRandomGenerator.GetWeaponPools;
             var spellPools = _spellVfxGenerator.GetSpellPools;

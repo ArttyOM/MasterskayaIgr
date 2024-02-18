@@ -30,7 +30,7 @@ public class WallHealth : MonoBehaviour
             if (collision.gameObject.tag == enemyType.name)
             {
                 healthPoints -= enemyType.damagePerSecond * Time.deltaTime;
-                $"healthPoints = {healthPoints}".Log();
+                //$"healthPoints = {healthPoints}".Log();
                 UpdateSprite();
                 break;
             }
