@@ -23,15 +23,16 @@ namespace Code.Enemies
         private IDisposable _onCollisionExitSubsruption;
         
         private IObserver<(CommonEnemy, SpellExplosion)> _onExplosionEnter;
-        
+        private IObserver<CommonEnemy> _onEnemyDead;
+
         public ObservableCollision2DTrigger GetObservableCollision2DTrigger { get; private set;}
         public ObservableTrigger2DTrigger GetObservableTrigger2DTrigger { get; private set; }
         public EnemyType GetEnemyType => _enemyType;
 
-        public void Init(IObserver<(CommonEnemy, SpellExplosion)> onExplosionEnter, EnemyStats config)
+        public void Init(IObserver<(CommonEnemy, SpellExplosion)> onExplosionEnter, IObserver<CommonEnemy> onEnemyDead,EnemyStats config)
         {
             _onExplosionEnter = onExplosionEnter;
-            
+            _onEnemyDead = onEnemyDead;
             if (_rigidbody2D is null) _rigidbody2D = FindKinematicRigidbody();
             GetObservableCollision2DTrigger = GetComponentInChildren<ObservableCollision2DTrigger>();
             GetObservableTrigger2DTrigger = GetComponentInChildren<ObservableTrigger2DTrigger>();
@@ -79,7 +80,11 @@ namespace Code.Enemies
             $">>GetHit {name} got {damage} damage".Colored(Color.cyan).Log();
 
             _currentHP -= damage;
-            if (_currentHP<=0) Destroy(this.gameObject);
+            if (_currentHP <= 0)
+            {
+                Destroy(this.gameObject);
+                _onEnemyDead.OnNext(this);
+            }
         }
         
         

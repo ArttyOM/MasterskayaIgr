@@ -30,6 +30,7 @@ namespace Code.Main
         private GridPointSelector _gridPointSelector;
         private ProjectileThrower _projectileThrower;
         private ExplosionHandler _explosionHandler;
+        private WinDetector _winDetector;
 
         private ScreenSwitcher _screenSwitcher;
         private InGameEvents _events;
@@ -55,11 +56,12 @@ namespace Code.Main
             CreateEventSystemIfNeeded();
             InitLight2D();
 
-            _enemies = new Enemies.Enemies(_enemiesConfig);
+            _enemies = new Enemies.Enemies(_enemiesConfig, _events.OnEnemyDead);
             _weaponRandomGenerator = new WeaponRandomGenerator(_weaponSpawnChanceConfig, _events.OnSpellSelected, _events.OnSessionStart);
             _spellVfxGenerator = new SpellVfxGenerator(_spellsConfig, _events.OnSpellSelected, _events.OnSessionStart);
             _gridPointSelector = new(_events.OnProjectileDestinationSelected);
-            
+
+            _winDetector = new WinDetector(_enemies, _events.OnLevelEnd);
             
             
             var weaponPools = _weaponRandomGenerator.GetWeaponPools;
@@ -129,7 +131,7 @@ namespace Code.Main
         {
             foreach (var enemy in _enemies.GetAliveEnemies)
             {
-                enemy.Init(_events.OnExplosionEnter, _enemies.GetEnemyStats[enemy.GetEnemyType]);
+                enemy.Init(_events.OnExplosionEnter, _events.OnEnemyDead, _enemies.GetEnemyStats[enemy.GetEnemyType]);
             }
         }
         
@@ -162,6 +164,7 @@ namespace Code.Main
             _loseScreenActivator = new LoseScreenActivator(_screenSwitcher, _events.OnLevelEnd);
             _winScreenActivator?.Dispose();
             _winScreenActivator = new WinScreenActivator(_screenSwitcher, _events.OnLevelEnd);
+            
             
             _spellsPanelActivator?.Dispose();
             _spellsPanelActivator = new SpellsPanelActivator(_events.OnSessionStart, _events.OnSpellSelected, _events.OnProjectileExploded);

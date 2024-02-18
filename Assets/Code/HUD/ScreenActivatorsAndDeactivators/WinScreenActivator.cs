@@ -1,6 +1,9 @@
 ﻿using System;
+using Code.DebugTools.Logger;
 using Code.GameLoop;
+using MyBox;
 using UniRx;
+using UnityEngine;
 
 namespace Code.HUD.ScreenActivators
 {
@@ -13,7 +16,7 @@ namespace Code.HUD.ScreenActivators
         {
             _screenSwitcher = screenSwitcher;
             _onWinSubscription = onLevelEnd.Where(x => x == LevelEndResult.Win).First()
-                .Subscribe(_ => ShowLoseScreen());
+                .Subscribe(_ => ShowWinScreen());
         }
 
         public void Dispose()
@@ -21,8 +24,9 @@ namespace Code.HUD.ScreenActivators
             _onWinSubscription.Dispose();
         }
 
-        private void ShowLoseScreen()
+        private void ShowWinScreen()
         {
+            $"Win Detected".Colored(Color.red).Log();
             _screenSwitcher.ShowScreen(ScreenType.Victory);
         }
     }

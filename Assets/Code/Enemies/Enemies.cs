@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Windows.WebCam;
+using UniRx;
 using Object = UnityEngine.Object;
 
 namespace Code.Enemies
 {
     public class Enemies: IDisposable
     {
-        public Enemies(EnemiesConfig enemiesConfig)
+        public Enemies(EnemiesConfig enemiesConfig, IObservable<CommonEnemy> onEnemyDead)
         {
             _enemiesConfig = enemiesConfig;
 
@@ -26,8 +26,16 @@ namespace Code.Enemies
                 }
                 else _aliveEnemies[enemy.GetEnemyType].Add(enemy);
             }
+
+            _onEnemyDeadSubscription = onEnemyDead
+                .Subscribe(enemy =>
+                {
+                    _enemyPools[enemy.GetEnemyType].Return(enemy);
+                    _aliveEnemies[enemy.GetEnemyType].Remove(enemy);
+                });
         }
 
+        private IDisposable _onEnemyDeadSubscription;
         private readonly EnemiesConfig _enemiesConfig;
         private readonly Dictionary<EnemyType, CommonEnemyPool> _enemyPools = new();
         private readonly Dictionary<EnemyType, List<CommonEnemy>> _aliveEnemies = new();
@@ -52,6 +60,7 @@ namespace Code.Enemies
 
         public void Dispose()
         {
+            _onEnemyDeadSubscription?.Dispose();
         }
     }
 }

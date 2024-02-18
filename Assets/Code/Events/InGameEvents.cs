@@ -27,6 +27,7 @@ namespace Code.Events
         
         public readonly Subject<ExplosionData> OnProjectileExploded =  new();
         public readonly Subject<(CommonEnemy, SpellExplosion)> OnExplosionEnter = new();
+        public readonly Subject<CommonEnemy> OnEnemyDead = new();
 
 
         public void Dispose()
