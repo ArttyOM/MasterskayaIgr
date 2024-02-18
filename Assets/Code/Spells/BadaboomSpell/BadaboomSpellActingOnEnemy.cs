@@ -24,7 +24,9 @@ namespace Code.Spells
             _megaSpellConfig = megaSpellConfig;
             _commonSpellConfig = commonSpellBalance;
             _onEnemyExploded = onEnemyExploded;
-            _onEnemyExploadedSubscription = _onEnemyExploded.Subscribe(OnExplosion);
+            _onEnemyExploadedSubscription = _onEnemyExploded
+                .Where(x => x.Item2.spellType == SpellType.Badaboom)
+                .Subscribe(OnExplosion);
         }
         
         public void Dispose()

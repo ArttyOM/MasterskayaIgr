@@ -19,7 +19,7 @@ namespace Code.Enemies
         public float currentSpeed;
 
         private IDisposable _onTriggerEnterSubscription;
-        private IDisposable _onCollisionEnterSubscription;
+        private IDisposable _onCollisionStaySubscription;
         private IDisposable _onCollisionExitSubsruption;
         
         private IObserver<(CommonEnemy, SpellExplosion)> _onExplosionEnter;
@@ -28,6 +28,8 @@ namespace Code.Enemies
         public ObservableCollision2DTrigger GetObservableCollision2DTrigger { get; private set;}
         public ObservableTrigger2DTrigger GetObservableTrigger2DTrigger { get; private set; }
         public EnemyType GetEnemyType => _enemyType;
+
+        public float GetBaseSpeed => _baseSpeed;
 
         public void Init(IObserver<(CommonEnemy, SpellExplosion)> onExplosionEnter, IObserver<CommonEnemy> onEnemyDead,EnemyStats config)
         {
@@ -53,7 +55,7 @@ namespace Code.Enemies
                     "OnTriggerEnter>>".Colored(Color.red).Log();
                 });
 
-            _onCollisionEnterSubscription = GetObservableCollision2DTrigger.OnCollisionEnter2DAsObservable()
+            _onCollisionStaySubscription = GetObservableCollision2DTrigger.OnCollisionStay2DAsObservable()
                 .Subscribe(_ =>
                 {
                     currentSpeed = 0;
@@ -111,7 +113,7 @@ namespace Code.Enemies
         {
             _onTriggerEnterSubscription?.Dispose();
             _onCollisionExitSubsruption?.Dispose();
-            _onCollisionEnterSubscription?.Dispose();
+            _onCollisionStaySubscription?.Dispose();
         }
     }
 }

@@ -4755,6 +4755,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Shrapnel_Mega_Explosion Variant
       objectReference: {fileID: 0}
+    - target: {fileID: 7124122976263009507, guid: 3a8396b81ce3510418f8348fc41d86e3, type: 3}
+      propertyPath: spellType
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 8073303818622696164, guid: 3a8396b81ce3510418f8348fc41d86e3, type: 3}
       propertyPath: m_LocalPosition.x
       value: 21.89

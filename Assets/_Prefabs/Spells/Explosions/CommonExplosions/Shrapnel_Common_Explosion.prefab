@@ -4757,7 +4757,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7670719965070498834, guid: 5b23ce1e8ce140f4182e4076025af347, type: 3}
       propertyPath: m_Name
-      value: _Shrapnel_Common_Explosion
+      value: Shrapnel_Common_Explosion
       objectReference: {fileID: 0}
     - target: {fileID: 7906209520544481104, guid: 5b23ce1e8ce140f4182e4076025af347, type: 3}
       propertyPath: m_LocalScale.x
@@ -4814,6 +4814,10 @@ PrefabInstance:
     - target: {fileID: 8093964344329765882, guid: 5b23ce1e8ce140f4182e4076025af347, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8397531402381156958, guid: 5b23ce1e8ce140f4182e4076025af347, type: 3}
+      propertyPath: spellType
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
