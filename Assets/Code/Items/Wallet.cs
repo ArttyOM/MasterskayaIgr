@@ -27,5 +27,7 @@ namespace Code.Items
             _coins += amount;
             BalanceChanged?.Invoke();
         }
+
+        public bool CanSpend(int price) => _coins >= price;
     }
 }

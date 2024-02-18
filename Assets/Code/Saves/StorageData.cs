@@ -25,11 +25,22 @@
         public void Create()
         {
             Data = CreateNew();
-            Save();
         }
         
-        public void Clear() => _storage.DeleteData(StorageKey);
+        public void Clear()
+        {
+            _storage.DeleteData(StorageKey);
+            Create();
+        }
 
-        public void Save() => _storage.StoreData(StorageKey, Data);
+        protected virtual void BeforeSave() {}
+
+        public void Save()
+        {
+            BeforeSave();
+            _storage.StoreData(StorageKey, Data);
+        }
+
+        
     }
 }

@@ -24,9 +24,9 @@ namespace Code.Main
             if (_serviceLocator.Profile.IsFirstLaunch()) LaunchTutorial();
             else
             {
+                _serviceLocator.ScreenSwitcher.HideAllScreensInstantly();
                 _serviceLocator.ScreenSwitcher.ShowScreen(ScreenType.Menu);
             }
-            _serviceLocator.Profile.IncrementLaunchCount();
         }
 
         private void RestoreSettings()
