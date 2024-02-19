@@ -1,50 +1,90 @@
 ﻿using System.Collections.Generic;
 using Code.DebugTools.Logger;
-using MasterServerToolkit.UI;
+using Code.Events;
+using Code.GameLoop;
+using UniRx;
 using UnityEngine;
 
 namespace Code.HUD
 {
     public class ScreenSwitcher
     {
-        private Dictionary<ScreenType, UIView> _screens;
+        private Dictionary<ScreenType, List<ScreenView>> _screens;
 
-        public ScreenSwitcher()
+        public ScreenSwitcher(InGameEvents events)
         {
+            events.OnSessionStart.Subscribe(OnGameplayStart);
+            events.OnLevelEnd.Subscribe(OnLevelEnd);
             ReInit();
+        }
+
+        private void OnLevelEnd(LevelEndResult result)
+        {
+            HideAllScreensInstantly();
+            ShowScreen(result == LevelEndResult.Win ? ScreenType.Victory : ScreenType.Defeat);
+        }
+
+        private void OnGameplayStart(int x)
+        {
+            HideAllScreensInstantly();
+            ShowScreen(ScreenType.Gameplay);
         }
 
         public void ReInit()
         {
             "ReInit called".Colored(Color.red).Log();
-            _screens = new Dictionary<ScreenType, UIView>();
-            var screenViews = Object.FindObjectsOfType<ScreenView>();
+            _screens = new Dictionary<ScreenType, List<ScreenView>>();
+            var screenViews = Object.FindObjectsOfType<ScreenView>(true);
             $"screenViews length is {screenViews.Length}".Log();
-            foreach (var screen in screenViews) _screens.Add(screen.type, screen.GetComponent<UIView>());
+            AddScreens(screenViews);
             HideAllScreensInstantly();
+        }
+
+        private void AddScreens(ScreenView[] screenViews)
+        {
+            foreach (var screen in screenViews)
+            {
+                if (!_screens.ContainsKey(screen.type)) _screens.Add(screen.type, new List<ScreenView>());
+                _screens[screen.type].Add(screen);
+            }
         }
 
         public void ShowScreen(ScreenType screenType)
         {
             $">> ShowScreen {screenType}".Colored(Color.blue).Log();
-
-            _screens[screenType].enabled = true;
-            _screens[screenType].Show();
+            if (_screens.TryGetValue(screenType, out var screens))
+            {
+                foreach (var screen in screens)
+                {
+                    screen.enabled = true;
+                    screen.Show();
+                }    
+            }
+            
         }
 
         public void HideScreenInstantly(ScreenType screenType)
         {
-            _screens[screenType].enabled = false;
-            _screens[screenType].Hide(true);
+            if (_screens.TryGetValue(screenType, out var screens))
+            {
+                foreach (var screen in screens)
+                {
+                    screen.enabled = false;
+                    screen.Hide(true);
+                }    
+            }
         }
 
         public void HideAllScreensInstantly()
         {
             ">> HideAllScreensInstantly".Colored(Color.blue).Log();
-            foreach (var screen in _screens)
+            foreach (var screenList in _screens)
             {
-                screen.Value.enabled = false;
-                screen.Value.Hide(true);
+                foreach (var screen in screenList.Value)
+                {
+                    screen.enabled = false;
+                    screen.Hide(true);
+                } 
             }
         }
     }

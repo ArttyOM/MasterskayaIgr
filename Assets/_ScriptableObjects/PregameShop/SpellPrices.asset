@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f399424f0a94b329e2fe34b298f4593, type: 3}
+  m_Name: SpellPrices
+  m_EditorClassIdentifier: 
+  _spells:
+  - Spell: 0
+    Cost: 350
+    Icon: {fileID: 21300000, guid: ff8178984d917d04bb162a302cc2750a, type: 3}
+  - Spell: 1
+    Cost: 450
+    Icon: {fileID: 21300000, guid: 055730caa6ceb4b4ca4a3381af7e9c5e, type: 3}
+  - Spell: 2
+    Cost: 375
+    Icon: {fileID: 21300000, guid: 8acadee7df40edd43a1bb65f1e606c95, type: 3}
+  - Spell: 3
+    Cost: 500
+    Icon: {fileID: 21300000, guid: cf7d3ef13f2162241837528fd7c54241, type: 3}
+  - Spell: 4
+    Cost: 475
+    Icon: {fileID: 21300000, guid: 738d5ccab4c776047a8906abdeeba7e2, type: 3}
+  - Spell: 5
+    Cost: 550
+    Icon: {fileID: 21300000, guid: 90dd826c609a0c64fa3c8b86da799732, type: 3}

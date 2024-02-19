@@ -4,6 +4,7 @@ using Code.DebugTools.Logger;
 using GameAnalyticsSDK.Setup;
 using UniRx;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Code.Projectiles
 {

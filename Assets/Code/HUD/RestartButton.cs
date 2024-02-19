@@ -1,9 +1,6 @@
 ﻿using System;
 using Code.DebugTools.Logger;
-using Code.Events;
-using UniRx;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace Code.HUD
