@@ -1,17 +1,25 @@
-﻿using UnityEngine;
+﻿using System;
+using UniRx;
+using UnityEngine;
 
 namespace Code.Spells
 {
     public class SpellExplosion:MonoBehaviour
     {
-        private SpellColliderProvider _colliderProvider;
+        public SpellType spellType;
+        public bool isMega;
 
-        public SpellColliderProvider GetColliderProvider => _colliderProvider;
-        
-        private void Awake()
+        private IDisposable _subscription;
+        public void VfxDestroyWithDelay()
         {
-            _colliderProvider = GetComponentInChildren<SpellColliderProvider>();
+            var ps = this.GetComponentInChildren<ParticleSystem>();
+            _subscription = Observable.EveryUpdate().SkipWhile(x => ps.IsAlive(true)).First()
+                .Subscribe(_ => GameObject.Destroy(this.gameObject));
         }
-        
+
+        private void OnDestroy()
+        {
+            _subscription?.Dispose();
+        }
     }
 }

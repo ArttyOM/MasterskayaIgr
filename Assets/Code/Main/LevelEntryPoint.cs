@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
+﻿using System.Linq;
 using Code.DebugTools.Logger;
 using Code.Enemies;
 using Code.Events;
@@ -16,7 +12,6 @@ using UnityEngine;
 using Object = UnityEngine.Object;
 using Cysharp.Threading.Tasks.Linq;
 using UniRx;
-using Unity.VisualScripting;
 using UnityEngine.EventSystems;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
@@ -28,14 +23,15 @@ namespace Code.Main
     {
         [SerializeField] private WeaponSpawnChanceConfig _weaponSpawnChanceConfig;
         [SerializeField] private SpellsConfig _spellsConfig;
-        [SerializeField] private CommonEnemy _commonEnemyPrefab;
-        [SerializeField] private float _moveSpeed = 1f;
+        [SerializeField] private EnemiesConfig _enemiesConfig;
 
         private WeaponRandomGenerator _weaponRandomGenerator;
         private SpellVfxGenerator _spellVfxGenerator;
         private GridPointSelector _gridPointSelector;
         private ProjectileThrower _projectileThrower;
         private ExplosionHandler _explosionHandler;
+        private WinDetector _winDetector;
+        private LoseDetector _loseDetector;
 
         private ScreenSwitcher _screenSwitcher;
         private InGameEvents _events;
@@ -52,49 +48,40 @@ namespace Code.Main
         private SpellsPanelActivator _spellsPanelActivator;
 
         private CommonEnemyMover _commonEnemyMover;
+        private Enemies.Enemies _enemies;
 
         public async UniTask Init(InGameEvents events, ScreenSwitcher screenSwitcher, int sceneIndex)
         {
             ">>LevelEntryPoint.Init".Colored(Color.red).Log();
-            
+         
+            CreateEventSystemIfNeeded();
+            InitLight2D();
+
+            _enemies = new Enemies.Enemies(_enemiesConfig, _events.OnEnemyDead);
             _weaponRandomGenerator = new WeaponRandomGenerator(_weaponSpawnChanceConfig, _events.OnSpellSelected, _events.OnSessionStart);
             _spellVfxGenerator = new SpellVfxGenerator(_spellsConfig, _events.OnSpellSelected, _events.OnSessionStart);
             _gridPointSelector = new(_events.OnProjectileDestinationSelected);
+
+            _winDetector = new WinDetector(_enemies, _events.OnLevelEnd);
+            _loseDetector = new LoseDetector(_events.OnLevelEnd);
             
             var weaponPools = _weaponRandomGenerator.GetWeaponPools;
             var spellPools = _spellVfxGenerator.GetSpellPools;
             _projectileThrower = new(_events.OnProjectileDestinationSelected, _events.OnProjectileExploded, weaponPools, spellPools);
-            _explosionHandler = new(_events.OnProjectileExploded, _spellsConfig);
-
-            var eventSystem = FindObjectOfType<EventSystem>();
-            if (eventSystem is null)
-            {
-                var uiEvents = new GameObject("UiInputEvents");
-                uiEvents.AddComponent<EventSystem>();
-                uiEvents.AddComponent<StandaloneInputModule>();
-            }
+            _explosionHandler = new(_events.OnProjectileExploded, _events.OnExplosionEnter, _spellsConfig);
 
             _sceneIndex = sceneIndex;
 
             _events = events;
             _screenSwitcher = screenSwitcher;
 
+            _commonEnemyMover = new CommonEnemyMover(_enemiesConfig, _enemies, _events.OnSessionStart);
+            
             _screenSwitcher.ReInit();
             _screenSwitcher.ShowScreen(ScreenType.PreparationForTheGame);
-
-            _commonEnemyMover = new CommonEnemyMover(_commonEnemyPrefab, _moveSpeed, _events.OnSessionStart);
-
             InitButtons();
             InitScreenActivators();
-
-            foreach (var light2D in FindObjectsOfType<Light2D>(true))
-                if (light2D.lightType == Light2D.LightType.Global)
-                {
-                    _globalLight = light2D;
-                    _globalLight.enabled = true;
-                    break;
-                }
-
+            InitEnemies();
             _isInit = true;
         }
 
@@ -130,6 +117,36 @@ namespace Code.Main
             _commonEnemyMover?.Dispose();
         }
 
+        private void InitLight2D()
+        {
+            foreach (var light2D in FindObjectsOfType<Light2D>(true))
+                if (light2D.lightType == Light2D.LightType.Global)
+                {
+                    _globalLight = light2D;
+                    _globalLight.enabled = true;
+                    break;
+                }
+        }
+
+        private void InitEnemies()
+        {
+            foreach (var enemy in _enemies.GetAliveEnemies)
+            {
+                enemy.Init(_events.OnExplosionEnter, _events.OnEnemyDead, _enemies.GetEnemyStats[enemy.GetEnemyType]);
+            }
+        }
+        
+        private void CreateEventSystemIfNeeded()
+        {
+            var eventSystem = FindObjectOfType<EventSystem>();
+            if (eventSystem is null)
+            {
+                var uiEvents = new GameObject("UiInputEvents");
+                uiEvents.AddComponent<EventSystem>();
+                uiEvents.AddComponent<StandaloneInputModule>();
+            }
+        }
+        
         private void InitButtons()
         {
             var startSessionButton = FindObjectOfType<StartSessionButton>();
@@ -148,6 +165,7 @@ namespace Code.Main
             _loseScreenActivator = new LoseScreenActivator(_screenSwitcher, _events.OnLevelEnd);
             _winScreenActivator?.Dispose();
             _winScreenActivator = new WinScreenActivator(_screenSwitcher, _events.OnLevelEnd);
+            
             
             _spellsPanelActivator?.Dispose();
             _spellsPanelActivator = new SpellsPanelActivator(_events.OnSessionStart, _events.OnSpellSelected, _events.OnProjectileExploded);
