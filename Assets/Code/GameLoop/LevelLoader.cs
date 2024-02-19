@@ -1,14 +1,10 @@
 ﻿using System;
 using Code.DebugTools.Logger;
 using Code.Events;
-using Code.HUD;
-using Code.HUD.ScreenActivators;
-using Code.Main;
 using Cysharp.Threading.Tasks;
 using UniRx;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Object = UnityEngine.Object;
 
 namespace Code.GameLoop
 {
@@ -18,23 +14,14 @@ namespace Code.GameLoop
     /// </summary>
     public class LevelLoader
     {
-        public LevelLoader(ScreenSwitcher screenSwitcher, InGameEvents events, int sceneIndex)
+        public LevelLoader(InGameEvents events)
         {
-            _events = events;
-
-            _sceneIndex = sceneIndex;
-            _screenSwitcher = screenSwitcher;
-
-            _toMenuSubscription = _events.OnMenu.Subscribe(x =>
+            
+            _toMenuSubscription = events.OnMenu.Subscribe(x =>
             {
-                LoadLevel(x).ToObservable()
-                    .Subscribe(_ =>
-                    {
-                        ">>ShowScreen Menu".Colored(Color.red).Log();
-                        _screenSwitcher.ShowScreen(ScreenType.Menu);
-                    });
+                LoadLevel(x).Forget();
             });
-            _restartLevelSubscription = _events.OnLevelRestart.Subscribe(x => LoadLevel(x));
+            _restartLevelSubscription = events.OnLevelRestart.Subscribe(x => LoadLevel(x).Forget());
         }
 
         ~LevelLoader()
@@ -44,14 +31,8 @@ namespace Code.GameLoop
         }
 
 
-        private InGameEvents _events;
-        private readonly ScreenSwitcher _screenSwitcher;
-
-        private IDisposable _toMenuSubscription;
-        private IDisposable _restartLevelSubscription;
-
-        private int _sceneIndex;
-
+        private readonly IDisposable _toMenuSubscription;
+        private readonly IDisposable _restartLevelSubscription;
         private async UniTask LoadLevel(int sceneIndex)
         {
             await LoadLevelWithSceneIndex(sceneIndex);
@@ -59,31 +40,9 @@ namespace Code.GameLoop
 
         public async UniTask LoadLevelWithSceneIndex(int sceneIndex)
         {
-            _sceneIndex = sceneIndex;
-
-            var scene = SceneManager.GetSceneByBuildIndex(sceneIndex);
-
-            if (SceneManager.GetActiveScene().buildIndex != _sceneIndex)
-            {
-                $"Загружаем сцену {_sceneIndex} ADDITIVE".Colored(Color.red).Log();
-                await SceneManager.LoadSceneAsync(_sceneIndex, LoadSceneMode.Additive);
-            }
-            else
-            {
-                $"Загружаем сцену {_sceneIndex} SINGLE".Colored(Color.red).Log();
-                await SceneManager.LoadSceneAsync(_sceneIndex);
-            }
-
-            $"Сцена {_sceneIndex} загружена".Colored(Color.red).Log();
-
-            if (scene.isLoaded)
-            {
-                $"Выгружаем сцену {scene.buildIndex}".Colored(Color.red).Log();
-                await SceneManager.UnloadSceneAsync(scene);
-            }
-
-            var levelEntryPoint = Object.FindObjectOfType<LevelEntryPoint>();
-            if (levelEntryPoint != null) await levelEntryPoint.Init(_events, _screenSwitcher, _sceneIndex);
+            $"Загружаем сцену {sceneIndex} SINGLE".Colored(Color.red).Log();
+            await SceneManager.LoadSceneAsync(sceneIndex, LoadSceneMode.Single);
+            $"Сцена {sceneIndex} загружена".Colored(Color.red).Log();
         }
     }
 }

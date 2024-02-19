@@ -16,6 +16,7 @@ namespace Code.HUD.ScreenActivators
 
         public void ShowScreen()
         {
+            _screenSwitcher.HideAllScreensInstantly();
             _screenSwitcher.ShowScreen(ScreenType.LevelSelector);
         }
 

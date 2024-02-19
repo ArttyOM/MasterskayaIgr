@@ -7,5 +7,6 @@
         Victory = 2,
         LevelSelector = 3,
         PreparationForTheGame = 4,
+        Gameplay = 5,
     }
 }
