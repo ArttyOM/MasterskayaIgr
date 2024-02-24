@@ -6,11 +6,11 @@ using Code.GameLoop;
 using Code.HUD;
 using Code.HUD.ScreenActivators;
 using Code.Projectiles;
+using Code.Saves;
 using Code.Spells;
+using Code.Upgrades;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
-using Object = UnityEngine.Object;
-using Cysharp.Threading.Tasks.Linq;
 using UnityEngine.Rendering.Universal;
 
 
@@ -40,7 +40,6 @@ namespace Code.Main
 
         private LoseScreenActivator _loseScreenActivator;
         private WinScreenActivator _winScreenActivator;
-        private SpellsPanelActivator _spellsPanelActivator;
 
         private CommonEnemyMover _commonEnemyMover;
 
@@ -53,10 +52,10 @@ namespace Code.Main
                 serviceLocator = ServiceLocator.Instance;
                 await UniTask.Yield();
             } while (serviceLocator == null);
-            Init(serviceLocator.Events, serviceLocator.ScreenSwitcher);
+            Init(serviceLocator.Events, serviceLocator.ScreenSwitcher, serviceLocator.Profile, serviceLocator.UpgradeSystem);
         }
 
-        public void Init(InGameEvents events, ScreenSwitcher screenSwitcher)
+        public void Init(InGameEvents events, ScreenSwitcher screenSwitcher, PlayerProfile profile, UpgradeSystem upgradeSystem)
         {
             _events = events;
             ">>LevelEntryPoint.Init".Colored(Color.red).Log();
@@ -72,7 +71,7 @@ namespace Code.Main
             var weaponPools = _weaponRandomGenerator.GetWeaponPools;
             var spellPools = _spellVfxGenerator.GetSpellPools;
             _projectileThrower = new(_events.OnProjectileDestinationSelected, _events.OnProjectileExploded, weaponPools, spellPools);
-            _explosionHandler = new(_events.OnProjectileExploded, _events.OnExplosionEnter, _spellsConfig);
+            _explosionHandler = new(_events.OnProjectileExploded, _events.OnExplosionEnter, _spellsConfig, new UpgradeService(profile.GetUpgrades(), upgradeSystem));
 
             _events = events;
             _screenSwitcher = screenSwitcher;
@@ -89,7 +88,6 @@ namespace Code.Main
             ">>LevelEntryPoint OnDestroy".Log();
             _loseScreenActivator?.Dispose();
             _winScreenActivator?.Dispose();
-            _spellsPanelActivator?.Dispose();
             
             _weaponRandomGenerator?.Dispose();
             
@@ -113,11 +111,6 @@ namespace Code.Main
         {
             var startSessionButton = FindObjectOfType<StartSessionButton>();
             startSessionButton.Init(_events.OnSessionStart);
-            var spellButtons = Object.FindObjectsOfType<UISelectSpellButton>(true)
-                .AsEnumerable();
-            if (spellButtons != null)
-                spellButtons.ToUniTaskAsyncEnumerable()
-                    .ForEachAsync(x => x.Init(_events.OnSpellSelected));
         }
 
 
@@ -127,10 +120,6 @@ namespace Code.Main
             _loseScreenActivator = new LoseScreenActivator(_screenSwitcher, _events.OnLevelEnd);
             _winScreenActivator?.Dispose();
             _winScreenActivator = new WinScreenActivator(_screenSwitcher, _events.OnLevelEnd);
-            
-            _spellsPanelActivator?.Dispose();
-            _spellsPanelActivator = new SpellsPanelActivator(_events.OnSessionStart, _events.OnSpellSelected, _events.OnProjectileExploded);
-
         }
     }
 }

@@ -9,6 +9,7 @@ using Code.HUD.Start;
 using Code.Levels;
 using Code.PregameShop;
 using Code.Saves;
+using Code.Spells;
 using Code.Upgrades;
 using UniRx;
 using UnityEngine;
@@ -51,6 +52,7 @@ namespace Code.Main
         public UpgradeSystem UpgradeSystem => _upgradeSystem;
         public SpellShop SpellShop => _spellShop;
         public Canvas DragCanvas => _dragCanvas;
+        public SpellsConfig SpellsConfig;
 
         private void Awake()
         {

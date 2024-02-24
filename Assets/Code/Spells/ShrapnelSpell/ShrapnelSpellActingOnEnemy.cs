@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Code.Enemies;
+using Code.Upgrades;
 using UniRx;
 using UnityEngine;
 
@@ -27,9 +28,10 @@ namespace Code.Spells.ShrapnelSpell
             }
         }
 
-        public void Init(IObservable<(CommonEnemy, SpellExplosion)> onEnemyExploded,
-            SpellBalanceConfig commonSpellBalance, SpellBalanceConfig megaSpellConfig)
+        public void Init(IObservable<(CommonEnemy, SpellExplosion)> onEnemyExploded, SpellBalanceConfig commonSpellBalance, SpellBalanceConfig megaSpellConfig,
+            UpgradeService upgradeService)
         {
+            
         }
     }
 }

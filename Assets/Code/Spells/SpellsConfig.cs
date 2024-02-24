@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
-using Code.Projectiles;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Code.Spells
 {
@@ -9,5 +7,15 @@ namespace Code.Spells
     public class SpellsConfig: ScriptableObject
     { 
         [SerializeField] public List<SpellConfig> spellConfigs;
+
+        public SpellBalanceConfig Get(SpellType spellType)
+        {
+            for (int i = 0; i < spellConfigs.Count; i++)
+            {
+                if (spellConfigs[i].spellType == spellType) return spellConfigs[i].commonSpellBalance;
+            }
+
+            return default;
+        }
     }
 }

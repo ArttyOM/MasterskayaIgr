@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Code.Enemies;
+using Code.Upgrades;
 
 namespace Code.Spells
 {
@@ -8,6 +9,6 @@ namespace Code.Spells
     {
         void Act(SpellExplosion explosion, SpellBalanceConfig spellConfig);
         void Init(IObservable<(CommonEnemy, SpellExplosion)> onEnemyExploded,
-            SpellBalanceConfig commonSpellBalance, SpellBalanceConfig megaSpellConfig);
+            SpellBalanceConfig commonSpellBalance, SpellBalanceConfig megaSpellConfig, UpgradeService upgradeService);
     }
 }

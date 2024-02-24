@@ -1,4 +1,6 @@
 using Code.DebugTools.Logger;
+using Code.Main;
+using Code.Upgrades;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -13,11 +15,13 @@ public class WallHealth : MonoBehaviour
 
     private void Start()
     {
+        var services = ServiceLocator.Instance;
+        var newHp = services.UpgradeSystem.GetUpgradedValue(services.Profile.GetUpgrades(), UpgradeTarget.WallHp, healthPoints);
         foreach (var enemy in enemyTypes)
         {
             enemy.CalculateDamagePerSecond(healthPoints); 
         }
-
+        healthPoints = newHp;
         spriteRenderer = GetComponent<SpriteRenderer>();
         UpdateSprite();
     }

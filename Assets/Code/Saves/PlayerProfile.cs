@@ -14,7 +14,6 @@ namespace Code.Saves
         public struct PlayerData
         {
             public int Level;
-            //@todo: Add LevelProgression store as array
             public int LaunchCount;
             public int Coins;
             public string[] Upgrades;
