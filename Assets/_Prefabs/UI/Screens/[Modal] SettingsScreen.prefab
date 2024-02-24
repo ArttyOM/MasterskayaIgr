@@ -1757,7 +1757,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 0
+  m_Interactable: 1
   m_TargetGraphic: {fileID: 531286933499266852}
   m_OnClick:
     m_PersistentCalls:
@@ -1924,6 +1924,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5727478185013792038, guid: cd8e24e7fbb99c9488d2a7a2806d442a, type: 3}
       propertyPath: m_Name
+      value: Legal
+      objectReference: {fileID: 0}
+    - target: {fileID: 8655631139208967847, guid: cd8e24e7fbb99c9488d2a7a2806d442a, type: 3}
+      propertyPath: m_text
       value: Legal
       objectReference: {fileID: 0}
     m_RemovedComponents: []
