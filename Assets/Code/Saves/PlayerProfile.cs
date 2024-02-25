@@ -70,6 +70,9 @@ namespace Code.Saves
         public UnitUpgrades GetUpgrades() => _unitUpgrades;
 
         public int GetLaunchCount() => Data.LaunchCount;
+
+        public int SetCurrentLevel(int level) => Data.Level = level;
+        public int GetCurrentLevel() => Data.Level;
     }
 
 }

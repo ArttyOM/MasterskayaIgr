@@ -10,7 +10,7 @@ namespace Code.GameLoop
         {
             var wallCollider = GameObject.FindObjectOfType<WallHealth>()
                 .GetComponent<Collider2D>();
-            _subscription =Observable.EveryUpdate().SkipWhile(_=>wallCollider.enabled).First()
+            _subscription = Observable.EveryUpdate().SkipWhile(_=>wallCollider.enabled).First()
                 .Subscribe(_=> eventsLevelEnd.OnNext(LevelEndResult.Lose));
                 
         }

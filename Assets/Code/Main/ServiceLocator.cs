@@ -54,6 +54,8 @@ namespace Code.Main
         public Canvas DragCanvas => _dragCanvas;
         public SpellsConfig SpellsConfig;
 
+        private CurrentLevelSwitcher _levelSwitcher;
+
         private void Awake()
         {
             if (Instance != null)
@@ -71,10 +73,11 @@ namespace Code.Main
             _settings = new PlayerSettings(_storage);
             _upgradeSystem = new UpgradeSystem(_upgrades.Upgrades);
             _shopSystem = new ShopSystem(_profile, _spellShop, _upgradeSystem);
-            _levelSelect.Init(_levelProgression, _events, _screenSwitcher);
+            _levelSelect.Init(_levelProgression, _events);
             _settingsModal.Init(_settings, _audioManager);
-            _startScreen.Init(_events, _screenSwitcher, _settingsModal, _offersManager);
+            _startScreen.Init(_events, _screenSwitcher, _settingsModal, _offersManager, _profile, _levelProgression);
             _levelLoader = new LevelLoader(_events);
+            _levelSwitcher = new CurrentLevelSwitcher(_events, _levelProgression, _profile);
             _events.OnLevelStart.Subscribe(StartLevel);
             Instance = this;
         }

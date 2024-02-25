@@ -282,6 +282,7 @@ GameObject:
   - component: {fileID: 5852853213237581386}
   - component: {fileID: 3608869633492814614}
   - component: {fileID: 6836930950784563868}
+  - component: {fileID: 2675963948121636116}
   m_Layer: 5
   m_Name: VictoryScreen
   m_TagString: Untagged
@@ -417,6 +418,20 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &2675963948121636116
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4675954228736608551}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7ae21b34e5c476e99f64de7f198247f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _restartButton: {fileID: 4296760962653118375}
+  _menuButton: {fileID: 173194232136472269}
 --- !u!1 &8526382168343111121
 GameObject:
   m_ObjectHideFlags: 0

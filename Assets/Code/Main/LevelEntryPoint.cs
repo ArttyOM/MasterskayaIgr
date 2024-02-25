@@ -78,7 +78,6 @@ namespace Code.Main
             _screenSwitcher.HideAllScreensInstantly();
             _screenSwitcher.ShowScreen(ScreenType.PreparationForTheGame);
             _commonEnemyMover = new CommonEnemyMover(_enemiesConfig, _enemies, _events.OnSessionStart);
-            InitButtons();
             InitScreenActivators();
             InitEnemies();
         }
@@ -86,6 +85,8 @@ namespace Code.Main
         private void OnDestroy()
         {
             ">>LevelEntryPoint OnDestroy".Log();
+            _loseDetector?.Dispose();
+            _winDetector?.Dispose();
             _loseScreenActivator?.Dispose();
             _winScreenActivator?.Dispose();
             
@@ -107,13 +108,6 @@ namespace Code.Main
             }
         }
         
-        private void InitButtons()
-        {
-            var startSessionButton = FindObjectOfType<StartSessionButton>();
-            startSessionButton.Init(_events.OnSessionStart);
-        }
-
-
         private void InitScreenActivators()
         {
             _loseScreenActivator?.Dispose();

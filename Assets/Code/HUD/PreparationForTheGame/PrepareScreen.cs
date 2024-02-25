@@ -1,6 +1,8 @@
-﻿using Code.Main;
+﻿using Code.DebugTools.Logger;
+using Code.Main;
 using Code.Spells;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Code.HUD
 {
@@ -10,6 +12,8 @@ namespace Code.HUD
         [SerializeField] private ShopSpellsView _shopSpellsView;
         [SerializeField] private WalletView _walletView;
         [SerializeField] private UpgradesListView _upgradesView;
+        [SerializeField] private Button _startButton;
+        
         
         private ServiceLocator _services;
         
@@ -18,7 +22,15 @@ namespace Code.HUD
             _services = ServiceLocator.Instance;
             _selectedSpells.SpellSelected += OnSpellSelected;
             _upgradesView.UpgradeBought += OnUpgradeBought;
+            _startButton.onClick.RemoveAllListeners();
+            _startButton.onClick.AddListener(StartGame);
             Render();
+        }
+
+        private void StartGame()
+        {
+            ">>StartSession sending event: onStartSessionEvent".Colored(Color.gray).Log();
+            _services.Events.OnSessionStart.OnNext(1);
         }
 
         private void OnUpgradeBought()
