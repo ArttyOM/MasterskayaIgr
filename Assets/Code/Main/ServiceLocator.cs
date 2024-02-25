@@ -29,6 +29,8 @@ namespace Code.Main
         [SerializeField] private UpgradeList _upgrades;
         [SerializeField] private AudioManager _audioManager;
         [SerializeField] private Canvas _dragCanvas;
+        [SerializeField] private DefaultPlayerProfile _defaultProfile;
+        
         
         
         private ScreenSwitcher _screenSwitcher;
@@ -68,7 +70,7 @@ namespace Code.Main
             
             _events = new InGameEvents();
             _storage = new PlayerPrefsStorage();
-            _profile = new PlayerProfile(_storage);
+            _profile = new PlayerProfile(_storage, _defaultProfile);
             _screenSwitcher = new ScreenSwitcher(_events);
             _settings = new PlayerSettings(_storage);
             _upgradeSystem = new UpgradeSystem(_upgrades.Upgrades);

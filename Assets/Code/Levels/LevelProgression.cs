@@ -11,19 +11,19 @@ namespace Code.Levels
     [CreateAssetMenu(menuName = "Levels/Progression")]
     public class LevelProgression : ScriptableObject
     {
-        [SerializeField] private List<SceneReference> _levels;
+        [SerializeField] private List<LevelData> _levels;
 
-        public IEnumerable<SceneReference> Levels => _levels;
-        public SceneReference DefaultLevel => _levels[0];
+        public IEnumerable<LevelData> Levels => _levels;
+        public LevelData DefaultLevel => _levels[0];
 
-        public SceneReference GetLevel(int levelIndex)
+        public LevelData GetLevel(int levelIndex)
         {
             if (levelIndex < 0 || levelIndex > _levels.Count - 1)
-                return new SceneReference() { SceneName = string.Empty, BuildIndex = -1 };
+                return new LevelData() { SceneName = string.Empty, BuildIndex = -1 };
             return _levels[levelIndex];
         }
 
-        public int GetNext(SceneReference level)
+        public int GetNext(LevelData level)
         {
             var index = _levels.IndexOf(level);
             if (index < 0) return index;
@@ -33,8 +33,9 @@ namespace Code.Levels
     }
 
     [Serializable]
-    public struct SceneReference : ISerializationCallbackReceiver
+    public struct LevelData : ISerializationCallbackReceiver
     {
+        public int CoinsReward;
         [HideInInspector]
         public string SceneName;
         [HideInInspector]

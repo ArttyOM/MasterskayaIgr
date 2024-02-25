@@ -59,6 +59,8 @@ MonoBehaviour:
   _upgrades: {fileID: 11400000, guid: ab90247d531241b419fdcc477642129f, type: 2}
   _audioManager: {fileID: 2770573630455429438}
   _dragCanvas: {fileID: 4071330281690348572}
+  _defaultProfile: {fileID: 11400000, guid: f79130e7b1d57244c95def84023d4a8c, type: 2}
+  SpellsConfig: {fileID: 11400000, guid: 5d318abb0db3b8b4f905d82cf98033fd, type: 2}
 --- !u!1001 &1444949659247824223
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -803,6 +805,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7261591181288520046, guid: ed511e63220f93b468b20f07e0275c06, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7284845630644941311, guid: ed511e63220f93b468b20f07e0275c06, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7284845630644941311, guid: ed511e63220f93b468b20f07e0275c06, type: 3}
+      propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7411742991960291659, guid: ed511e63220f93b468b20f07e0275c06, type: 3}
