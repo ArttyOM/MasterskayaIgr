@@ -76,14 +76,16 @@ namespace Code.Enemies
             }
         }
 
+        public bool _dead;
         public void GetHit(float damage)
         {
             var name = this.name;
             $">>GetHit {name} got {damage} damage".Colored(Color.cyan).Log();
 
             _currentHP -= damage;
-            if (_currentHP <= 0)
+            if (_currentHP <= 0 && !_dead)
             {
+                _dead = true;
                 Destroy(this.gameObject);
                 _onEnemyDead.OnNext(this);
             }

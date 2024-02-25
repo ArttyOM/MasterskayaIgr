@@ -5,6 +5,7 @@ using Code.Events;
 using Code.GameLoop;
 using Code.HUD;
 using Code.HUD.ScreenActivators;
+using Code.InGameRewards;
 using Code.Projectiles;
 using Code.Saves;
 using Code.Spells;
@@ -42,6 +43,7 @@ namespace Code.Main
         private WinScreenActivator _winScreenActivator;
 
         private CommonEnemyMover _commonEnemyMover;
+        private EnemyDropService _dropService;
 
 
         private async void Start()
@@ -52,11 +54,12 @@ namespace Code.Main
                 serviceLocator = ServiceLocator.Instance;
                 await UniTask.Yield();
             } while (serviceLocator == null);
-            Init(serviceLocator.Events, serviceLocator.ScreenSwitcher, serviceLocator.Profile, serviceLocator.UpgradeSystem);
+            Init(serviceLocator.Events, serviceLocator.ScreenSwitcher, serviceLocator.Profile, serviceLocator.UpgradeSystem, serviceLocator.Camera, serviceLocator.DropRewardsService);
         }
 
-        public void Init(InGameEvents events, ScreenSwitcher screenSwitcher, PlayerProfile profile, UpgradeSystem upgradeSystem)
+        public void Init(InGameEvents events, ScreenSwitcher screenSwitcher, PlayerProfile profile, UpgradeSystem upgradeSystem, Camera camera, DropRewards dropRewardsService)
         {
+            ClearDisposables();
             _events = events;
             ">>LevelEntryPoint.Init".Colored(Color.red).Log();
 
@@ -78,13 +81,20 @@ namespace Code.Main
             _screenSwitcher.HideAllScreensInstantly();
             _screenSwitcher.ShowScreen(ScreenType.PreparationForTheGame);
             _commonEnemyMover = new CommonEnemyMover(_enemiesConfig, _enemies, _events.OnSessionStart);
+            _dropService = new EnemyDropService(_events.OnEnemyDead, _enemiesConfig, camera, dropRewardsService);
             InitScreenActivators();
             InitEnemies();
         }
 
         private void OnDestroy()
         {
+            ClearDisposables();
+        }
+
+        private void ClearDisposables()
+        {
             ">>LevelEntryPoint OnDestroy".Log();
+            _dropService?.Dispose();
             _loseDetector?.Dispose();
             _winDetector?.Dispose();
             _loseScreenActivator?.Dispose();

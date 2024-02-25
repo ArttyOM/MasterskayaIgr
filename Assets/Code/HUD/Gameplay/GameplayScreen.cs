@@ -1,5 +1,4 @@
-﻿using System;
-using Code.Events;
+﻿using Code.Events;
 using Code.Main;
 using Code.PregameShop;
 using Code.Saves;
@@ -14,20 +13,18 @@ namespace Code.HUD.Gameplay
         private ServiceLocator _services;
         [SerializeField] private SpellsPanel _spells;
         [SerializeField] private WalletView _wallet;
-        
-        
 
         private void Start()
         {
+            Debug.Log("START GAMEPLAY");
             _services = ServiceLocator.Instance;
             Initialize(_services.Profile, _services.SpellShop, _services.Events, new UpgradeService(_services.Profile.GetUpgrades(), _services.UpgradeSystem));
-            
         }
-
+        
         public void Initialize(PlayerProfile profile, SpellShop spellShop, InGameEvents events, UpgradeService upgradeService)
         {
             _spells.CreateButtons(profile.GetSpellBook(), events, upgradeService);
-            _wallet.Render(profile.GetWallet());
+            _wallet.Render(profile.GetWallet(), _services.DropRewardsService);
         }
     }
 }

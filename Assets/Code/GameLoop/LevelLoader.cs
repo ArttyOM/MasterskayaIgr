@@ -41,6 +41,7 @@ namespace Code.GameLoop
         public async UniTask LoadLevelWithSceneIndex(int sceneIndex)
         {
             $"Загружаем сцену {sceneIndex} SINGLE".Colored(Color.red).Log();
+            await Resources.UnloadUnusedAssets();
             await SceneManager.LoadSceneAsync(sceneIndex, LoadSceneMode.Single);
             $"Сцена {sceneIndex} загружена".Colored(Color.red).Log();
         }

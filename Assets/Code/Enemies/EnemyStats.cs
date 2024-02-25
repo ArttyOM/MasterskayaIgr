@@ -8,6 +8,7 @@ public class EnemyStats
 
     public float hitPoints;
     public float moveSpeed;
+    public int KillReward;
     
     [HideInInspector] public float damagePerSecond;
 

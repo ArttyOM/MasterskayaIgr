@@ -1,4 +1,5 @@
-﻿using Code.Items;
+﻿using Code.InGameRewards;
+using Code.Items;
 using TMPro;
 using UnityEngine;
 
@@ -9,10 +10,11 @@ namespace Code.HUD
         [SerializeField] private TMP_Text _balance;
         private Wallet _wallet;
 
-        public void Render(Wallet wallet)
+        public void Render(Wallet wallet, DropRewards dropRewards)
         {
             UnSubscribe();
 
+            dropRewards.SetDestination(transform.position);
             _wallet = wallet;
             UpdateBalance();
             Subscribe();

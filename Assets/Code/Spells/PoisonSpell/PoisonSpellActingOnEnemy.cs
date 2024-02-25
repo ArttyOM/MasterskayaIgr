@@ -70,6 +70,7 @@ namespace Code.Spells.PoisonSpell
             {
                 deltaTime = Time.deltaTime;
                 duration -= deltaTime;
+                if (enemy == null) yield break;
                 enemy.GetHit(damagePerSecond * deltaTime);
                 yield return null;
             }

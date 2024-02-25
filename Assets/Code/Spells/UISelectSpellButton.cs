@@ -37,7 +37,11 @@ namespace Code.Spells
             _onClick = onClick;
             _thisButton = GetComponent<Button>();
             _icon.sprite = _spellIcons.GetSprite(GetSpellType);
+            _thisButton.onClick.RemoveAllListeners();
             _thisButton.onClick.AddListener(SendOnNext);
+            _cooldown.fillAmount = 0;
+            _cooldown.DOKill(false);
+            _thisButton.interactable = true;
         }
 
         public void SetButtonInteractable(bool isInteractable)

@@ -6,6 +6,7 @@ using Code.HUD;
 using Code.HUD.LevelSelect;
 using Code.HUD.Offers;
 using Code.HUD.Start;
+using Code.InGameRewards;
 using Code.Levels;
 using Code.PregameShop;
 using Code.Saves;
@@ -29,6 +30,9 @@ namespace Code.Main
         [SerializeField] private UpgradeList _upgrades;
         [SerializeField] private AudioManager _audioManager;
         [SerializeField] private Canvas _dragCanvas;
+        [SerializeField] private DropRewards _dropRewards;
+        [SerializeField] private Camera _camera;
+        
         [SerializeField] private DefaultPlayerProfile _defaultProfile;
         
         
@@ -54,9 +58,13 @@ namespace Code.Main
         public UpgradeSystem UpgradeSystem => _upgradeSystem;
         public SpellShop SpellShop => _spellShop;
         public Canvas DragCanvas => _dragCanvas;
+        public DropRewards DropRewardsService => _dropRewards;
+        public Camera Camera => _camera;
+
         public SpellsConfig SpellsConfig;
 
         private CurrentLevelSwitcher _levelSwitcher;
+        
 
         private void Awake()
         {
