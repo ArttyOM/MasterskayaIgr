@@ -1,4 +1,5 @@
-﻿using Code.Events;
+﻿using System.Threading.Tasks;
+using Code.Events;
 using Code.Main;
 using Code.PregameShop;
 using Code.Saves;
@@ -14,9 +15,12 @@ namespace Code.HUD.Gameplay
         [SerializeField] private SpellsPanel _spells;
         [SerializeField] private WalletView _wallet;
 
-        private void Start()
+        private async void OnEnable()
         {
-            Debug.Log("START GAMEPLAY");
+            while (ServiceLocator.Instance == null)
+            {
+                await Task.Yield();
+            }
             _services = ServiceLocator.Instance;
             Initialize(_services.Profile, _services.SpellShop, _services.Events, new UpgradeService(_services.Profile.GetUpgrades(), _services.UpgradeSystem));
         }

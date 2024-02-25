@@ -24,6 +24,7 @@ namespace Code.Spells
                 var spellType = selectedSpell.Value;
                 var spellButton = Instantiate(_buttonPrefab, _root);
                 spellButton.Init(spellType, events.OnSpellSelected, _spellsConfig.Get(spellType), upgradeService);
+                _buttons.Add(spellButton);
             }
         }
 

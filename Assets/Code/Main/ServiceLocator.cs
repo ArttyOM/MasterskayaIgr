@@ -3,6 +3,7 @@ using Code.DebugTools.Logger;
 using Code.Events;
 using Code.GameLoop;
 using Code.HUD;
+using Code.HUD.Gameplay;
 using Code.HUD.LevelSelect;
 using Code.HUD.Offers;
 using Code.HUD.Start;
@@ -32,6 +33,10 @@ namespace Code.Main
         [SerializeField] private Canvas _dragCanvas;
         [SerializeField] private DropRewards _dropRewards;
         [SerializeField] private Camera _camera;
+        [SerializeField] private GameplayScreen _gameplayScreen;
+        [SerializeField] private PrepareScreen _prepareScreen;
+        
+        
         
         [SerializeField] private DefaultPlayerProfile _defaultProfile;
         
@@ -61,9 +66,12 @@ namespace Code.Main
         public DropRewards DropRewardsService => _dropRewards;
         public Camera Camera => _camera;
 
+        public PrepareScreen PrepareScreen => _prepareScreen;
+        public GameplayScreen GameplayScreen => _gameplayScreen;
+
         public SpellsConfig SpellsConfig;
 
-        private CurrentLevelSwitcher _levelSwitcher;
+        private LevelCompleteHandler _levelCompleteHandler;
         
 
         private void Awake()
@@ -86,8 +94,9 @@ namespace Code.Main
             _levelSelect.Init(_levelProgression, _events);
             _settingsModal.Init(_settings, _audioManager);
             _startScreen.Init(_events, _screenSwitcher, _settingsModal, _offersManager, _profile, _levelProgression);
+            
             _levelLoader = new LevelLoader(_events);
-            _levelSwitcher = new CurrentLevelSwitcher(_events, _levelProgression, _profile);
+            _levelCompleteHandler = new LevelCompleteHandler(_events, _levelProgression, _profile, _dropRewards);
             _events.OnLevelStart.Subscribe(StartLevel);
             Instance = this;
         }
