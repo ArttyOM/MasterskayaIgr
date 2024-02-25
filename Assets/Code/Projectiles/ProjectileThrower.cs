@@ -20,7 +20,6 @@ namespace Code.Projectiles
             _projectilePool = new();
 
             _spawnPoint = GameObject.FindObjectOfType<CurrentWeaponSpawnPoint>();
-
             _onFireSubsctription = eventsProjectileDestinationSelected
                 .Throttle(TimeSpan.FromMilliseconds(300f))
                 .Subscribe(x => BuildProjectileThenThrow(x));
@@ -43,13 +42,13 @@ namespace Code.Projectiles
             var weapon = _spawnPoint.GetComponentInChildren<Weapon>();
             if (weapon is null) return;
             var spell = _spawnPoint.GetComponentInChildren<Spell>();
-            if (spell is null) return;
+            //if (spell is null) return;
 
             var currentProjectile = _projectilePool.Rent();
             var currentProjectileTransform = currentProjectile.transform;
             currentProjectileTransform.position = _spawnPoint.transform.position;
             weapon.transform.SetParent(currentProjectileTransform, true);
-            spell.transform.SetParent(currentProjectile.transform, true);
+            spell?.transform.SetParent(currentProjectile.transform, true);
 
             $"destination worlposition = {destinationPoint.worldPosition}".Colored(Color.cyan).Log();
             currentProjectile.transform.DOMove(destinationPoint.worldPosition, 0.3f).OnComplete(() =>

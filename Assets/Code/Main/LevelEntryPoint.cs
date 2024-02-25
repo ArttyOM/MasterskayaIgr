@@ -64,13 +64,13 @@ namespace Code.Main
             _enemies = new(_enemiesConfig, _events.OnEnemyDead);
             _weaponRandomGenerator = new WeaponRandomGenerator(_weaponSpawnChanceConfig, _events.OnSpellSelected, _events.OnSessionStart);
             _spellVfxGenerator = new SpellVfxGenerator(_spellsConfig, _events.OnSpellSelected, _events.OnSessionStart);
-            _gridPointSelector = new(_events.OnProjectileDestinationSelected);
             
             _winDetector = new WinDetector(_enemies, _events.OnLevelEnd);
             _loseDetector = new LoseDetector(_events.OnLevelEnd);
             
             var weaponPools = _weaponRandomGenerator.GetWeaponPools;
             var spellPools = _spellVfxGenerator.GetSpellPools;
+            _gridPointSelector = new(_events.OnProjectileDestinationSelected);
             _projectileThrower = new(_events.OnProjectileDestinationSelected, _events.OnProjectileExploded, weaponPools, spellPools);
             _explosionHandler = new(_events.OnProjectileExploded, _events.OnExplosionEnter, _spellsConfig);
 
@@ -82,6 +82,8 @@ namespace Code.Main
             InitButtons();
             InitScreenActivators();
             InitEnemies();
+            
+            "<<LevelEntryPoint.Init".Colored(Color.red).Log();
         }
 
         private void OnDestroy()
