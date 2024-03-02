@@ -23,6 +23,7 @@ namespace Code.Projectiles
             _onExplosionSubscription = onExplosion.Subscribe(ShowExplosionAnimationAndEffortOnEnemies);
             _interationWithEnemies = new()
             {
+                {SpellType.NoSpell, new BadaboomSpellActingOnEnemy()},
                 {SpellType.Badaboom, new BadaboomSpellActingOnEnemy()},
                 {SpellType.Poison, new PoisonSpellActingOnEnemy()},
                 {SpellType.Shrapnel, new ShrapnelSpellActingOnEnemy()},
@@ -73,7 +74,8 @@ namespace Code.Projectiles
             SpellType spellType = explosionData.GetSpellType;
             SpellConfig spellConfig = _spellsConfig.spellConfigs.Find(x => x.spellType == spellType);
 
-            bool isMega = spellConfig.megaCastWeaponType == explosionData.GetProjectileType;
+            bool isMega = (spellConfig.megaCastWeaponType == explosionData.GetProjectileType) && (spellConfig.megaCastWeaponType != ProjectileType.None);
+            
             var explosion = InstantiateExplosion(isMega, explosionData);
             if (isMega)
             {

@@ -72,7 +72,7 @@ namespace Code.Main
             var weaponPools = _weaponRandomGenerator.GetWeaponPools;
             var spellPools = _spellVfxGenerator.GetSpellPools;
             _gridPointSelector = new(_autofireConfig, _events.OnProjectileDestinationSelected, _events.OnSessionStart);
-            _projectileThrower = new(_events.OnProjectileDestinationSelected, _events.OnProjectileExploded, weaponPools, spellPools);
+            _projectileThrower = new(_events.OnProjectileDestinationSelected, _events.OnProjectileExploded, _events.OnSpellSelected, weaponPools, spellPools);
             _explosionHandler = new(_events.OnProjectileExploded, _events.OnExplosionEnter, _spellsConfig);
 
             _events = events;

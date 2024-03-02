@@ -12,6 +12,8 @@ namespace Code.Projectiles
 {
     public class WeaponRandomGenerator: IDisposable
     {
+        public const float Duration = 0.4f;
+        
         public WeaponRandomGenerator(WeaponSpawnChanceConfig weaponSpawnChanceConfig,
             IObservable<SpellType> onSpellSelected, IObservable<int> eventsSessionStart)
         {
@@ -105,7 +107,7 @@ namespace Code.Projectiles
                 }
                 _currentWeapon = _nextWeapon;
                 _currentWeapon.transform.SetParent(_currentWeaponSpawnPoint.transform);
-                _currentWeapon.transform.DOMove(_currentWeaponSpawnPoint.transform.position, 0.4f);
+                _currentWeapon.transform.DOMove(_currentWeaponSpawnPoint.transform.position, Duration);
             }
         }
     }
