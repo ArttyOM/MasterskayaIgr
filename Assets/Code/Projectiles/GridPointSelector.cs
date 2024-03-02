@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.Eventing.Reader;
 using System.Linq;
@@ -17,76 +18,78 @@ namespace Code.Projectiles
 {
     public class GridPointSelector:IDisposable
     {
-        private const string TOUCH = "Fire1";
-        
-        public GridPointSelector(IObserver<(Vector2Int,Vector3)> onDestinationSelected)
+
+        public GridPointSelector(AutofireConfig autofireConfig, IObserver<(Vector2Int, Vector3)> onDestinationSelected, IObservable<int> eventsOnSessionStart)
         {
             _playZoneCollider = GameObject.FindObjectOfType<PlayZone>().GetCollider;
-            _camera = Camera.main;
-
-            _onDestinationSelected = onDestinationSelected;
-            
             _grid = GameObject.FindObjectOfType<Grid>();
             _aimCursor = GameObject.FindObjectOfType<AimCursor>();
-
-            var onMouseButtonPressed = Observable.EveryUpdate()
-                .Where(_ => IsLeftMouseButtonDown() || IsTouchBegan());
-            _onGetMouseButtonDownSubscription = onMouseButtonPressed
-                .Subscribe(_ => SetCursorActive());
-
-            _onGetMouseButtonPressedSubscription = Observable.EveryUpdate()
-                .Where(_ => Input.touchCount>0 || Input.GetMouseButton(0))
-                .Subscribe(x =>
+            _camera = Camera.main;
+            _autofirePeriod = autofireConfig.periodInSeconds;
+            _onDestinationSelected = onDestinationSelected;
+            _onGetMouseButtonDownSubscription = Observable.EveryUpdate().SkipUntil(eventsOnSessionStart)
+                .Where(_ => IsLeftMouseButtonDown() || IsTouchBegan())
+                .Subscribe(_ =>
                 {
-                    _mouseGridPosition.Value = GetPointerGridCoords();
+                    MainThreadDispatcher.StartUpdateMicroCoroutine(DisplayAimAndSendFireEvent());
                 });
-
-            _mouseGridPosition.Where(x => _isCursorActive && x!= _nonActivePosition)
-                .Subscribe(x => _aimCursor.MoveToPosition(GetWorldPosition(x)));
-
-            // Observable.EveryUpdate()
-            //     .Where(_ => Input.GetButtonUp(TOUCH) ||IsTouchPhaseEnded())
-            //     .Subscribe(_ =>
-            //     {
-            //         //"OnButtonUp".Log();
-            //         SetCursorInactive();
-            //     });
-            
-            // _mouseGridPosition.Where(x => _isCursorActive && x!= _nonActivePosition)
-            //     .Buffer(_mouseGridPosition.Throttle(TimeSpan.FromMilliseconds(500f)))
-            //     .Where(x => x.Count>=1)
-            //     .Subscribe(x =>
-            //     {
-            //         SetCursorInactive();
-            //     });
-
-            "<<new GridPointSelector".Colored(Color.red).Log();
         }
 
         private static readonly Vector2Int _nonActivePosition = new Vector2Int(-100, -100);
 
-        private readonly IObserver<(Vector2Int gridCoords, Vector3 worldCoords)> _onDestinationSelected; 
-
-        private readonly IDisposable _onGetMouseButtonUpSubscription;
+        private readonly IObserver<(Vector2Int gridCoords, Vector3 worldCoords)> _onDestinationSelected;
         private readonly IDisposable _onGetMouseButtonDownSubscription;
-        private readonly IDisposable _onGetMouseButtonPressedSubscription;
-        private readonly Grid _grid;
-
-        private readonly Vector2IntReactiveProperty _mouseGridPosition= new(_nonActivePosition);
-        
-        private readonly AimCursor _aimCursor;
-
-        private readonly Collider2D _playZoneCollider;
-
-        private bool _isCursorActive = false;
-
         private readonly Camera _camera;
+        
+        private readonly Grid _grid;
+        private readonly Vector2IntReactiveProperty _mouseGridPosition= new(_nonActivePosition);
+        private readonly AimCursor _aimCursor;
+        private readonly Collider2D _playZoneCollider;
+        private readonly float _autofirePeriod;
+        
+        private bool _isCursorActive = false;
 
         public void Dispose()
         {
-           _onGetMouseButtonUpSubscription?.Dispose();
-           _onGetMouseButtonPressedSubscription?.Dispose();
-           _onGetMouseButtonDownSubscription?.Dispose();
+            _onGetMouseButtonDownSubscription?.Dispose();
+        }
+
+        private IEnumerator DisplayAimAndSendFireEvent()
+        {
+            SetCursorActive();
+            float secondsToFire = _autofirePeriod;
+            Vector3 worldPosition;
+            while (Input.touchCount > 0 || Input.GetMouseButton(0))
+            {
+                secondsToFire -= Time.deltaTime;
+                yield return null;
+                _mouseGridPosition.Value = GetPointerGridCoords();
+
+                if (IsCursorActiveAndInGamezone())
+                {
+                    worldPosition = GetWorldPosition(_mouseGridPosition.Value);
+                    _aimCursor.MoveToPosition(worldPosition);
+                        
+                    if (secondsToFire <= 0)
+                    {
+                        Fire(_mouseGridPosition.Value, worldPosition);
+                        secondsToFire = _autofirePeriod;
+                    }
+                }
+            }
+
+            if (IsCursorActiveAndInGamezone())
+            {
+                worldPosition = GetWorldPosition(_mouseGridPosition.Value);
+                Fire(_mouseGridPosition.Value, worldPosition);
+                SetCursorInactive();
+            }
+        }
+
+        private bool IsCursorActiveAndInGamezone()
+        {
+            return (_isCursorActive && (_mouseGridPosition.Value != _nonActivePosition) &&
+                    _playZoneCollider.OverlapPoint(_camera.ScreenToWorldPoint(Input.mousePosition)));
         }
 
         private bool IsLeftMouseButtonDown()
@@ -105,23 +108,9 @@ namespace Code.Projectiles
             }
             return false;
         }
-
-        private bool IsTouchMoved()
-        {
-            foreach (var touch in Input.touches)
-            {
-                if (touch.phase==TouchPhase.Moved) return true;
-                    //if (_touch.phase != TouchPhase.Moved) return false;
-                    //if (!_playZoneCollider.OverlapPoint(_camera.ScreenToWorldPoint(_touch.position))) return false;
-            }
-            return false;
-        }
         
-        
-
         private void SetCursorActive()
         {
-            ">>SetCursorActive".Log();
             _mouseGridPosition.Value = GetPointerGridCoords();
             var worldPosition = GetWorldPosition(_mouseGridPosition.Value);
             if (_playZoneCollider.OverlapPoint(worldPosition))
@@ -138,15 +127,18 @@ namespace Code.Projectiles
             if (_mouseGridPosition.Value != _nonActivePosition && 
                 _playZoneCollider.OverlapPoint(_camera.ScreenToWorldPoint(Input.mousePosition)))
             {
-                
                 var worldPosition = GetWorldPosition(_mouseGridPosition.Value);
                 _onDestinationSelected.OnNext((_mouseGridPosition.Value, worldPosition));
-                $"_mouseGridPosition.Value = {_mouseGridPosition.Value}, GetWorldPosition(_mouseGridPosition.Value))= {worldPosition}".Colored(Color.cyan).Log();
-
             }
- 
             _mouseGridPosition.Value = _nonActivePosition;
         }
+
+        private void Fire(Vector2Int gridPosition, Vector3 worldPosition)
+        {
+            ">>Fire".Log();
+            _onDestinationSelected.OnNext((gridPosition, worldPosition));
+        }
+        
 
         private Vector3 GetWorldPosition(Vector2Int coords)
         {
