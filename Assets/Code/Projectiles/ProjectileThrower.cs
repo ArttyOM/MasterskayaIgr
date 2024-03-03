@@ -11,7 +11,8 @@ namespace Code.Projectiles
 {
     public class ProjectileThrower : IDisposable
     {
-
+        public const float DestroyProjectileTime = 0.3f;
+        
         public ProjectileThrower(IObservable<(Vector2Int, Vector3)> eventsProjectileDestinationSelected, IObserver<ExplosionData> onExplosion, 
             IObserver<SpellType> spellSelected,
             IReadOnlyDictionary<ProjectileType, WeaponPool> weaponPools,
@@ -67,7 +68,7 @@ namespace Code.Projectiles
             spell?.transform.SetParent(currentProjectile.transform, true);
 
             $"destination worlposition = {destinationPoint.worldPosition}".Colored(Color.cyan).Log();
-            currentProjectile.transform.DOMove(destinationPoint.worldPosition, 0.3f).OnComplete(() =>
+            currentProjectile.transform.DOMove(destinationPoint.worldPosition, DestroyProjectileTime).OnComplete(() =>
             {
                 "Выстрел совершен".Colored(Color.cyan).Log();
                 _onExplosion.OnNext(new ExplosionData(weapon.GetProjectileType, spell.GetSpellType, destinationPoint.worldPosition,destinationPoint.gridCoords));
