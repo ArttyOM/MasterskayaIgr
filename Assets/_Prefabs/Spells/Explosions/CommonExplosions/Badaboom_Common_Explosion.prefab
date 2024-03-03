@@ -23944,7 +23944,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 7670719965070498834, guid: 5b23ce1e8ce140f4182e4076025af347, type: 3}
       propertyPath: m_Name
-      value: Badaboom_Common_Explosion 2 Variant
+      value: Badaboom_Common_Explosion
       objectReference: {fileID: 0}
     - target: {fileID: 8093964344329765882, guid: 5b23ce1e8ce140f4182e4076025af347, type: 3}
       propertyPath: m_LocalPosition.x
