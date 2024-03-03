@@ -90087,7 +90087,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4622010461751231616, guid: 4c169ad4baa361647b655dcd796e7224, type: 3}
       propertyPath: spellType
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5977249843109153415, guid: 4c169ad4baa361647b655dcd796e7224, type: 3}
       propertyPath: m_LocalPosition.x

@@ -47,9 +47,7 @@ namespace Code.Projectiles
         private IEnumerator BuildProjectileThenThrow((Vector2Int gridCoords, Vector3 worldPosition) destinationPoint)
         {
             var weapon = _spawnPoint.GetComponentInChildren<Weapon>();
-            var currentProjectile = _projectilePool.Rent();
-            var currentProjectileTransform = currentProjectile.transform;
-            currentProjectileTransform.position = _spawnPoint.transform.position;
+  
             if (weapon is null)
             {
                 _spellSelected.OnNext(SpellType.NoSpell);
@@ -63,11 +61,14 @@ namespace Code.Projectiles
             }
             var spell = _spawnPoint.GetComponentInChildren<Spell>();
             //if (spell is null) return;
+            var currentProjectile = _projectilePool.Rent();
+            var currentProjectileTransform = currentProjectile.transform;
+            currentProjectileTransform.position = _spawnPoint.transform.position;
             
             weapon?.transform.SetParent(currentProjectileTransform, true);
             spell?.transform.SetParent(currentProjectile.transform, true);
 
-            $"destination worlposition = {destinationPoint.worldPosition}".Colored(Color.cyan).Log();
+            $"destination worldposition = {destinationPoint.worldPosition}".Colored(Color.cyan).Log();
             currentProjectile.transform.DOMove(destinationPoint.worldPosition, DestroyProjectileTime).OnComplete(() =>
             {
                 "Выстрел совершен".Colored(Color.cyan).Log();

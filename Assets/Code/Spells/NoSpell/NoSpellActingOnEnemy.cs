@@ -3,11 +3,11 @@ using Code.DebugTools.Logger;
 using Code.Enemies;
 using UniRx;
 
-namespace Code.Spells.BadaboomSpell
+
+namespace Code.Spells.NoSpell
 {
-    public class BadaboomSpellActingOnEnemy: IDisposable, ISpellActingOnEnemy
+    public class NoSpellActingOnEnemy : IDisposable, ISpellActingOnEnemy
     {
-        
         private IDisposable _onEnemyExploadedSubscription;
         private IObservable<(CommonEnemy, SpellExplosion)> _onEnemyExploded;
         private SpellBalanceConfig _megaSpellConfig;
@@ -16,14 +16,16 @@ namespace Code.Spells.BadaboomSpell
         public void Init(IObservable<(CommonEnemy, SpellExplosion)> onEnemyExploded,
             SpellBalanceConfig commonSpellBalance, SpellBalanceConfig megaSpellConfig)
         {
+            $">>Init Обычный взрыв".Log();
+
             _megaSpellConfig = megaSpellConfig;
             _commonSpellConfig = commonSpellBalance;
             _onEnemyExploded = onEnemyExploded;
             _onEnemyExploadedSubscription = _onEnemyExploded
-                .Where(x => x.Item2.spellType == SpellType.Badaboom)
+                .Where(x => x.Item2.spellType == SpellType.NoSpell)
                 .Subscribe(OnExplosion);
         }
-        
+
         public void Dispose()
         {
             _onEnemyExploadedSubscription?.Dispose();
@@ -31,7 +33,7 @@ namespace Code.Spells.BadaboomSpell
 
         public void Act(SpellExplosion explosion, SpellBalanceConfig spellConfig)
         {
-            
+
         }
 
         private void OnExplosion((CommonEnemy enemy, SpellExplosion explosion) enemySpellPair)
@@ -39,7 +41,7 @@ namespace Code.Spells.BadaboomSpell
 
             var explosion = enemySpellPair.explosion;
             var enemy = enemySpellPair.enemy;
-            
+
             float damage;
             if (explosion.isMega)
             {
@@ -49,7 +51,8 @@ namespace Code.Spells.BadaboomSpell
             {
                 damage = _commonSpellConfig.damage;
             }
-            $">>OnExplosion Badaboom с уроном {damage}".Log();
+
+            $">>OnExplosion Обычный взрыв с уроном {damage}".Log();
             enemy.GetHit(damage);
         }
     }
