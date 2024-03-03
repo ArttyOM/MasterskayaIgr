@@ -1,5 +1,4 @@
 ﻿using Code.Events;
-using Code.HUD.Offers;
 using Code.Levels;
 using Code.Saves;
 using UniRx;
@@ -12,7 +11,6 @@ namespace Code.HUD.Start
     {
         [SerializeField] private Button _startButton;
         [SerializeField] private Button _settingsButton;
-        [SerializeField] private OffersList _offersList;
         
         
         private SettingsModal _settings;
@@ -23,7 +21,7 @@ namespace Code.HUD.Start
 
 
         public void Init(InGameEvents events, ScreenSwitcher screenSwitcher, 
-            SettingsModal settingsModal, OffersManager offersManager, PlayerProfile profile, LevelProgression levelProgression)
+            SettingsModal settingsModal, PlayerProfile profile, LevelProgression levelProgression)
         {
             _levelProgression = levelProgression;
             _profile = profile;
@@ -36,7 +34,6 @@ namespace Code.HUD.Start
             _startButton.onClick.AddListener(OpenNextLevel);
             #endif
             _settingsButton.onClick.AddListener(OpenSettings);
-            _offersList.Render(offersManager.GetRandomOffers());
         }
 
         private void OpenSettings() => _settings.Show();
