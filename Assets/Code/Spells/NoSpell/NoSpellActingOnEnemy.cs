@@ -1,6 +1,7 @@
 ﻿using System;
 using Code.DebugTools.Logger;
 using Code.Enemies;
+using Code.Upgrades;
 using UniRx;
 
 
@@ -12,12 +13,15 @@ namespace Code.Spells.NoSpell
         private IObservable<(CommonEnemy, SpellExplosion)> _onEnemyExploded;
         private SpellBalanceConfig _megaSpellConfig;
         private SpellBalanceConfig _commonSpellConfig;
+        private UpgradeService _upgradeService;
 
-        public void Init(IObservable<(CommonEnemy, SpellExplosion)> onEnemyExploded,
-            SpellBalanceConfig commonSpellBalance, SpellBalanceConfig megaSpellConfig)
+        public void Init(IObservable<(CommonEnemy, SpellExplosion)> onEnemyExploded, 
+            SpellBalanceConfig commonSpellBalance, SpellBalanceConfig megaSpellConfig,
+            UpgradeService upgradeService)
         {
             $">>Init Обычный взрыв".Log();
 
+            _upgradeService = upgradeService;
             _megaSpellConfig = megaSpellConfig;
             _commonSpellConfig = commonSpellBalance;
             _onEnemyExploded = onEnemyExploded;
@@ -25,6 +29,7 @@ namespace Code.Spells.NoSpell
                 .Where(x => x.Item2.spellType == SpellType.NoSpell)
                 .Subscribe(OnExplosion);
         }
+        
 
         public void Dispose()
         {
@@ -35,6 +40,8 @@ namespace Code.Spells.NoSpell
         {
 
         }
+
+
 
         private void OnExplosion((CommonEnemy enemy, SpellExplosion explosion) enemySpellPair)
         {

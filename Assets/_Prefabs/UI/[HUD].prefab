@@ -1523,6 +1523,14 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3614381664944382482, guid: b2d8a8920d84f374084a4a2c8242fb46, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3614381664944382482, guid: b2d8a8920d84f374084a4a2c8242fb46, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4789859401038316314, guid: b2d8a8920d84f374084a4a2c8242fb46, type: 3}
       propertyPath: _spellType
       value: 1

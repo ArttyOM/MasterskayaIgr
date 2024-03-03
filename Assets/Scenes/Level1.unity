@@ -303,6 +303,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Soldier
       objectReference: {fileID: 0}
+    - target: {fileID: 6049656599310627643, guid: ad6b0d10946d145c5b99d24b70d0c932, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6049656599310627643, guid: ad6b0d10946d145c5b99d24b70d0c932, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8299813366584505043, guid: ad6b0d10946d145c5b99d24b70d0c932, type: 3}
       propertyPath: m_LocalPosition.x
       value: 22.7
@@ -1157,6 +1165,7 @@ MonoBehaviour:
   _weaponSpawnChanceConfig: {fileID: 11400000, guid: f72a4100cdc269046b1bffcf27346df9, type: 2}
   _spellsConfig: {fileID: 11400000, guid: 5d318abb0db3b8b4f905d82cf98033fd, type: 2}
   _enemiesConfig: {fileID: 11400000, guid: e0830e9eb7187ee40808885a59e437d9, type: 2}
+  _autofireConfig: {fileID: 11400000, guid: 2dcb536bca428634aa8265d6444b48a9, type: 2}
 --- !u!1 &569771388
 GameObject:
   m_ObjectHideFlags: 0
@@ -1415,6 +1424,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 310708907}
     m_Modifications:
+    - target: {fileID: 1326859376096348086, guid: 2f91ca8780e4c4289819086874b3a1e8, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1326859376096348086, guid: 2f91ca8780e4c4289819086874b3a1e8, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2988622968305195182, guid: 2f91ca8780e4c4289819086874b3a1e8, type: 3}
       propertyPath: m_Name
       value: Rider
@@ -1640,6 +1657,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 310708907}
     m_Modifications:
+    - target: {fileID: 3406339010732460978, guid: 22a9f60eb28194f39932e8926869437a, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3406339010732460978, guid: 22a9f60eb28194f39932e8926869437a, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7542298475135160198, guid: 22a9f60eb28194f39932e8926869437a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 23.44

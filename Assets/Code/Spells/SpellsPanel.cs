@@ -11,9 +11,7 @@ namespace Code.Spells
         [SerializeField] private Transform _root;
         [SerializeField] private SpellsConfig _spellsConfig;
         
-        
         [SerializeField] private List<UISelectSpellButton> _buttons = new();
-        
 
         public void CreateButtons(SpellBook spellBook, InGameEvents events, UpgradeService upgradeService)
         {
