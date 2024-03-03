@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Code.Enemies;
+using Code.Upgrades;
 using UniRx;
 using UnityEngine;
 
@@ -14,7 +15,8 @@ namespace Code.Spells.IceSpell
         private IObservable<(CommonEnemy, SpellExplosion)> _onEnemyExploded;
         private SpellBalanceConfig _megaSpellConfig;
         private SpellBalanceConfig _commonSpellConfig;
-        
+        private UpgradeService _upgradeService;
+
         public void Dispose()
         {
             _onEnemyExploadedSubscription?.Dispose();
@@ -25,8 +27,9 @@ namespace Code.Spells.IceSpell
         }
 
         public void Init(IObservable<(CommonEnemy, SpellExplosion)> onEnemyExploded,
-            SpellBalanceConfig commonSpellBalance, SpellBalanceConfig megaSpellConfig)
+            SpellBalanceConfig commonSpellBalance, SpellBalanceConfig megaSpellConfig, UpgradeService upgradeService)
         {
+            _upgradeService = upgradeService;
             _megaSpellConfig = megaSpellConfig;
             _commonSpellConfig = commonSpellBalance;
             _onEnemyExploded = onEnemyExploded;
@@ -56,7 +59,7 @@ namespace Code.Spells.IceSpell
                 slowValue = _commonSpellConfig.slowValue;
                 slowDuration = _commonSpellConfig.duration;
             }
-            enemy.GetHit(damage);
+            enemy.GetHit(_upgradeService.GetUpgradedValue(UpgradeTarget.SpellDamage, damage));
             
             MainThreadDispatcher
                 .StartUpdateMicroCoroutine(SlowDebuffMicrocoroutine(enemy ,slowValue, slowDuration));

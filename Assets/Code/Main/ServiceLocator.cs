@@ -3,12 +3,15 @@ using Code.DebugTools.Logger;
 using Code.Events;
 using Code.GameLoop;
 using Code.HUD;
+using Code.HUD.Gameplay;
 using Code.HUD.LevelSelect;
 using Code.HUD.Offers;
 using Code.HUD.Start;
+using Code.InGameRewards;
 using Code.Levels;
 using Code.PregameShop;
 using Code.Saves;
+using Code.Spells;
 using Code.Upgrades;
 using UniRx;
 using UnityEngine;
@@ -28,6 +31,15 @@ namespace Code.Main
         [SerializeField] private UpgradeList _upgrades;
         [SerializeField] private AudioManager _audioManager;
         [SerializeField] private Canvas _dragCanvas;
+        [SerializeField] private DropRewards _dropRewards;
+        [SerializeField] private Camera _camera;
+        [SerializeField] private GameplayScreen _gameplayScreen;
+        [SerializeField] private PrepareScreen _prepareScreen;
+        
+        
+        
+        [SerializeField] private DefaultPlayerProfile _defaultProfile;
+        
         
         
         private ScreenSwitcher _screenSwitcher;
@@ -51,6 +63,16 @@ namespace Code.Main
         public UpgradeSystem UpgradeSystem => _upgradeSystem;
         public SpellShop SpellShop => _spellShop;
         public Canvas DragCanvas => _dragCanvas;
+        public DropRewards DropRewardsService => _dropRewards;
+        public Camera Camera => _camera;
+
+        public PrepareScreen PrepareScreen => _prepareScreen;
+        public GameplayScreen GameplayScreen => _gameplayScreen;
+
+        public SpellsConfig SpellsConfig;
+
+        private LevelCompleteHandler _levelCompleteHandler;
+        
 
         private void Awake()
         {
@@ -64,15 +86,17 @@ namespace Code.Main
             
             _events = new InGameEvents();
             _storage = new PlayerPrefsStorage();
-            _profile = new PlayerProfile(_storage);
+            _profile = new PlayerProfile(_storage, _defaultProfile);
             _screenSwitcher = new ScreenSwitcher(_events);
             _settings = new PlayerSettings(_storage);
             _upgradeSystem = new UpgradeSystem(_upgrades.Upgrades);
             _shopSystem = new ShopSystem(_profile, _spellShop, _upgradeSystem);
-            _levelSelect.Init(_levelProgression, _events, _screenSwitcher);
+            _levelSelect.Init(_levelProgression, _events);
             _settingsModal.Init(_settings, _audioManager);
-            _startScreen.Init(_events, _screenSwitcher, _settingsModal, _offersManager);
+            _startScreen.Init(_events, _screenSwitcher, _settingsModal, _offersManager, _profile, _levelProgression);
+            
             _levelLoader = new LevelLoader(_events);
+            _levelCompleteHandler = new LevelCompleteHandler(_events, _levelProgression, _profile, _dropRewards);
             _events.OnLevelStart.Subscribe(StartLevel);
             Instance = this;
         }

@@ -54,7 +54,6 @@ namespace Code.Enemies
                     var explosion = trigger.GetComponentInChildren<SpellColliderProvider>().GetComponentInParent<SpellExplosion>();
                     if (explosion is not null)
                     {
-                        //"onExplosion OnNext".Colored(Color.red).Log();
                         _onExplosionEnter.OnNext(new (this,explosion));
                     }
                     ">>OnTriggerEnter".Colored(Color.red).Log();
@@ -81,6 +80,7 @@ namespace Code.Enemies
             }
         }
 
+        public bool _dead;
         public void GetHit(float damage)
         {
             var name = this.name;
@@ -90,8 +90,9 @@ namespace Code.Enemies
 
             _hpVisual.value = _currentHP / _maxHP;
             
-            if (_currentHP <= 0)
+            if (_currentHP <= 0 && !_dead)
             {
+                _dead = true;
                 Destroy(this.gameObject);
                 _onEnemyDead.OnNext(this);
             }

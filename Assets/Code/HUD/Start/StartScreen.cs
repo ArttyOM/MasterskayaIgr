@@ -1,5 +1,7 @@
 ﻿using Code.Events;
 using Code.HUD.Offers;
+using Code.Levels;
+using Code.Saves;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,14 +18,23 @@ namespace Code.HUD.Start
         private SettingsModal _settings;
         private InGameEvents _events;
         private ScreenSwitcher _screenSwitcher;
+        private PlayerProfile _profile;
+        private LevelProgression _levelProgression;
 
 
-        public void Init(InGameEvents events, ScreenSwitcher screenSwitcher, SettingsModal settingsModal, OffersManager offersManager)
+        public void Init(InGameEvents events, ScreenSwitcher screenSwitcher, 
+            SettingsModal settingsModal, OffersManager offersManager, PlayerProfile profile, LevelProgression levelProgression)
         {
+            _levelProgression = levelProgression;
+            _profile = profile;
             _events = events;
             _screenSwitcher = screenSwitcher;
             _settings = settingsModal;
+            #if UNITY_EDITOR && LEVEL_SELECTOR
             _startButton.onClick.AddListener(OpenLevelSelection);
+            #else 
+            _startButton.onClick.AddListener(OpenNextLevel);
+            #endif
             _settingsButton.onClick.AddListener(OpenSettings);
             _offersList.Render(offersManager.GetRandomOffers());
         }
@@ -35,6 +46,18 @@ namespace Code.HUD.Start
             _events.OnLevelSelection.OnNext(new Unit());
             _screenSwitcher.HideAllScreensInstantly();
             _screenSwitcher.ShowScreen(ScreenType.LevelSelector);
+        }
+
+        private void OpenNextLevel()
+        {
+            var currentLevel = _profile.GetCurrentLevel();
+            var level = _levelProgression.GetLevel(currentLevel);
+            if (level.BuildIndex == -1)
+            {
+                Debug.Log($"Requested Level is not found in level progression {currentLevel}");
+                return;
+            }
+            _events.OnLevelStart.OnNext(level.BuildIndex);
         }
 
         private void OnDestroy()

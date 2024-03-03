@@ -1,22 +1,23 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using Code.DebugTools.Logger;
 using Code.Items;
 using Code.Spells;
 using Code.Upgrades;
-using UnityEngine;
 
 namespace Code.Saves
 {
     public class PlayerProfile : StorageData<PlayerProfile.PlayerData>
     {
+        private readonly DefaultPlayerProfile _defaultPlayerProfile;
+
         [Serializable]
         public struct PlayerData
         {
             public int Level;
-            //@todo: Add LevelProgression store as array
             public int LaunchCount;
             public int Coins;
+            public List<int> CompletedLevels;
             public string[] Upgrades;
             public int[] SelectedSpells;
             public SpellType[] UnlockedSpells;
@@ -26,8 +27,9 @@ namespace Code.Saves
         private readonly Wallet _wallet;
         private readonly UnitUpgrades _unitUpgrades;
         private readonly SpellBook _spellBook;
-        public PlayerProfile(IPersistentStorage storage) : base(storage)
+        public PlayerProfile(IPersistentStorage storage, DefaultPlayerProfile defaultPlayerProfile) : base(storage)
         {
+            _defaultPlayerProfile = defaultPlayerProfile;
             Initialize();
             _wallet = new Wallet(Data.Coins);
             _unitUpgrades = new UnitUpgrades(Data.Upgrades);
@@ -41,11 +43,12 @@ namespace Code.Saves
         {
             return new PlayerData()
             {
-                Level = 0,
+                Level = _defaultPlayerProfile.GetStartLevel(),
                 LaunchCount = 0,
-                Coins = 0,   
-                SelectedSpells = new int[] { -1,-1,-1 },
-                UnlockedSpells = new[] { SpellType.Badaboom , SpellType.Ice , SpellType.Mine },
+                Coins = _defaultPlayerProfile.GetStartCoins(),   
+                CompletedLevels = new List<int>(),
+                SelectedSpells = _defaultPlayerProfile.GetSelectedSpells().Take(3).Select(x => (int)x).ToArray(),
+                UnlockedSpells = _defaultPlayerProfile.GetUnlockedSpells().ToArray(),
                 Upgrades = new string[]{},
             };
         }
@@ -71,6 +74,19 @@ namespace Code.Saves
         public UnitUpgrades GetUpgrades() => _unitUpgrades;
 
         public int GetLaunchCount() => Data.LaunchCount;
+
+        public void CompleteLevel(int level)
+        {
+            Data.CompletedLevels.Add(level);
+        }
+
+        public bool IsLevelCompleted(int level)
+        {
+            return Data.CompletedLevels.Contains(level);
+        }
+
+        public int SetCurrentLevel(int level) => Data.Level = level;
+        public int GetCurrentLevel() => Data.Level;
     }
 
 }

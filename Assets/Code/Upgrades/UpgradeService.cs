@@ -1,19 +1,16 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
-
-namespace Code.Upgrades
+﻿namespace Code.Upgrades
 {
-    public class UpgradeService : MonoBehaviour
+    public class UpgradeService
     {
-        private UpgradeSystem _system;
-        [SerializeField] private List<UpgradeDefinition> _upgradeDefinitions;
+        private readonly UnitUpgrades _unitUpgrades;
+        private readonly UpgradeSystem _upgradeSystem;
 
-        public void Initialize()
+        public UpgradeService(UnitUpgrades unitUpgrades, UpgradeSystem upgradeSystem)
         {
-            _system = new UpgradeSystem(_upgradeDefinitions);
+            _unitUpgrades = unitUpgrades;
+            _upgradeSystem = upgradeSystem;
         }
-        
-        public float GetUpgradedValue(UnitUpgrades unitUpgrades, UpgradeTarget target, float baseValue) => _system.GetUpgradedValue(unitUpgrades, target, baseValue);
+        public float GetUpgradedValue(UpgradeTarget target, float baseValue) => _upgradeSystem.GetUpgradedValue(_unitUpgrades, target, baseValue);
         
     }
 }

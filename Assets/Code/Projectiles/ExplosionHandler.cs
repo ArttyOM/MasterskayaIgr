@@ -11,6 +11,7 @@ using Code.Spells.MinesSpell;
 using Code.Spells.NoSpell;
 using Code.Spells.PoisonSpell;
 using Code.Spells.ShrapnelSpell;
+using Code.Upgrades;
 using MyBox;
 using UniRx;
 
@@ -18,7 +19,7 @@ namespace Code.Projectiles
 {
     public class ExplosionHandler: IDisposable
     {
-        public ExplosionHandler(IObservable<ExplosionData> onExplosion, IObservable<(CommonEnemy, SpellExplosion)> onEnemyExploded, SpellsConfig spellsConfig)
+        public ExplosionHandler(IObservable<ExplosionData> onExplosion, IObservable<(CommonEnemy, SpellExplosion)> onEnemyExploded, SpellsConfig spellsConfig, UpgradeService upgradeService)
         {
             _spellsConfig = spellsConfig;
             CreatePools();
@@ -36,7 +37,7 @@ namespace Code.Projectiles
 
             foreach (var config in spellsConfig.spellConfigs)
             {
-                _interationWithEnemies[config.spellType].Init(onEnemyExploded, config.commonSpellBalance, config.megaSpellBalance);
+                _interationWithEnemies[config.spellType].Init(onEnemyExploded, config.commonSpellBalance, config.megaSpellBalance, upgradeService);
             }
         }
 

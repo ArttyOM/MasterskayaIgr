@@ -1,6 +1,8 @@
-﻿using Code.Main;
+﻿using Code.DebugTools.Logger;
+using Code.Main;
 using Code.Spells;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Code.HUD
 {
@@ -10,6 +12,8 @@ namespace Code.HUD
         [SerializeField] private ShopSpellsView _shopSpellsView;
         [SerializeField] private WalletView _walletView;
         [SerializeField] private UpgradesListView _upgradesView;
+        [SerializeField] private Button _startButton;
+        
         
         private ServiceLocator _services;
         
@@ -18,7 +22,15 @@ namespace Code.HUD
             _services = ServiceLocator.Instance;
             _selectedSpells.SpellSelected += OnSpellSelected;
             _upgradesView.UpgradeBought += OnUpgradeBought;
+            _startButton.onClick.RemoveAllListeners();
+            _startButton.onClick.AddListener(StartGame);
             Render();
+        }
+
+        private void StartGame()
+        {
+            ">>StartSession sending event: onStartSessionEvent".Colored(Color.gray).Log();
+            _services.Events.OnSessionStart.OnNext(1);
         }
 
         private void OnUpgradeBought()
@@ -31,7 +43,7 @@ namespace Code.HUD
             _selectedSpells.Render(_services.Profile.GetSpellBook());
             _shopSpellsView.Render(_services.Profile.GetSpellBook(), _services.SpellShop, _services.ShopSystem);
             _upgradesView.Render(_services.ShopSystem);
-            _walletView.Render(_services.Profile.GetWallet());
+            _walletView.Render(_services.Profile.GetWallet(), _services.DropRewardsService);
         }
 
         private void OnSpellSelected(SpellType spell, int slotIndex)

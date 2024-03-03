@@ -60,7 +60,6 @@ namespace Code.HUD
                     screen.Show();
                 }    
             }
-            
         }
 
         public void HideScreenInstantly(ScreenType screenType)

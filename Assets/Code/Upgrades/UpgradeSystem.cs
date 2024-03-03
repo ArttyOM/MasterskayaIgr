@@ -29,7 +29,7 @@ namespace Code.Upgrades
             foreach (var upgrade in _upgrades)
             {
                 if (upgrade.GetTarget() != target) continue;
-                if (unitUpgrades.HasUpgrade(upgrade.GetID())) continue;
+                if (!unitUpgrades.HasUpgrade(upgrade.GetID())) continue;
                 var effect = upgrade.GetEffect();
                 var effectType = upgrade.GetEffectType();
                 switch (effectType)
