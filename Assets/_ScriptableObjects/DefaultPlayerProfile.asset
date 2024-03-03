@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _StartLevel: 0
   _Coins: 300
-  _unlockedSpells: 000000000100000002000000
-  _selectedSpells: 000000000100000002000000
+  _unlockedSpells: 010000000200000003000000
+  _selectedSpells: 010000000200000003000000

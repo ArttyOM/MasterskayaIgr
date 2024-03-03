@@ -146,7 +146,6 @@ GameObject:
   - component: {fileID: 6199513716540017548}
   - component: {fileID: 7756320733399834921}
   - component: {fileID: 1979805757473654534}
-  - component: {fileID: 2102275069129435770}
   m_Layer: 5
   m_Name: StartSessionButton
   m_TagString: Untagged
@@ -256,15 +255,3 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &2102275069129435770
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6551089973714660176}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 061e47f952b54dc0bbd72ea3306a2945, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
