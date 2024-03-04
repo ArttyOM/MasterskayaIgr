@@ -65,7 +65,7 @@ namespace Code.Main
             ">>LevelEntryPoint.Init".Colored(Color.red).Log();
 
             _enemies = new(_enemiesConfig, _events.OnEnemyDead);
-            _weaponRandomGenerator = new WeaponRandomGenerator(_weaponSpawnChanceConfig, _events.OnSpellSelected, _events.OnSessionStart);
+            _weaponRandomGenerator = new WeaponRandomGenerator(_weaponSpawnChanceConfig, _events.OnProjectileExploded, _events.OnSessionStart);
             _spellVfxGenerator = new SpellVfxGenerator(_spellsConfig, _events.OnSpellSelected, _events.OnSessionStart);
             
             _winDetector = new WinDetector(_enemies, _events.OnLevelEnd);

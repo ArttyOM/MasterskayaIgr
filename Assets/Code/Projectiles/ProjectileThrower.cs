@@ -47,20 +47,25 @@ namespace Code.Projectiles
         private IEnumerator BuildProjectileThenThrow((Vector2Int gridCoords, Vector3 worldPosition) destinationPoint)
         {
             var weapon = _spawnPoint.GetComponentInChildren<Weapon>();
-  
-            if (weapon is null)
+            //if (weapon is null)
+            // {
+            //    
+            //     float delay = WeaponRandomGenerator.Duration + 0.02f;
+            //     while (delay > 0f)
+            //     {
+            //         delay -= Time.deltaTime;
+            //         yield return null;
+            //     }
+            //     weapon = _spawnPoint.GetComponentInChildren<Weapon>();
+            // }
+            var spell = _spawnPoint.GetComponentInChildren<Spell>();
+            if (spell is null)
             {
                 _spellSelected.OnNext(SpellType.NoSpell);
-                float delay = WeaponRandomGenerator.Duration + 0.02f;
-                while (delay > 0f)
-                {
-                    delay -= Time.deltaTime;
-                    yield return null;
-                }
-                weapon = _spawnPoint.GetComponentInChildren<Weapon>();
+                
+                spell = _spawnPoint.GetComponentInChildren<Spell>();
             }
-            var spell = _spawnPoint.GetComponentInChildren<Spell>();
-            //if (spell is null) return;
+
             var currentProjectile = _projectilePool.Rent();
             var currentProjectileTransform = currentProjectile.transform;
             currentProjectileTransform.position = _spawnPoint.transform.position;
@@ -69,13 +74,24 @@ namespace Code.Projectiles
             spell?.transform.SetParent(currentProjectile.transform, true);
 
             $"destination worldposition = {destinationPoint.worldPosition}".Colored(Color.cyan).Log();
-            currentProjectile.transform.DOMove(destinationPoint.worldPosition, DestroyProjectileTime).OnComplete(() =>
+            currentProjectile.transform.DOMove(destinationPoint.worldPosition, DestroyProjectileTime);
+            //     .OnComplete(() =>
+            // {
+            //     "Выстрел совершен".Colored(Color.cyan).Log();
+            //     _onExplosion.OnNext(new ExplosionData(weapon.GetProjectileType, spell.GetSpellType, destinationPoint.worldPosition,destinationPoint.gridCoords));
+            //     _weaponPools[weapon.GetProjectileType].Return(weapon);
+            //     _spellPools[spell.GetSpellType].Return(spell);
+            // });
+            float delay = DestroyProjectileTime;
+            while (delay > 0f)
             {
-                "Выстрел совершен".Colored(Color.cyan).Log();
-                _onExplosion.OnNext(new ExplosionData(weapon.GetProjectileType, spell.GetSpellType, destinationPoint.worldPosition,destinationPoint.gridCoords));
-                _weaponPools[weapon.GetProjectileType].Return(weapon);
-                _spellPools[spell.GetSpellType].Return(spell);
-            });
+                delay -= Time.deltaTime;
+                yield return null;
+            }
+            "Выстрел совершен".Colored(Color.cyan).Log();
+            _onExplosion.OnNext(new ExplosionData(weapon.GetProjectileType, spell.GetSpellType, destinationPoint.worldPosition,destinationPoint.gridCoords));
+            _weaponPools[weapon.GetProjectileType].Return(weapon);
+            _spellPools[spell.GetSpellType].Return(spell);
         }
         
     }

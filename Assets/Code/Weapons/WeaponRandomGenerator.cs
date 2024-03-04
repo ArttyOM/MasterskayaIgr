@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Code.DebugTools.Logger;
 using Code.Spells;
@@ -15,7 +16,7 @@ namespace Code.Projectiles
         public const float Duration = 0.4f;
         
         public WeaponRandomGenerator(WeaponSpawnChanceConfig weaponSpawnChanceConfig,
-            IObservable<SpellType> onSpellSelected, IObservable<int> eventsSessionStart)
+            IObservable<ExplosionData> onExplosion, IObservable<int> eventsSessionStart)
         {
             _nextWeaponSpawnPoint = Object.FindObjectOfType<NextWeaponSpawnPoint>();
             _currentWeaponSpawnPoint = Object.FindObjectOfType<CurrentWeaponSpawnPoint>();
@@ -24,7 +25,8 @@ namespace Code.Projectiles
             CreatePools(weaponSpawnChanceConfig);
 
             GenerateWeapon();
-            _onNextWeaponSubsctiption = onSpellSelected
+            GenerateWeapon();
+            _onNextWeaponSubsctiption = onExplosion
                 .SkipUntil(eventsSessionStart)
                 .Subscribe(_ => GenerateWeapon());
 
@@ -63,12 +65,11 @@ namespace Code.Projectiles
 
         private void GenerateWeapon()
         {
-            ">>GenerateWeapon".Colored(Color.green);
+            //">>GenerateWeapon".Colored(Color.green);
             MoveNextWeaponToCurrentPosition();
 
             ProjectileType typeOfWeapon = GenarateRandomNextWeapon();
             _nextWeapon = _weaponPools[typeOfWeapon].Rent();
-            
             _nextWeapon.transform.position = _nextWeaponSpawnPoint.transform.position;
         }
 
@@ -105,9 +106,11 @@ namespace Code.Projectiles
                 {
                     _weaponPools[_currentWeapon.GetProjectileType].Return(_currentWeapon);
                 }
+
                 _currentWeapon = _nextWeapon;
-                _currentWeapon.transform.SetParent(_currentWeaponSpawnPoint.transform);
-                _currentWeapon.transform.DOMove(_currentWeaponSpawnPoint.transform.position, Duration);
+                var weapon = _currentWeapon;
+                weapon.transform.SetParent(_currentWeaponSpawnPoint.transform);
+                weapon.transform.DOMove(_currentWeaponSpawnPoint.transform.position, Duration);
             }
         }
     }

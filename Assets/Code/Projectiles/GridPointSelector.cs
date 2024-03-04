@@ -1,18 +1,8 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics.Eventing.Reader;
-using System.Linq;
 using Code.DebugTools.Logger;
-using Cysharp.Threading.Tasks.Triggers;
-using DG.Tweening.Plugins;
-using GameAnalyticsSDK.Setup;
 using UniRx;
-using UniRx.Diagnostics;
-using UnityEditor.ShaderKeywordFilter;
-using UnityEditor.U2D.Animation;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 namespace Code.Projectiles
 {
