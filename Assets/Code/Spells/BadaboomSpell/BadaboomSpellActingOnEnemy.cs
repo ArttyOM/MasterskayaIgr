@@ -9,7 +9,7 @@ using UniRx;
 using UniRx.Diagnostics;
 using UnityEngine;
 
-namespace Code.Spells
+namespace Code.Spells.BadaboomSpell
 {
     public class BadaboomSpellActingOnEnemy: IDisposable, ISpellActingOnEnemy
     {
@@ -47,7 +47,6 @@ namespace Code.Spells
             var explosion = enemySpellPair.explosion;
             var enemy = enemySpellPair.enemy;
             
-
             float damage;
             if (explosion.isMega)
             {
@@ -57,6 +56,7 @@ namespace Code.Spells
             {
                 damage = _upgradeService.GetUpgradedValue(UpgradeTarget.SpellDamage, _commonSpellConfig.damage);
             }
+            $">>OnExplosion Badaboom с уроном {damage}".Log();
             enemy.GetHit(damage);
         }
     }

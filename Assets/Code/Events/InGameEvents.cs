@@ -11,8 +11,6 @@ namespace Code.Events
     public class InGameEvents : IDisposable
     {
         public readonly Subject<Unit> OnStartSimulation = new();
-
-        
         
         public readonly Subject<int> OnLevelRestart = new();
         public readonly Subject<int> OnMenu = new();

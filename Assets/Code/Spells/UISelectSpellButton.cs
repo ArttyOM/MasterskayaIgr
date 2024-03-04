@@ -10,10 +10,10 @@ using UnityEngine.UI;
 namespace Code.Spells
 {
     [RequireComponent(typeof(Button), typeof(EventTrigger))]
-    public class UISelectSpellButton: MonoBehaviour
+    public class UISelectSpellButton : MonoBehaviour
     {
         [SerializeField] private SpellType _spellType;
-        
+
         private Button _thisButton;
         private IObserver<SpellType> _onClick;
         private SpellBalanceConfig _config;
@@ -65,4 +65,5 @@ namespace Code.Spells
             _thisButton.interactable = true;
         }
     }
+    
 }

@@ -4,9 +4,11 @@ using System.Linq;
 using Code.DebugTools.Logger;
 using Code.Enemies;
 using Code.Spells;
+using Code.Spells.BadaboomSpell;
 using Code.Spells.IceSpell;
 using Code.Spells.LineAttackSpell;
 using Code.Spells.MinesSpell;
+using Code.Spells.NoSpell;
 using Code.Spells.PoisonSpell;
 using Code.Spells.ShrapnelSpell;
 using Code.Upgrades;
@@ -24,6 +26,7 @@ namespace Code.Projectiles
             _onExplosionSubscription = onExplosion.Subscribe(ShowExplosionAnimationAndEffortOnEnemies);
             _interationWithEnemies = new()
             {
+                {SpellType.NoSpell, new NoSpellActingOnEnemy()},
                 {SpellType.Badaboom, new BadaboomSpellActingOnEnemy()},
                 {SpellType.Poison, new PoisonSpellActingOnEnemy()},
                 {SpellType.Shrapnel, new ShrapnelSpellActingOnEnemy()},
@@ -35,11 +38,7 @@ namespace Code.Projectiles
             foreach (var config in spellsConfig.spellConfigs)
             {
                 _interationWithEnemies[config.spellType].Init(onEnemyExploded, config.commonSpellBalance, config.megaSpellBalance, upgradeService);
-                //_interationWithEnemies[config.spellType] 
             }
-            //onEnemyExploded, spellsConfig.spellConfigs.
-           
-            
         }
 
         private readonly Dictionary<SpellType, SpellExplosionPool> _commonSpellExplosionPool = new();
@@ -74,7 +73,9 @@ namespace Code.Projectiles
             SpellType spellType = explosionData.GetSpellType;
             SpellConfig spellConfig = _spellsConfig.spellConfigs.Find(x => x.spellType == spellType);
 
-            bool isMega = spellConfig.megaCastWeaponType == explosionData.GetProjectileType;
+            bool isMega = (spellConfig.megaCastWeaponType == explosionData.GetProjectileType) &&
+                          (spellType != SpellType.NoSpell);
+            
             var explosion = InstantiateExplosion(isMega, explosionData);
             if (isMega)
             {
