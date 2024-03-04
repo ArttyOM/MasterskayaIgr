@@ -12,7 +12,6 @@ namespace Code.HUD.Start
     {
         [SerializeField] private Button _startButton;
         [SerializeField] private Button _settingsButton;
-        [SerializeField] private OffersList _offersList;
         
         
         private SettingsModal _settings;
@@ -36,7 +35,6 @@ namespace Code.HUD.Start
             _startButton.onClick.AddListener(OpenNextLevel);
             #endif
             _settingsButton.onClick.AddListener(OpenSettings);
-            _offersList.Render(offersManager.GetRandomOffers());
         }
 
         private void OpenSettings() => _settings.Show();
