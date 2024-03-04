@@ -93,7 +93,7 @@ namespace Code.Main
             _shopSystem = new ShopSystem(_profile, _spellShop, _upgradeSystem);
             _levelSelect.Init(_levelProgression, _events);
             _settingsModal.Init(_settings, _audioManager);
-            _startScreen.Init(_events, _screenSwitcher, _settingsModal, _offersManager, _profile, _levelProgression);
+            _startScreen.Init(_events, _screenSwitcher, _settingsModal, _profile, _levelProgression);
             
             _levelLoader = new LevelLoader(_events);
             _levelCompleteHandler = new LevelCompleteHandler(_events, _levelProgression, _profile, _dropRewards);

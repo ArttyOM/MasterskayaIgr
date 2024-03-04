@@ -14,6 +14,7 @@ namespace Code.PregameShop
         private readonly PlayerProfile _player;
         private readonly SpellShop _spellShop;
         private readonly UpgradeSystem _upgradeSystem;
+        public event Action Changed;
 
         public ShopSystem(PlayerProfile player, SpellShop spellShop, UpgradeSystem upgradeSystem)
         {
@@ -31,11 +32,7 @@ namespace Code.PregameShop
 
         public IEnumerable<SpellType> GetSpellOffers()
         {
-            foreach (var spell in Enum.GetValues(typeof(SpellType)))
-            {
-                var spellType = (SpellType)spell;
-                yield return spellType;
-            }
+            return _spellShop.GetSpells();
         }
 
 
@@ -46,6 +43,7 @@ namespace Code.PregameShop
             if (_player.GetWallet().TrySpend(upgradeDefinition.GetCost()))
             {
                 _player.GetUpgrades().TryUpgrade(upgradeDefinition.GetID());
+                Changed?.Invoke();
             }
         }
 
@@ -56,6 +54,7 @@ namespace Code.PregameShop
             if (_player.GetWallet().TrySpend(_spellShop.GetCost(spell)))
             {
                 _player.GetSpellBook().TryUnlock(spell);
+                Changed?.Invoke();
             }
         }
     }

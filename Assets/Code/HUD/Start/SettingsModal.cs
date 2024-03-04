@@ -16,6 +16,8 @@ namespace Code.HUD.Start
         [SerializeField] private Button _legalDocsButton;
         [SerializeField] private Button _accountTerminationButton;
         [SerializeField] private OverlayClose _overlayClose;
+        [SerializeField] private Button _buttonClose;
+        
         
         
         
@@ -42,6 +44,8 @@ namespace Code.HUD.Start
             _accountTerminationButton.onClick.AddListener(OnAccountTerminationClicked);
             _legalDocsButton.onClick.AddListener(OnLegalDocsClicked);
             _overlayClose.Triggered += Hide;
+            _buttonClose.onClick.RemoveAllListeners();
+            _buttonClose.onClick.AddListener(Hide);
         }
 
         private void OnLegalDocsClicked()

@@ -21,13 +21,12 @@ namespace Code.HUD
                 _items.Add(spellItem);
                 if (spellBook.IsUnlocked(spell))
                 {
-                    spellItem.Render(spell, shop.GetSprite(spell));
+                    spellItem.Render(spell, shop.GetSprite(spell), spellBook);
                 }
                 else
                 {
                     spellItem.Render(spell, shop.GetCost(spell), shop.GetSprite(spell), shopSystem);    
                 }
-                
             }
         }
 
