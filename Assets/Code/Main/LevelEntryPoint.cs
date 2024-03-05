@@ -82,7 +82,7 @@ namespace Code.Main
             _events = events;
             _screenSwitcher = screenSwitcher;
             _screenSwitcher.HideAllScreensInstantly();
-            
+            _screenSwitcher.ShowScreen(ScreenType.PreparationForTheGame);
             _commonEnemyMover = new CommonEnemyMover(_enemiesConfig, _enemies, _events.OnSessionStart);
             _dropService = new EnemyDropService(_events.OnEnemyDead, _enemiesConfig, camera, dropRewardsService);
             InitScreenActivators();
