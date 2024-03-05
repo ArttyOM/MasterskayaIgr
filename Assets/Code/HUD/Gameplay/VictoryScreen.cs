@@ -15,7 +15,7 @@ namespace Code.HUD.Gameplay
             var services = ServiceLocator.Instance;
             var level = services.LevelProgression.GetLevel(services.Profile.GetCurrentLevel());
             _restartButton.Init(services.Events.OnLevelRestart, level.BuildIndex);
-            _menuButton.Init(services.Events.OnMenu, 0);
+            _menuButton.Init(services.Events.OnMenu, level.BuildIndex);
         }
     }
 }

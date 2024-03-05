@@ -1,10 +1,12 @@
 ﻿using System;
 using Code.DebugTools.Logger;
 using Code.Events;
+using Code.Main;
 using Cysharp.Threading.Tasks;
 using UniRx;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Object = UnityEngine.Object;
 
 namespace Code.GameLoop
 {
@@ -17,11 +19,22 @@ namespace Code.GameLoop
         public LevelLoader(InGameEvents events)
         {
             
-            _toMenuSubscription = events.OnMenu.Subscribe(x =>
-            {
-                LoadLevel(x).Forget();
-            });
-            _restartLevelSubscription = events.OnLevelRestart.Subscribe(x => LoadLevel(x).Forget());
+            _toMenuSubscription = events.OnMenu.Subscribe(LoadWithPrepare);
+            _restartLevelSubscription = events.OnLevelRestart.Subscribe(LoadAndStart);
+        }
+
+        public async void LoadWithPrepare(int x)
+        {
+            await LoadLevel(x);
+            var entryPoint = await WaitForLevelEntry();
+            entryPoint.StartPrepare();
+        }
+
+        public async void LoadAndStart(int x)
+        {
+            await LoadLevel(x);
+            var entryPoint = await WaitForLevelEntry();
+            entryPoint.StartLevel();
         }
 
         ~LevelLoader()
@@ -31,6 +44,15 @@ namespace Code.GameLoop
         }
 
 
+        private async UniTask<LevelEntryPoint> WaitForLevelEntry()
+        {
+            var entryPoint = Object.FindObjectOfType<LevelEntryPoint>();
+            while (!entryPoint.IsLoaded())
+            {
+                await UniTask.Yield();
+            }
+            return entryPoint;
+        }
         private readonly IDisposable _toMenuSubscription;
         private readonly IDisposable _restartLevelSubscription;
         private async UniTask LoadLevel(int sceneIndex)

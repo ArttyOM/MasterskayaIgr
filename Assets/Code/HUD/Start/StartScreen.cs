@@ -28,22 +28,11 @@ namespace Code.HUD.Start
             _events = events;
             _screenSwitcher = screenSwitcher;
             _settings = settingsModal;
-            #if UNITY_EDITOR && LEVEL_SELECTOR
-            _startButton.onClick.AddListener(OpenLevelSelection);
-            #else 
             _startButton.onClick.AddListener(OpenNextLevel);
-            #endif
             _settingsButton.onClick.AddListener(OpenSettings);
         }
 
         private void OpenSettings() => _settings.Show();
-
-        private void OpenLevelSelection()
-        {
-            _events.OnLevelSelection.OnNext(new Unit());
-            _screenSwitcher.HideAllScreensInstantly();
-            _screenSwitcher.ShowScreen(ScreenType.LevelSelector);
-        }
 
         private void OpenNextLevel()
         {

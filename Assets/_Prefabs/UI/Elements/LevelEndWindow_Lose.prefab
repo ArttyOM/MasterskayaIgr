@@ -94,11 +94,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3171610037941771166, guid: c2ff7c3b888b1f34ea17f89321112cba, type: 3}
       propertyPath: m_Name
-      value: LevelEndWindow Variant
+      value: LevelEndWindow_Lose
       objectReference: {fileID: 0}
     - target: {fileID: 5841700223841930811, guid: c2ff7c3b888b1f34ea17f89321112cba, type: 3}
       propertyPath: m_text
       value: Restart
+      objectReference: {fileID: 0}
+    - target: {fileID: 8734369446429391658, guid: c2ff7c3b888b1f34ea17f89321112cba, type: 3}
+      propertyPath: m_Color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8734369446429391658, guid: c2ff7c3b888b1f34ea17f89321112cba, type: 3}
+      propertyPath: m_Color.g
+      value: 0.69803923
+      objectReference: {fileID: 0}
+    - target: {fileID: 8734369446429391658, guid: c2ff7c3b888b1f34ea17f89321112cba, type: 3}
+      propertyPath: m_Color.r
+      value: 0.27058825
       objectReference: {fileID: 0}
     - target: {fileID: 8897438020858975626, guid: c2ff7c3b888b1f34ea17f89321112cba, type: 3}
       propertyPath: m_text

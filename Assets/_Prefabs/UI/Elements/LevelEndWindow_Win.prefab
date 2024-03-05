@@ -199,7 +199,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Exit
+  m_text: SHOP
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 3be86c9388660ce4bbba7bf3cde94d66, type: 2}
   m_sharedMaterial: {fileID: 333719480993934853, guid: 3be86c9388660ce4bbba7bf3cde94d66, type: 2}
@@ -464,7 +464,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.39937097, b: 0.39937097, a: 1}
+  m_Color: {r: 0.11372548, g: 0.5453378, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -916,7 +916,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4054141004965868751, guid: 2d57f69513050e74f87928877abed7be, type: 3}
       propertyPath: m_Name
-      value: Panel Variant
+      value: LevelEndWindow_Win
       objectReference: {fileID: 0}
     - target: {fileID: 4383032350918326367, guid: 2d57f69513050e74f87928877abed7be, type: 3}
       propertyPath: m_SizeDelta.y

@@ -11,6 +11,7 @@ using Code.Saves;
 using Code.Spells;
 using Code.Upgrades;
 using Cysharp.Threading.Tasks;
+using UniRx;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
@@ -45,6 +46,7 @@ namespace Code.Main
 
         private CommonEnemyMover _commonEnemyMover;
         private EnemyDropService _dropService;
+        private bool _isLoaded = false;
 
 
         private async void Start()
@@ -80,11 +82,12 @@ namespace Code.Main
             _events = events;
             _screenSwitcher = screenSwitcher;
             _screenSwitcher.HideAllScreensInstantly();
-            _screenSwitcher.ShowScreen(ScreenType.PreparationForTheGame);
+            
             _commonEnemyMover = new CommonEnemyMover(_enemiesConfig, _enemies, _events.OnSessionStart);
             _dropService = new EnemyDropService(_events.OnEnemyDead, _enemiesConfig, camera, dropRewardsService);
             InitScreenActivators();
             InitEnemies();
+            _isLoaded = true;
         }
 
         private void OnDestroy()
@@ -125,6 +128,22 @@ namespace Code.Main
             _loseScreenActivator = new LoseScreenActivator(_screenSwitcher, _events.OnLevelEnd);
             _winScreenActivator?.Dispose();
             _winScreenActivator = new WinScreenActivator(_screenSwitcher, _events.OnLevelEnd);
+        }
+
+        public void StartPrepare()
+        {
+            _screenSwitcher.HideAllScreensInstantly();
+            _screenSwitcher.ShowScreen(ScreenType.PreparationForTheGame);
+        }
+
+        public void StartLevel()
+        {
+            _events.OnSessionStart.OnNext(1);
+        }
+
+        public bool IsLoaded()
+        {
+            return _isLoaded;
         }
     }
 }
