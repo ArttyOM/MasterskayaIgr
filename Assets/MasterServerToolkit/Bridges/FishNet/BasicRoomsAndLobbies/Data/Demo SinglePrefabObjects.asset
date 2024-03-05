@@ -12,6 +12,50 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4489d77032a81ef42b0067acf2737d4d, type: 3}
   m_Name: Demo SinglePrefabObjects
   m_EditorClassIdentifier: 
+<<<<<<< Updated upstream:Assets/MasterServerToolkit/Bridges/FishNet/BasicRoomsAndLobbies/Data/Demo SinglePrefabObjects.asset
   _prefabs:
   - {fileID: 4422773728184011611, guid: 5e2ac64c93487324ab48d05537574c0a, type: 3}
   - {fileID: -4936559094045431684, guid: a254f666eb0044949912607eec09bdde, type: 3}
+=======
+  _levels:
+  - CoinsReward: 0
+    SceneName: Assets/Scenes/Level1.unity
+    BuildIndex: 1
+    SceneAsset: {fileID: 102900000, guid: 3e0e428a3bf63e74dba76262f84fab48, type: 3}
+  - CoinsReward: 0
+    SceneName: Assets/Scenes/Level2.unity
+    BuildIndex: 3
+    SceneAsset: {fileID: 102900000, guid: 352eae8cdcf03fe42b539c31ac7c3fdc, type: 3}
+  - CoinsReward: 0
+    SceneName: Assets/Scenes/Level3.unity
+    BuildIndex: 4
+    SceneAsset: {fileID: 102900000, guid: 9bd263d0b54aca647b2b2b8de2314bca, type: 3}
+  - CoinsReward: 0
+    SceneName: Assets/Scenes/Level4.unity
+    BuildIndex: 5
+    SceneAsset: {fileID: 102900000, guid: 52e84288930bb4244833a382735e03c8, type: 3}
+  - CoinsReward: 0
+    SceneName: Assets/Scenes/Level5.unity
+    BuildIndex: 6
+    SceneAsset: {fileID: 102900000, guid: 59d6e0a14ec530c4ba5e765ace906ff2, type: 3}
+  - CoinsReward: 0
+    SceneName: Assets/Scenes/Level6.unity
+    BuildIndex: 7
+    SceneAsset: {fileID: 102900000, guid: 83980d9f08a511b4083ec7ab438b6e55, type: 3}
+  - CoinsReward: 0
+    SceneName: Assets/Scenes/Level7.unity
+    BuildIndex: 8
+    SceneAsset: {fileID: 102900000, guid: 2b582b2259279ac46aae71c06b7a0518, type: 3}
+  - CoinsReward: 0
+    SceneName: Assets/Scenes/Level8.unity
+    BuildIndex: 9
+    SceneAsset: {fileID: 102900000, guid: 3806fdae4b85b334d90d4b231a971380, type: 3}
+  - CoinsReward: 0
+    SceneName: Assets/Scenes/Level9.unity
+    BuildIndex: 10
+    SceneAsset: {fileID: 102900000, guid: 56f90a774ba4eb14f8042bdaa48d02b3, type: 3}
+  - CoinsReward: 0
+    SceneName: Assets/Scenes/Level10.unity
+    BuildIndex: 11
+    SceneAsset: {fileID: 102900000, guid: c34eb0b62d5eff94484dfbbb39aeb871, type: 3}
+>>>>>>> Stashed changes:Assets/_ScriptableObjects/LevelProgression.asset

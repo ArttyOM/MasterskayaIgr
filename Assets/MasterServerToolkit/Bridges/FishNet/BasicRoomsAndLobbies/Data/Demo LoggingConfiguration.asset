@@ -12,7 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 925fc096350b81f4f82f4fe4ac0c4dda, type: 3}
   m_Name: Demo LoggingConfiguration
   m_EditorClassIdentifier: 
+<<<<<<< Updated upstream:Assets/MasterServerToolkit/Bridges/FishNet/BasicRoomsAndLobbies/Data/Demo LoggingConfiguration.asset
   _loggingEnabled: 1
   _developmentLogging: 3
   _guiLogging: 2
   _headlessLogging: 1
+=======
+  periodInSeconds: 0.5
+>>>>>>> Stashed changes:Assets/_ScriptableObjects/BaseAutofireConfig.asset
