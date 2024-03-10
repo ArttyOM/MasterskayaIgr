@@ -108,7 +108,6 @@ namespace Code.Main
             _startScreen.Init(_events, _screenSwitcher, _profile, _levelProgression);
             
             _levelLoader = new LevelLoader(_events);
-            _levelCompleteHandler = new LevelCompleteHandler(_events, _levelProgression, _profile, _dropRewards);
             _events.OnLevelStart.Subscribe(StartLevel);
             Instance = this;
         }

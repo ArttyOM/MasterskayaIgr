@@ -43,11 +43,8 @@ namespace Code.HUD.DamageNumbers
         public void Spawn(int amount, Vector3 worldPosition)
         {
             if (_dmPool == null) return;
-            for (int i = 0; i < amount; i++)
-            {
-                var dm = _dmPool.Get();
-                dm.Drop(amount, _camera.WorldToScreenPoint(worldPosition));
-            }
+            var dm = _dmPool.Get();
+            dm.Drop(amount, _camera.WorldToScreenPoint(worldPosition));
         }
     }
 }

@@ -22,7 +22,7 @@ MonoBehaviour:
       radius: 0
       duration: 0
       slowValue: 0
-      damage: 2
+      damage: 999
       damagePerSecond: 0
       throttleTimeOfExplosion: 0
       cooldown: 0

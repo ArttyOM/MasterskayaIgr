@@ -36,9 +36,7 @@ namespace Code.Levels
     public struct LevelData : ISerializationCallbackReceiver
     {
         public int CoinsReward;
-        [HideInInspector]
         public string SceneName;
-        [HideInInspector]
         public int BuildIndex;
 #if UNITY_EDITOR
         public SceneAsset SceneAsset;

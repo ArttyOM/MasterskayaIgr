@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Code.Main;
 using TMPro;
 using UnityEngine;
@@ -21,12 +20,15 @@ namespace Code.HUD.Gameplay
                 await Task.Yield();
             }
             var services = ServiceLocator.Instance;
-            var level = services.LevelProgression.GetLevel(services.Profile.GetCurrentLevel());
             _wallet.Render(services.Profile.GetWallet(), services.DropRewardsService);
-            _restartButton.Init(services.Events.OnLevelRestart, level.BuildIndex);
-            _menuButton.Init(services.Events.OnMenu, level.BuildIndex);
-            _reward.SetActive(services.Profile.IsLevelCompleted(services.Profile.GetCurrentLevel()) == false);
-            _rewardAmount.text = level.CoinsReward.ToString();
+            var levelIndex = services.Profile.GetCurrentLevel();
+            var currentLevel = services.LevelProgression.GetLevel(levelIndex);
+            _reward.SetActive(false);
+            //@todo: Need to Force VictoryScreen to use somewhat of a reward system
+            //_rewardAmount.text = level.CoinsReward.ToString();
+            _restartButton.Init(services.Events.OnLevelRestart, currentLevel.BuildIndex);
+            _menuButton.Init(services.Events.OnMenu, currentLevel.BuildIndex);
+            Debug.Log($"Change Level to {levelIndex} :{currentLevel.BuildIndex} {currentLevel.SceneName}");
         }
     }
 }

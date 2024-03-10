@@ -20,6 +20,7 @@ namespace Code.HUD
             _onMenuEvent = onMenuEvent;
 
             restartButton = gameObject.GetComponent<Button>();
+            restartButton.onClick.RemoveAllListeners();
             restartButton.onClick.AddListener(ToMenu);
         }
 

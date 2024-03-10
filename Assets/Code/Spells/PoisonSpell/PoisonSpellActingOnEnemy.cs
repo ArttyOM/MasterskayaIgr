@@ -19,6 +19,7 @@ namespace Code.Spells.PoisonSpell
 
         public void Dispose()
         {
+            _onEnemyExploadedSubscription?.Dispose();
         }
 
         public void Act(SpellExplosion explosion, SpellBalanceConfig spellConfig)

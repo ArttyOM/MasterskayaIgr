@@ -14,6 +14,7 @@ namespace Code.Spells.MinesSpell
 
         public void Dispose()
         {
+            
         }
 
         public void Act(SpellExplosion explosion, SpellBalanceConfig spellConfig)
