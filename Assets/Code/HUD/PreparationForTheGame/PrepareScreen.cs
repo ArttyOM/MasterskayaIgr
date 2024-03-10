@@ -40,7 +40,7 @@ namespace Code.HUD
         }
         private void Render()
         {
-            _selectedSpells.Render(_services.Profile.GetSpellBook());
+            _selectedSpells.Render(_services.Profile.GetSpellBook(), _services.SpellShop);
             _shopSpellsView.Render(_services.Profile.GetSpellBook(), _services.SpellShop, _services.ShopSystem);
             _upgradesView.Render(_services.ShopSystem);
             _walletView.Render(_services.Profile.GetWallet(), _services.DropRewardsService);

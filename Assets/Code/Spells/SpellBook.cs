@@ -6,11 +6,11 @@ namespace Code.Spells
 {
     public class SpellBook
     {
-        private readonly List<SpellType?> _selected;
+        private readonly List<SpellType> _selected;
         private readonly List<SpellType> _unlocked;
         private int _selectedSlots;
 
-        public SpellBook(IEnumerable<SpellType?> selected, IEnumerable<SpellType> unlocked)
+        public SpellBook(IEnumerable<SpellType> selected, IEnumerable<SpellType> unlocked)
         {
             _selected = selected.ToList();
             _unlocked = unlocked.ToList();
@@ -39,18 +39,18 @@ namespace Code.Spells
             if (!_selected.Contains(spell)) return false;
             var index = _selected.IndexOf(spell);
             if (index < 0) return false;
-            _selected[index] = null;
+            _selected[index] = SpellType.NoSpell;
             Changed?.Invoke();
             return true;
         }
         public bool TryDeselect(int slot)
         {
             if (slot >= _selected.Count || slot < 0) return false;
-            _selected[slot] = null;
+            _selected[slot] = SpellType.NoSpell;
             Changed?.Invoke();
             return true;
         }
-        public IEnumerable<SpellType?> GetSelected() => _selected;
+        public IEnumerable<SpellType> GetSelected() => _selected;
         public IEnumerable<SpellType> GetUnlocked() => _unlocked;
 
         public void TryUnlock(SpellType spell)
@@ -67,7 +67,7 @@ namespace Code.Spells
             var firstEmpty = -1;
             for (int i = 0; i < _selected.Count; i++)
             {
-                if (_selected[i].HasValue) continue;
+                if (_selected[i] != SpellType.NoSpell) continue;
                 firstEmpty = i;
             }
             if (firstEmpty < 0) return false;
@@ -82,7 +82,7 @@ namespace Code.Spells
             var firstEmpty = -1;
             for (int i = 0; i < _selected.Count; i++)
             {
-                if (_selected[i].HasValue) continue;
+                if (_selected[i] != SpellType.NoSpell) continue;
                 firstEmpty = i;
             }
             if (firstEmpty < 0) return false;

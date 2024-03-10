@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bde6b8a374b4fa2bd4cdda35ba86e60, type: 3}
+  m_Name: Poison
+  m_EditorClassIdentifier: 
+  _spellType: 2
+  _title: The Stinker
+  _shortDescription: Applies poison
+  _fullDescription: Quite the nasty but effective spell, this one. Ain't just hurtin'
+    but also lays a poison on all them critters around. They keep losin' health bit
+    by bit. Ain't much, but it sticks for good. Pair it up with the target item,
+    and you conjure up a stinkin' cloud (for a while) that'll poison any varmint
+    dumb enough to wander into it.
+  _icon: {fileID: 21300000, guid: 055730caa6ceb4b4ca4a3381af7e9c5e, type: 3}
+  _guideArt: {fileID: 21300000, guid: 055730caa6ceb4b4ca4a3381af7e9c5e, type: 3}
+  _cost: 350
+  _targetItems: []

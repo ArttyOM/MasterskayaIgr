@@ -42,5 +42,6 @@ namespace Code.Upgrades
         TurretCooldown,
         SpellCooldown,
         SpellDamage,
+        AutofireDamage
     }
 }

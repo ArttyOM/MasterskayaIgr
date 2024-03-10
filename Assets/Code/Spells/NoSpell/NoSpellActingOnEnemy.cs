@@ -60,7 +60,7 @@ namespace Code.Spells.NoSpell
             }
 
             $">>OnExplosion Обычный взрыв с уроном {damage}".Log();
-            enemy.GetHit(damage);
+            enemy.GetHit(_upgradeService.GetUpgradedValue(UpgradeTarget.AutofireDamage, damage));
         }
     }
 }

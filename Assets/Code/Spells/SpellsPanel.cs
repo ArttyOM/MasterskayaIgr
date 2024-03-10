@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Code.Events;
+using Code.HUD;
 using Code.Upgrades;
 using UnityEngine;
 
@@ -13,15 +14,14 @@ namespace Code.Spells
         
         [SerializeField] private List<UISelectSpellButton> _buttons = new();
 
-        public void CreateButtons(SpellBook spellBook, InGameEvents events, UpgradeService upgradeService)
+        public void CreateButtons(SpellBook spellBook, SpellDefinitions spellDefinitions, InGameEvents events, UpgradeService upgradeService)
         {
             RemoveAllButtons();
             foreach (var selectedSpell in spellBook.GetSelected())
             {
-                if (!selectedSpell.HasValue) continue;
-                var spellType = selectedSpell.Value;
+                if (selectedSpell is SpellType.NoSpell) continue;
                 var spellButton = Instantiate(_buttonPrefab, _root);
-                spellButton.Init(spellType, events.OnSpellSelected, _spellsConfig.Get(spellType), upgradeService);
+                spellButton.Init(spellDefinitions.Get(selectedSpell), events.OnSpellSelected, events.OnProjectileExploded, _spellsConfig.Get(selectedSpell), upgradeService);
                 _buttons.Add(spellButton);
             }
         }

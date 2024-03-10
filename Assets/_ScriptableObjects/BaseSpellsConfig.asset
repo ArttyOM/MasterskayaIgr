@@ -22,7 +22,7 @@ MonoBehaviour:
       radius: 0
       duration: 0
       slowValue: 0
-      damage: 5
+      damage: 2
       damagePerSecond: 0
       throttleTimeOfExplosion: 0
       cooldown: 0
@@ -48,17 +48,17 @@ MonoBehaviour:
       damage: 10
       damagePerSecond: 0
       throttleTimeOfExplosion: 0
-      cooldown: 4
+      cooldown: 16
     megaSpellBalance:
       spellExplosionVfxPrefab: {fileID: 4622010461751231616, guid: 4c169ad4baa361647b655dcd796e7224, type: 3}
       spellType: 1
       radius: 1
       duration: 0
       slowValue: 0
-      damage: 10000
+      damage: 70
       damagePerSecond: 0
       throttleTimeOfExplosion: 0
-      cooldown: 4
+      cooldown: 24
   - spellType: 2
     spellPreparationVfxPrefab: {fileID: 5609960483709638669, guid: 21391bceaa9a816429630977e3b55c28, type: 3}
     megaCastWeaponType: 2
@@ -71,7 +71,7 @@ MonoBehaviour:
       damage: 7
       damagePerSecond: 2
       throttleTimeOfExplosion: 0
-      cooldown: 7
+      cooldown: 28
     megaSpellBalance:
       spellExplosionVfxPrefab: {fileID: 6776487761002917681, guid: a7263cf1f37bb164e8de971da019573a, type: 3}
       spellType: 2
@@ -81,7 +81,7 @@ MonoBehaviour:
       damage: 20
       damagePerSecond: 10
       throttleTimeOfExplosion: 0
-      cooldown: 2
+      cooldown: 42
   - spellType: 3
     spellPreparationVfxPrefab: {fileID: 5609960483709638669, guid: a3e21cd76300bd14a9417a7cb4fa88e4, type: 3}
     megaCastWeaponType: 5
@@ -90,11 +90,11 @@ MonoBehaviour:
       spellType: 3
       radius: 1
       duration: 5
-      slowValue: 0.5
+      slowValue: 0.7
       damage: 0
       damagePerSecond: 0
       throttleTimeOfExplosion: 0
-      cooldown: 5
+      cooldown: 20
     megaSpellBalance:
       spellExplosionVfxPrefab: {fileID: 289044611648317479, guid: 29f7a3ac991f6ee478349077ac374a79, type: 3}
       spellType: 3
@@ -104,7 +104,7 @@ MonoBehaviour:
       damage: 0
       damagePerSecond: 0
       throttleTimeOfExplosion: 0
-      cooldown: 10
+      cooldown: 40
   - spellType: 4
     spellPreparationVfxPrefab: {fileID: 5609960483709638669, guid: 9c27a5cee3a2e4f49af3e54b70c5adda, type: 3}
     megaCastWeaponType: 3
@@ -114,20 +114,20 @@ MonoBehaviour:
       radius: 0
       duration: 0
       slowValue: 0
-      damage: 10000
+      damage: 100
       damagePerSecond: 0
       throttleTimeOfExplosion: 4
-      cooldown: 0
+      cooldown: 30
     megaSpellBalance:
       spellExplosionVfxPrefab: {fileID: 7124122976263009507, guid: 3a8396b81ce3510418f8348fc41d86e3, type: 3}
       spellType: 4
-      radius: 1
+      radius: 0
       duration: 0
       slowValue: 0
-      damage: 10000
+      damage: 190
       damagePerSecond: 0
       throttleTimeOfExplosion: 4
-      cooldown: 5
+      cooldown: 45
   - spellType: 5
     spellPreparationVfxPrefab: {fileID: 5609960483709638669, guid: 9636d70099ccc6c44819ae7c3022f7b5, type: 3}
     megaCastWeaponType: 6

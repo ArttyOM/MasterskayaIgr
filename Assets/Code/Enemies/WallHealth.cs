@@ -1,6 +1,8 @@
+using System;
 using Code.DebugTools.Logger;
 using Code.Main;
 using Code.Upgrades;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -22,7 +24,10 @@ public class WallHealth : MonoBehaviour
             enemy.CalculateDamagePerSecond(healthPoints); 
         }
         healthPoints = newHp;
+        _maxHealthPoints = newHp;
+        _lastHealth = healthPoints;
         spriteRenderer = GetComponent<SpriteRenderer>();
+        services.ChangeWallHp(newHp, newHp);
         UpdateSprite();
     }
 
@@ -31,10 +36,13 @@ public class WallHealth : MonoBehaviour
         
         foreach (var enemyType in enemyTypes)
         {
-            if (collision.gameObject.tag == enemyType.name)
+            //todo: This is a broken mechanic --- needs to be modified
+            if (collision.gameObject.CompareTag(enemyType.name))
             {
-                healthPoints -= enemyType.damagePerSecond * Time.deltaTime;
+                var damage = enemyType.damagePerSecond * Time.deltaTime;
+                healthPoints -= damage;
                 //$"healthPoints = {healthPoints}".Log();
+                
                 UpdateSprite();
                 break;
             }
@@ -45,6 +53,26 @@ public class WallHealth : MonoBehaviour
             Debug.Log("Wall is destroyed");
             GetComponent<Collider2D>().enabled = false;
         }
+    }
+
+    private float _lastHealth;
+    private float _timer = .5f;
+    private float _maxHealthPoints;
+
+    private void FixedUpdate()
+    {
+        _timer -= Time.deltaTime;
+        if (_timer > 0) return;
+        _timer += .5f;
+        if (_lastHealth > healthPoints)
+        {
+            ServiceLocator.Instance.DamageNumbers.Spawn(Mathf.CeilToInt(_lastHealth - healthPoints), transform.position);
+            transform.DOPunchScale(new Vector3(0.1f, 0.1f, 0.1f), .2f, 1, 1);
+            ServiceLocator.Instance.ChangeWallHp(healthPoints, _maxHealthPoints);
+            _lastHealth = healthPoints;
+            
+        }
+        
     }
 
     private void UpdateSprite()

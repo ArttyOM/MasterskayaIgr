@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cf3eb47ac784371b1cf2066c707bcaa, type: 3}
   m_Name: BaseAutofireConfig
   m_EditorClassIdentifier: 
-  period: 2
+  periodInSeconds: 0.5

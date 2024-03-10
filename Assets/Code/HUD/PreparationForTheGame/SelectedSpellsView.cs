@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using Code.PregameShop;
 using Code.Spells;
 using UnityEngine;
 
@@ -12,10 +10,12 @@ namespace Code.HUD
         [SerializeField] private SpellSlotView _prefab;
         private readonly List<SpellSlotView> _slots = new List<SpellSlotView>();
         private SpellBook _spellBook;
+        private SpellDefinitions _spellDefinitions;
 
-        public void Render(SpellBook spellBook)
+        public void Render(SpellBook spellBook, SpellDefinitions spellDefinitions)
         {
             _spellBook = spellBook;
+            _spellDefinitions = spellDefinitions;
             RemoveAllSlots();
             var spells = _spellBook.GetSelected().ToArray();
             for (int i = 0; i < spells.Length; i++)
@@ -24,13 +24,13 @@ namespace Code.HUD
                 slot.OnSpellAssign += SpellAssigned;
                 slot.OnSpellRemoved += SpellRemoved;
                 var spell = spells[i];
-                if (!spell.HasValue)
+                if (spell == SpellType.NoSpell)
                 {
                     slot.RenderEmpty();
                 }
                 else
                 {
-                    slot.Render(spell.Value, _spellBook);    
+                    slot.Render(_spellDefinitions.Get(spell));    
                 }
                 _slots.Add(slot);
             }
