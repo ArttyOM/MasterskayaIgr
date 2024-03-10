@@ -48,7 +48,10 @@ namespace Code.Projectiles
         {
             SetCursorActive();
             float secondsToFire = _autofirePeriod;
-            Vector3 worldPosition;
+            Vector3 worldPosition = GetWorldPosition(_mouseGridPosition.Value);
+            
+            Fire(_mouseGridPosition.Value, worldPosition);
+            
             while (Input.touchCount > 0 || Input.GetMouseButton(0))
             {
                 secondsToFire -= Time.deltaTime;
@@ -71,7 +74,7 @@ namespace Code.Projectiles
             if (IsCursorActiveAndInGamezone())
             {
                 worldPosition = GetWorldPosition(_mouseGridPosition.Value);
-                Fire(_mouseGridPosition.Value, worldPosition);
+                
                 SetCursorInactive();
             }
         }
