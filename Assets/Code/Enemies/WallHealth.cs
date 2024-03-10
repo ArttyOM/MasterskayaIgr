@@ -1,10 +1,10 @@
 using System;
-using Code.DebugTools.Logger;
+using System.Threading.Tasks;
 using Code.Main;
 using Code.Upgrades;
 using DG.Tweening;
+using UniRx;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class WallHealth : MonoBehaviour
 {
@@ -15,7 +15,19 @@ public class WallHealth : MonoBehaviour
 
     public Sprite[] wallSprites;
 
-    private void Start()
+    private async void OnEnable()
+    {
+        
+        while (ServiceLocator.Instance == null)
+        {
+            await Task.Yield();
+        }
+        var services = ServiceLocator.Instance;
+        _subscription = services.Events.OnSessionStart.Subscribe(InitiateWall);
+        InitiateWall(0);
+    }
+
+    private void InitiateWall(int _)
     {
         var services = ServiceLocator.Instance;
         var newHp = services.UpgradeSystem.GetUpgradedValue(services.Profile.GetUpgrades(), UpgradeTarget.WallHp, healthPoints);
@@ -29,6 +41,11 @@ public class WallHealth : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         services.ChangeWallHp(newHp, newHp);
         UpdateSprite();
+    }
+
+    private void OnDestroy()
+    {
+        _subscription.Dispose();
     }
 
     private void OnCollisionStay2D(Collision2D collision)
@@ -48,7 +65,7 @@ public class WallHealth : MonoBehaviour
             }
         }
 
-        if (healthPoints <= 50)
+        if (healthPoints <= 0)
         {
             Debug.Log("Wall is destroyed");
             GetComponent<Collider2D>().enabled = false;
@@ -58,6 +75,7 @@ public class WallHealth : MonoBehaviour
     private float _lastHealth;
     private float _timer = .5f;
     private float _maxHealthPoints;
+    private IDisposable _subscription;
 
     private void FixedUpdate()
     {
@@ -77,22 +95,14 @@ public class WallHealth : MonoBehaviour
 
     private void UpdateSprite()
     {
-        // Условия для изменения спрайта в зависимости от уровня HP
-        if (healthPoints <= 50)
+        spriteRenderer.sprite = healthPoints switch
         {
-            spriteRenderer.sprite = wallSprites[3]; // Спрайт для HP <= 50
-        }
-        else if (healthPoints <= 100)
-        {
-            spriteRenderer.sprite = wallSprites[2]; // Спрайт для HP <= 100
-        }
-        else if (healthPoints <= 150)
-        {
-            spriteRenderer.sprite = wallSprites[1]; // Спрайт для HP <= 150
-        }
-        else
-        {
-            spriteRenderer.sprite = wallSprites[0]; // Спрайт для полного HP
-        }
+            // Условия для изменения спрайта в зависимости от уровня HP
+            <= 0 => wallSprites[3],
+            <= 50 => wallSprites[2],
+            <= 100 => wallSprites[2],
+            <= 150 => wallSprites[1],
+            _ => wallSprites[0]
+        };
     }
 }

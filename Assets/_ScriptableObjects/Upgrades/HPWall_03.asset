@@ -17,5 +17,5 @@ MonoBehaviour:
   _icon: {fileID: 21300000, guid: cc10a44c659086948a9f7d144820598f, type: 3}
   _cost: 200
   _target: 0
-  _effect: 200
+  _effect: 280
   _effectType: 2

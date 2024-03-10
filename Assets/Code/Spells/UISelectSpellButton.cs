@@ -56,13 +56,14 @@ namespace Code.Spells
         {
             _clickEffect.Play();
             _onClick.OnNext(_spellType);
-            
+            SetButtonInteractable(false);
         }
 
         private void StartCooldown(ExplosionData explosionData)
         {
             var spellType = explosionData.GetSpellType;
             if (spellType != _spellType) return;
+            _cooldown.DOComplete(true);
             bool isMega = (_config.megaCastWeaponType == explosionData.GetProjectileType) &&
                           (spellType != SpellType.NoSpell);
             var cooldown = _upgradeService.GetUpgradedValue(UpgradeTarget.SpellCooldown, isMega ? _config.megaSpellBalance.cooldown : _config.commonSpellBalance.cooldown);

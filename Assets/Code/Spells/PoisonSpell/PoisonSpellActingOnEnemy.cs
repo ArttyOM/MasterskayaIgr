@@ -65,16 +65,24 @@ namespace Code.Spells.PoisonSpell
         
         private IEnumerator PoisonDebuffMicrocoroutine(CommonEnemy enemy,float damagePerSecond, float duration)
         {
-            float deltaTime;
+            float deltaTime = 0;
             while (duration >= 0 && (enemy is not null))
             {
-                deltaTime = Time.deltaTime;
-                duration -= deltaTime;
+                deltaTime += Time.deltaTime;
+                duration -= Time.deltaTime;
                 if (enemy == null) yield break;
-                enemy.GetHit(damagePerSecond * deltaTime);
+                if (deltaTime >= 1f)
+                {
+                    enemy.GetHit(damagePerSecond * deltaTime);
+                    deltaTime = 0;
+                }
                 yield return null;
             }
-            
+
+            if (deltaTime > 0 && enemy != null)
+            {
+                enemy.GetHit(damagePerSecond * deltaTime);
+            }
         }
     }
 }

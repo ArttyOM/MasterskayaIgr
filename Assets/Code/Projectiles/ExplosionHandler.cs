@@ -51,6 +51,14 @@ namespace Code.Projectiles
         public void Dispose()
         {
             _onExplosionSubscription?.Dispose();
+            foreach (var (key, value) in _interationWithEnemies)
+            {
+                if (value is IDisposable disposable)
+                {
+                    disposable.Dispose();
+                }
+            }
+            _interationWithEnemies.Clear();
         }
 
         private void CreatePools()

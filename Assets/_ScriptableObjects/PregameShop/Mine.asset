@@ -22,6 +22,6 @@ MonoBehaviour:
     at once \u2014 pretty much shuts the door on any critters trying to get through."
   _icon: {fileID: 21300000, guid: 051fe2a09e5accd4aa75c5d250f836d8, type: 3}
   _guideArt: {fileID: 21300000, guid: 051fe2a09e5accd4aa75c5d250f836d8, type: 3}
-  _cost: 0
+  _cost: 900
   _targetItems:
   - {fileID: 21300000, guid: a0fd5b1267be591409207988e7bc1e1a, type: 3}

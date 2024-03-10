@@ -22,5 +22,5 @@ MonoBehaviour:
     front, back, skyward, and down under. Ain''t no hidey-hole safe, you betcha.'
   _icon: {fileID: 21300000, guid: 90dd826c609a0c64fa3c8b86da799732, type: 3}
   _guideArt: {fileID: 21300000, guid: 90dd826c609a0c64fa3c8b86da799732, type: 3}
-  _cost: 350
+  _cost: 1500
   _targetItems: []

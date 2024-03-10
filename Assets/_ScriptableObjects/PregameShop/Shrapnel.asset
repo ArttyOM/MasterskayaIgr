@@ -22,5 +22,5 @@ MonoBehaviour:
     for all those who rose from beneath it."
   _icon: {fileID: 21300000, guid: 738d5ccab4c776047a8906abdeeba7e2, type: 3}
   _guideArt: {fileID: 21300000, guid: 738d5ccab4c776047a8906abdeeba7e2, type: 3}
-  _cost: 350
+  _cost: 600
   _targetItems: []

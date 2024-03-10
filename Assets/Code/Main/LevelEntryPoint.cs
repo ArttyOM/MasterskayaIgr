@@ -90,7 +90,7 @@ namespace Code.Main
             _isLoaded = true;
         }
 
-        private void OnDestroy()
+        private void OnDisable()
         {
             ClearDisposables();
         }
@@ -110,7 +110,7 @@ namespace Code.Main
             _spellVfxGenerator?.Dispose();
             _projectileThrower?.Dispose();
             _explosionHandler?.Dispose();
-            
+            _enemies?.Dispose();
             _commonEnemyMover?.Dispose();
         }
 

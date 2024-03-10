@@ -80,10 +80,13 @@ namespace Code.Enemies
         }
 
         public bool _dead;
-        public void GetHit(float damage)
+
+        public void GetHit(float damage, bool impact = true)
         {
             var name = this.name;
-            ServiceLocator.Instance.DamageNumbers.Spawn(Mathf.CeilToInt(damage), this.transform.position);
+            var damageFloored = Mathf.FloorToInt(damage);
+            if(damageFloored > 0 && impact)
+                ServiceLocator.Instance.DamageNumbers.Spawn(damageFloored, this.transform.position);
             $">>GetHit {name} got {damage} damage".Colored(Color.cyan).Log();
 
             _currentHP -= damage;
