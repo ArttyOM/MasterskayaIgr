@@ -24,5 +24,4 @@ MonoBehaviour:
   _guideArt: {fileID: 21300000, guid: 44cda725b2594f346bee9939394b2fd6, type: 3}
   _cost: 450
   _targetItems:
-  - {fileID: 21300000, guid: cc359e137f9e54e4aaa9e15c7939f99d, type: 3}
-  - {fileID: 21300000, guid: 58a49ee7be68415498d1d34670cae0d1, type: 3}
+  - {fileID: 21300000, guid: 3385517a7d71ac541b87daa6877c28cf, type: 3}
