@@ -4,7 +4,6 @@ using Code.Events;
 using Code.GameLoop;
 using Code.HUD;
 using Code.HUD.Gameplay;
-using Code.HUD.LevelSelect;
 using Code.HUD.Offers;
 using Code.HUD.Start;
 using Code.InGameRewards;
@@ -23,7 +22,6 @@ namespace Code.Main
     public class ServiceLocator : MonoBehaviour
     {
         [SerializeField] private LevelProgression _levelProgression;
-        [SerializeField] private LevelSelectScreen _levelSelect;
         [SerializeField] private StartScreen _startScreen;
         [SerializeField] private SettingsModal _settingsModal;
         [SerializeField] private OffersManager _offersManager;
@@ -91,7 +89,6 @@ namespace Code.Main
             _settings = new PlayerSettings(_storage);
             _upgradeSystem = new UpgradeSystem(_upgrades.Upgrades);
             _shopSystem = new ShopSystem(_profile, _spellShop, _upgradeSystem);
-            _levelSelect.Init(_levelProgression, _events);
             _settingsModal.Init(_settings, _audioManager);
             _startScreen.Init(_events, _screenSwitcher, _settingsModal, _profile, _levelProgression);
             
@@ -101,6 +98,9 @@ namespace Code.Main
             Instance = this;
         }
 
-        private async void StartLevel(int levelIndex) => await _levelLoader.LoadLevelWithSceneIndex(levelIndex);
+        private void StartLevel(int levelIndex)
+        {
+            _levelLoader.LoadWithPrepare(levelIndex);
+        }
     }
 }

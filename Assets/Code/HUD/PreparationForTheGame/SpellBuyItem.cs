@@ -9,7 +9,6 @@ namespace Code.HUD
     public class SpellBuyItem : MonoBehaviour
     {
         [SerializeField] private TMP_Text _price;
-        [SerializeField] private DraggableSpell _draggable;
         
         [SerializeField] private Image _icon;
         [SerializeField] private TMP_Text _title;
@@ -21,14 +20,11 @@ namespace Code.HUD
             _price.text = cost.ToString();
             _icon.sprite = icon;
             _title.text = spell.ToString();
-            _draggable.Disable();
             _buyButton.onClick.RemoveAllListeners();
             _buyButton.onClick.AddListener(() =>
             {
                 if (!shopSystem.CanBuy(spell)) return;
                 shopSystem.Buy(spell);
-                _draggable.SetSpell(spell);
-                _draggable.Enable();
                 _buyButton.gameObject.SetActive(false);
                 _buyButton.onClick.RemoveAllListeners();
             });
@@ -37,8 +33,6 @@ namespace Code.HUD
 
         public void Render(SpellType spell, Sprite icon, SpellBook spellBook)
         {
-            _draggable.Enable();
-            _draggable.SetSpell(spell);
             _buyButton.gameObject.SetActive(false);
             _icon.sprite = icon;
             _title.text = spell.ToString();
