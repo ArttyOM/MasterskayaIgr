@@ -19,7 +19,7 @@ namespace Code.Saves
             public int Coins;
             public List<int> CompletedLevels;
             public string[] Upgrades;
-            public int[] SelectedSpells;
+            public SpellType[] SelectedSpells;
             public SpellType[] UnlockedSpells;
         }
 
@@ -33,7 +33,7 @@ namespace Code.Saves
             Initialize();
             _wallet = new Wallet(Data.Coins);
             _unitUpgrades = new UnitUpgrades(Data.Upgrades);
-            _spellBook = new SpellBook(Data.SelectedSpells.Select(x => x != -1 ? (SpellType?)x : null), Data.UnlockedSpells);
+            _spellBook = new SpellBook(Data.SelectedSpells, Data.UnlockedSpells);
             IncrementLaunchCount();
             Save();
         }
@@ -47,7 +47,7 @@ namespace Code.Saves
                 LaunchCount = 0,
                 Coins = _defaultPlayerProfile.GetStartCoins(),   
                 CompletedLevels = new List<int>(),
-                SelectedSpells = _defaultPlayerProfile.GetSelectedSpells().Take(3).Select(x => (int)x).ToArray(),
+                SelectedSpells = _defaultPlayerProfile.GetSelectedSpells().Take(3).ToArray(),
                 UnlockedSpells = _defaultPlayerProfile.GetUnlockedSpells().ToArray(),
                 Upgrades = new string[]{},
             };
@@ -65,7 +65,7 @@ namespace Code.Saves
         {
             Data.Coins = _wallet.Balance;
             Data.UnlockedSpells = _spellBook.GetUnlocked().ToArray();
-            Data.SelectedSpells = _spellBook.GetSelected().Select(x => x.HasValue ? (int)x.Value : -1).ToArray();
+            Data.SelectedSpells = _spellBook.GetSelected().ToArray();
             Data.Upgrades = _unitUpgrades.GetActiveUpgrades().ToArray();
         }
 

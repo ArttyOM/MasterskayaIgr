@@ -8,11 +8,11 @@ namespace Code.Spells
     { 
         [SerializeField] public List<SpellConfig> spellConfigs;
 
-        public SpellBalanceConfig Get(SpellType spellType)
+        public SpellConfig Get(SpellType spellType)
         {
             for (int i = 0; i < spellConfigs.Count; i++)
             {
-                if (spellConfigs[i].spellType == spellType) return spellConfigs[i].commonSpellBalance;
+                if (spellConfigs[i].spellType == spellType) return spellConfigs[i];
             }
 
             return default;

@@ -14,11 +14,10 @@ namespace Code.GameLoop
     /// Грузит и перезагружает уровни.
     /// Инициализирует зависимости после загрузки
     /// </summary>
-    public class LevelLoader
+    public class LevelLoader : IDisposable
     {
         public LevelLoader(InGameEvents events)
         {
-            
             _toMenuSubscription = events.OnMenu.Subscribe(LoadWithPrepare);
             _restartLevelSubscription = events.OnLevelRestart.Subscribe(LoadAndStart);
         }
@@ -39,14 +38,17 @@ namespace Code.GameLoop
 
         ~LevelLoader()
         {
-            _toMenuSubscription.Dispose();
-            _restartLevelSubscription.Dispose();
+            Dispose(false);
         }
 
 
         private async UniTask<LevelEntryPoint> WaitForLevelEntry()
         {
             var entryPoint = Object.FindObjectOfType<LevelEntryPoint>();
+            if (entryPoint == null)
+            {
+                Debug.Log("Level Entry Point not found");
+            }
             while (!entryPoint.IsLoaded())
             {
                 await UniTask.Yield();
@@ -66,6 +68,21 @@ namespace Code.GameLoop
             await Resources.UnloadUnusedAssets();
             await SceneManager.LoadSceneAsync(sceneIndex, LoadSceneMode.Single);
             $"Сцена {sceneIndex} загружена".Colored(Color.red).Log();
+        }
+
+        private void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _toMenuSubscription?.Dispose();
+                _restartLevelSubscription?.Dispose();
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 }

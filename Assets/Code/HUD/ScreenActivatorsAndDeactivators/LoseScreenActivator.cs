@@ -23,6 +23,7 @@ namespace Code.HUD.ScreenActivators
 
         private void ShowLoseScreen()
         {
+            _screenSwitcher.HideAllScreensInstantly();
             _screenSwitcher.ShowScreen(ScreenType.Defeat);
         }
     }

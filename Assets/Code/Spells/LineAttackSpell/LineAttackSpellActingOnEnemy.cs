@@ -10,6 +10,7 @@ namespace Code.Spells.LineAttackSpell
 {
     public class LineAttackSpellActingOnEnemy: IDisposable, ISpellActingOnEnemy
     {
+        private UpgradeService _upgradeService;
         public void Dispose()
         {
             
@@ -23,7 +24,7 @@ namespace Code.Spells.LineAttackSpell
                 enemy.GetObservableTrigger2DTrigger.OnTriggerEnter2DAsObservable()
                     .Subscribe(onNext: collider2D =>
                     {
-                        enemy.GetHit(spellConfig.damage);
+                        enemy.GetHit(_upgradeService.GetUpgradedValue(UpgradeTarget.SpellDamage, spellConfig.damage));
                     });
             }
         }

@@ -18,25 +18,25 @@ MonoBehaviour:
     enemyStats:
       name: zombie
       destroyInSec: 60
-      hitPoints: 40
+      hitPoints: 200
       moveSpeed: 1
-      KillReward: 5
+      KillReward: 15
       damagePerSecond: 0
   - enemyType: 1
     prefab: {fileID: 0}
     enemyStats:
       name: soldier
-      destroyInSec: 120
-      hitPoints: 20
+      destroyInSec: 100
+      hitPoints: 60
       moveSpeed: 2
-      KillReward: 10
+      KillReward: 5
       damagePerSecond: 0
   - enemyType: 2
     prefab: {fileID: 0}
     enemyStats:
       name: rider
       destroyInSec: 120
-      hitPoints: 20
+      hitPoints: 40
       moveSpeed: 3
-      KillReward: 15
+      KillReward: 10
       damagePerSecond: 0

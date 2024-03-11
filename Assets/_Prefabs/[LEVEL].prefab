@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5651506742427570521}
-  - component: {fileID: 2002583105685127792}
   m_Layer: 0
   m_Name: '[LEVEL]'
   m_TagString: Untagged
@@ -32,17 +31,3 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2002583105685127792
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4129114346521421050}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5eefd57b8e8f41b78be8b01a8ac53776, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  <PoolCommonParent>k__BackingField: {fileID: 0}
-  _sceneIndex: 1

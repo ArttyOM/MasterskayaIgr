@@ -1,11 +1,10 @@
 ﻿using System;
 using Code.DebugTools.Logger;
+using Code.Main;
 using Code.Spells;
 using UniRx;
-using UniRx.Diagnostics;
 using UniRx.Triggers;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Code.Enemies
@@ -81,9 +80,13 @@ namespace Code.Enemies
         }
 
         public bool _dead;
-        public void GetHit(float damage)
+
+        public void GetHit(float damage, bool impact = true)
         {
             var name = this.name;
+            var damageFloored = Mathf.FloorToInt(damage);
+            if(damageFloored > 0 && impact)
+                ServiceLocator.Instance.DamageNumbers.Spawn(damageFloored, this.transform.position);
             $">>GetHit {name} got {damage} damage".Colored(Color.cyan).Log();
 
             _currentHP -= damage;

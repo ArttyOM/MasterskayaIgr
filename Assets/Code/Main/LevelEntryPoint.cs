@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Code.DebugTools.Logger;
+﻿using Code.DebugTools.Logger;
 using Code.Enemies;
 using Code.Events;
 using Code.GameLoop;
@@ -11,7 +10,6 @@ using Code.Saves;
 using Code.Spells;
 using Code.Upgrades;
 using Cysharp.Threading.Tasks;
-using UniRx;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
@@ -90,7 +88,7 @@ namespace Code.Main
             _isLoaded = true;
         }
 
-        private void OnDestroy()
+        private void OnDisable()
         {
             ClearDisposables();
         }
@@ -110,7 +108,7 @@ namespace Code.Main
             _spellVfxGenerator?.Dispose();
             _projectileThrower?.Dispose();
             _explosionHandler?.Dispose();
-            
+            _enemies?.Dispose();
             _commonEnemyMover?.Dispose();
         }
 

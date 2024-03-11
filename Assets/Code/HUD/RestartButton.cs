@@ -21,6 +21,7 @@ namespace Code.HUD
             _onRestartEvent = onRestartEvent;
 
             restartButton = gameObject.GetComponent<Button>();
+            restartButton.onClick.RemoveAllListeners();
             restartButton.onClick.AddListener(Restart);
         }
 

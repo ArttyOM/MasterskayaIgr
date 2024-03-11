@@ -1,8 +1,10 @@
+using System;
 using Code.Audio;
 using Code.DebugTools.Logger;
 using Code.Events;
 using Code.GameLoop;
 using Code.HUD;
+using Code.HUD.DamageNumbers;
 using Code.HUD.Gameplay;
 using Code.HUD.Offers;
 using Code.HUD.Start;
@@ -24,8 +26,9 @@ namespace Code.Main
         [SerializeField] private LevelProgression _levelProgression;
         [SerializeField] private StartScreen _startScreen;
         [SerializeField] private SettingsModal _settingsModal;
+        [SerializeField] private GuideModal _guideModal;
         [SerializeField] private OffersManager _offersManager;
-        [SerializeField] private SpellShop _spellShop;
+        [SerializeField] private SpellDefinitions _spellShop;
         [SerializeField] private UpgradeList _upgrades;
         [SerializeField] private AudioManager _audioManager;
         [SerializeField] private Canvas _dragCanvas;
@@ -33,6 +36,8 @@ namespace Code.Main
         [SerializeField] private Camera _camera;
         [SerializeField] private GameplayScreen _gameplayScreen;
         [SerializeField] private PrepareScreen _prepareScreen;
+        [SerializeField] private DamageNumbersManager _damageNumbers;
+        
         
         
         
@@ -59,10 +64,13 @@ namespace Code.Main
         public LevelLoader LevelLoader => _levelLoader;
         public ShopSystem ShopSystem => _shopSystem;
         public UpgradeSystem UpgradeSystem => _upgradeSystem;
-        public SpellShop SpellShop => _spellShop;
+        public SpellDefinitions SpellShop => _spellShop;
         public Canvas DragCanvas => _dragCanvas;
         public DropRewards DropRewardsService => _dropRewards;
         public Camera Camera => _camera;
+        public DamageNumbersManager DamageNumbers => _damageNumbers;
+        public GuideModal GuideModal => _guideModal;
+        public ModalsManager Modals => _modalsManager;
 
         public PrepareScreen PrepareScreen => _prepareScreen;
         public GameplayScreen GameplayScreen => _gameplayScreen;
@@ -70,7 +78,9 @@ namespace Code.Main
         public SpellsConfig SpellsConfig;
 
         private LevelCompleteHandler _levelCompleteHandler;
-        
+        private ModalsManager _modalsManager;
+        private IDisposable _settingsSubscription;
+        private IDisposable _guideSubscribtion;
 
         private void Awake()
         {
@@ -81,8 +91,8 @@ namespace Code.Main
                 return;
             }
             DontDestroyOnLoad(gameObject);
-            
             _events = new InGameEvents();
+            _modalsManager = new ModalsManager();
             _storage = new PlayerPrefsStorage();
             _profile = new PlayerProfile(_storage, _defaultProfile);
             _screenSwitcher = new ScreenSwitcher(_events);
@@ -90,17 +100,43 @@ namespace Code.Main
             _upgradeSystem = new UpgradeSystem(_upgrades.Upgrades);
             _shopSystem = new ShopSystem(_profile, _spellShop, _upgradeSystem);
             _settingsModal.Init(_settings, _audioManager);
-            _startScreen.Init(_events, _screenSwitcher, _settingsModal, _profile, _levelProgression);
+            _settingsModal.GetComponent<ModalScreen>().Init(_modalsManager);
+            _guideModal.GetComponent<ModalScreen>().Init(_modalsManager);
+            _settingsSubscription = _events.OnSettingsRequested.Subscribe(OpenSettings);
+            _guideSubscribtion = _events.OnGuideRequested.Subscribe(OpenGuide);
+            _modalsManager.Deactivate();
+            _startScreen.Init(_events, _screenSwitcher, _profile, _levelProgression);
             
             _levelLoader = new LevelLoader(_events);
-            _levelCompleteHandler = new LevelCompleteHandler(_events, _levelProgression, _profile, _dropRewards);
             _events.OnLevelStart.Subscribe(StartLevel);
             Instance = this;
+        }
+
+        private void OpenGuide(Unit unit)
+        {
+            _modalsManager.Activate(_guideModal.gameObject.name);
+        }
+        private void OpenSettings(Unit unit)
+        {
+            _modalsManager.Activate(_settingsModal.gameObject.name);
         }
 
         private void StartLevel(int levelIndex)
         {
             _levelLoader.LoadWithPrepare(levelIndex);
+        }
+
+        private void OnDestroy()
+        {
+            _settingsSubscription.Dispose();
+            _guideSubscribtion.Dispose();
+        }
+
+        public event Action<float, float> OnWallHpChanged;
+
+        public void ChangeWallHp(float healthPoints, float maxHealthPoints)
+        {
+            OnWallHpChanged?.Invoke(healthPoints, maxHealthPoints);
         }
     }
 }

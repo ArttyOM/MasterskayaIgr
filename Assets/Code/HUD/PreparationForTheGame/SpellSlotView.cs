@@ -1,5 +1,4 @@
 ﻿using System;
-using Code.PregameShop;
 using Code.Spells;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -10,15 +9,14 @@ namespace Code.HUD
     public class SpellSlotView : MonoBehaviour, IDropHandler
     {
         [SerializeField] private Image _icon;
-        [SerializeField] private SpellShop _spellShop;
         [SerializeField] private Sprite _emptySprite;
         [SerializeField] private Button _removeButton;
         
         public event Action<SpellType, SpellSlotView> OnSpellAssign;
         public event Action<SpellSlotView> OnSpellRemoved;
-        public void Render(SpellType spell, SpellBook spellBook)
+        public void Render(SpellDefinition definition)
         {
-            var icon = _spellShop.GetSprite(spell);
+            var icon = definition.GetIcon();
             _icon.sprite = icon;
             _removeButton.gameObject.SetActive(true);
             _removeButton.onClick.RemoveAllListeners();

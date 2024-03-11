@@ -13,6 +13,43 @@ MonoBehaviour:
   m_Name: LevelProgression
   m_EditorClassIdentifier: 
   _levels:
-  - SceneName: Assets/Scenes/Level1.unity
+  - CoinsReward: 50
+    SceneName: Assets/Scenes/Level1 0.unity
     BuildIndex: 1
     SceneAsset: {fileID: 102900000, guid: 3e0e428a3bf63e74dba76262f84fab48, type: 3}
+  - CoinsReward: 50
+    SceneName: Assets/Scenes/Level1 1.unity
+    BuildIndex: 3
+    SceneAsset: {fileID: 102900000, guid: 4b7a34d1e8ad7834ca5110dcc3c57f7d, type: 3}
+  - CoinsReward: 50
+    SceneName: Assets/Scenes/Level1 2.unity
+    BuildIndex: 4
+    SceneAsset: {fileID: 102900000, guid: da2f1e38745aa0841a1cfba843648d47, type: 3}
+  - CoinsReward: 50
+    SceneName: Assets/Scenes/Level1 3.unity
+    BuildIndex: 5
+    SceneAsset: {fileID: 102900000, guid: 4edd7392cf564aa41a293bfb999a51be, type: 3}
+  - CoinsReward: 50
+    SceneName: Assets/Scenes/Level1 4.unity
+    BuildIndex: 6
+    SceneAsset: {fileID: 102900000, guid: 38b3a440319b73f43831a7ad2775eebe, type: 3}
+  - CoinsReward: 50
+    SceneName: Assets/Scenes/Level1 5.unity
+    BuildIndex: 7
+    SceneAsset: {fileID: 102900000, guid: 2d996d23adcac284481dd2557213ab3f, type: 3}
+  - CoinsReward: 50
+    SceneName: Assets/Scenes/Level1 6.unity
+    BuildIndex: 8
+    SceneAsset: {fileID: 102900000, guid: 9c53b2616fda5764c8364a76aaeeeb31, type: 3}
+  - CoinsReward: 50
+    SceneName: Assets/Scenes/Level1 7.unity
+    BuildIndex: 9
+    SceneAsset: {fileID: 102900000, guid: e2265a62111df00499fa73f95c84f0c1, type: 3}
+  - CoinsReward: 50
+    SceneName: Assets/Scenes/Level1 8.unity
+    BuildIndex: 10
+    SceneAsset: {fileID: 102900000, guid: ea030e33956227a489397cd80394df6f, type: 3}
+  - CoinsReward: 50
+    SceneName: Assets/Scenes/Level1 9.unity
+    BuildIndex: 11
+    SceneAsset: {fileID: 102900000, guid: 83d5da17e63f2d14fa60fce2d1cb1f72, type: 3}

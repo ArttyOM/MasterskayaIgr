@@ -10,6 +10,8 @@ namespace Code.Spells.ShrapnelSpell
 {
     public class ShrapnelSpellActingOnEnemy: IDisposable, ISpellActingOnEnemy
     {
+        private UpgradeService _upgradeService;
+
         public void Dispose()
         {
             
@@ -23,7 +25,7 @@ namespace Code.Spells.ShrapnelSpell
                 enemy.GetObservableTrigger2DTrigger.OnTriggerEnter2DAsObservable()
                     .Subscribe(onNext: collider2D =>
                     {
-                        enemy.GetHit(spellConfig.damage);
+                        enemy.GetHit(_upgradeService.GetUpgradedValue(UpgradeTarget.SpellDamage, spellConfig.damage));
                     });
             }
         }
@@ -31,7 +33,7 @@ namespace Code.Spells.ShrapnelSpell
         public void Init(IObservable<(CommonEnemy, SpellExplosion)> onEnemyExploded, SpellBalanceConfig commonSpellBalance, SpellBalanceConfig megaSpellConfig,
             UpgradeService upgradeService)
         {
-            
+            _upgradeService = upgradeService;
         }
     }
 }
