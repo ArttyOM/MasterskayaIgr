@@ -12,24 +12,26 @@ namespace Code.Projectiles
     public class ProjectileThrower : IDisposable
     {
         public const float DestroyProjectileTime = 0.3f;
+        public const float ThrottleTime = 0.4f;
         
-        public ProjectileThrower(IObservable<(Vector2Int, Vector3)> eventsProjectileDestinationSelected, IObserver<ExplosionData> onExplosion, 
+        public ProjectileThrower(WeaponRandomGenerator weaponGenerator, IObservable<(Vector2Int, Vector3)> eventsProjectileDestinationSelected, IObserver<ExplosionData> onExplosion, 
             IObserver<SpellType> spellSelected,
-            IReadOnlyDictionary<ProjectileType, WeaponPool> weaponPools,
             IReadOnlyDictionary<SpellType, SpellPool> spellPools)
         {
+            _weaponGenerator = weaponGenerator;
             _onExplosion = onExplosion;
             _spellSelected = spellSelected;
-            _weaponPools = weaponPools;
+            _weaponPools = weaponGenerator.GetWeaponPools;
             _spellPools = spellPools;
             _projectilePool = new();
 
             _spawnPoint = GameObject.FindObjectOfType<CurrentWeaponSpawnPoint>();
             _onFireSubsctription = eventsProjectileDestinationSelected
-                .Throttle(TimeSpan.FromMilliseconds(300f))
+                //.Throttle(TimeSpan.FromSeconds(ThrottleTime))
                 .Subscribe(x =>  MainThreadDispatcher.StartUpdateMicroCoroutine(BuildProjectileThenThrow(x)));
         }
 
+        private readonly WeaponRandomGenerator _weaponGenerator;
         private readonly IObserver<ExplosionData> _onExplosion;
         private readonly IObserver<SpellType> _spellSelected;
         private readonly IReadOnlyDictionary<ProjectileType, WeaponPool> _weaponPools;
@@ -82,6 +84,8 @@ namespace Code.Projectiles
             //     _weaponPools[weapon.GetProjectileType].Return(weapon);
             //     _spellPools[spell.GetSpellType].Return(spell);
             // });
+            _weaponGenerator.GenerateWeapon(out _, out _);
+            
             float delay = DestroyProjectileTime;
             while (delay > 0f)
             {

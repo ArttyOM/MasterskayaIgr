@@ -117,12 +117,6 @@ namespace Code.Projectiles
         {
             _isCursorActive = false;
             _aimCursor.Hide();
-            if (_mouseGridPosition.Value != _nonActivePosition && 
-                _playZoneCollider.OverlapPoint(_camera.ScreenToWorldPoint(Input.mousePosition)))
-            {
-                var worldPosition = GetWorldPosition(_mouseGridPosition.Value);
-                _onDestinationSelected.OnNext((_mouseGridPosition.Value, worldPosition));
-            }
             _mouseGridPosition.Value = _nonActivePosition;
         }
 

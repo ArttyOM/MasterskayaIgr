@@ -13,10 +13,9 @@ namespace Code.Projectiles
 {
     public class WeaponRandomGenerator: IDisposable
     {
-        public const float Duration = 0.4f;
+        public const float Duration = 0.04f;
         
-        public WeaponRandomGenerator(WeaponSpawnChanceConfig weaponSpawnChanceConfig,
-            IObservable<ExplosionData> onExplosion, IObservable<int> eventsSessionStart)
+        public WeaponRandomGenerator(WeaponSpawnChanceConfig weaponSpawnChanceConfig)
         {
             _nextWeaponSpawnPoint = Object.FindObjectOfType<NextWeaponSpawnPoint>();
             _currentWeaponSpawnPoint = Object.FindObjectOfType<CurrentWeaponSpawnPoint>();
@@ -24,11 +23,11 @@ namespace Code.Projectiles
             _weaponSpawnChanceConfig = weaponSpawnChanceConfig;
             CreatePools(weaponSpawnChanceConfig);
 
-            GenerateWeapon();
-            GenerateWeapon();
-            _onNextWeaponSubsctiption = onExplosion
-                .SkipUntil(eventsSessionStart)
-                .Subscribe(_ => GenerateWeapon());
+            GenerateWeapon(out _, out _);
+            GenerateWeapon(out _,out _);
+            // _onNextWeaponSubsctiption = onProjectileDestinationSelected
+            //     .SkipUntil(eventsSessionStart)
+            //     .Subscribe(_ => GenerateWeapon());
 
         }
         
@@ -50,6 +49,20 @@ namespace Code.Projectiles
         {
             _onNextWeaponSubsctiption?.Dispose();
         }
+        
+        public void GenerateWeapon(out Weapon currentWeapon, out Weapon nextWeapon)
+        {
+            ">>GenerateWeapon".Colored(Color.green).Log();
+            MoveNextWeaponToCurrentPosition();
+
+            ProjectileType typeOfWeapon = GenarateRandomNextWeapon();
+            _nextWeapon = _weaponPools[typeOfWeapon].Rent();
+            _nextWeapon.transform.position = _nextWeaponSpawnPoint.transform.position;
+
+            nextWeapon = _nextWeapon;
+            currentWeapon = _currentWeapon;
+        }
+        
 
         private void CreatePools(WeaponSpawnChanceConfig weaponSpawnChanceConfig)
         {
@@ -63,15 +76,7 @@ namespace Code.Projectiles
             }
         }
 
-        private void GenerateWeapon()
-        {
-            //">>GenerateWeapon".Colored(Color.green);
-            MoveNextWeaponToCurrentPosition();
 
-            ProjectileType typeOfWeapon = GenarateRandomNextWeapon();
-            _nextWeapon = _weaponPools[typeOfWeapon].Rent();
-            _nextWeapon.transform.position = _nextWeaponSpawnPoint.transform.position;
-        }
 
         private ProjectileType GenarateRandomNextWeapon()
         {

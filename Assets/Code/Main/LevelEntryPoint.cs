@@ -23,11 +23,8 @@ namespace Code.Main
         [SerializeField] private EnemiesConfig _enemiesConfig;
         [SerializeField] private AutofireConfig _autofireConfig;
 
-        private WeaponRandomGenerator _weaponRandomGenerator;
-        private SpellVfxGenerator _spellVfxGenerator;
-        private GridPointSelector _gridPointSelector;
-        private ProjectileThrower _projectileThrower;
-        private ExplosionHandler _explosionHandler;
+        private OnClickProjectileThrower _onClickProjectileThrower;
+        
         private Enemies.Enemies _enemies;
         
         private WinDetector _winDetector;
@@ -65,19 +62,13 @@ namespace Code.Main
             ">>LevelEntryPoint.Init".Colored(Color.red).Log();
 
             _enemies = new(_enemiesConfig, _events.OnEnemyDead);
-            _weaponRandomGenerator = new WeaponRandomGenerator(_weaponSpawnChanceConfig, _events.OnProjectileExploded, _events.OnSessionStart);
-            _spellVfxGenerator = new SpellVfxGenerator(_spellsConfig, _events.OnSpellSelected, _events.OnSessionStart);
+            ConfigHolder configHolder = new ConfigHolder(_autofireConfig, _weaponSpawnChanceConfig, _spellsConfig);
+            _onClickProjectileThrower = new OnClickProjectileThrower(configHolder,_events, profile, upgradeSystem);
             
             _winDetector = new WinDetector(_enemies, _events.OnLevelEnd);
             _loseDetector = new LoseDetector(_events.OnLevelEnd);
             
-            var weaponPools = _weaponRandomGenerator.GetWeaponPools;
-            var spellPools = _spellVfxGenerator.GetSpellPools;
-            _explosionHandler = new(_events.OnProjectileExploded, _events.OnExplosionEnter, _spellsConfig, new UpgradeService(profile.GetUpgrades(), upgradeSystem));
-            _gridPointSelector = new(_autofireConfig, _events.OnProjectileDestinationSelected, _events.OnSessionStart);
-            _projectileThrower = new(_events.OnProjectileDestinationSelected, _events.OnProjectileExploded, _events.OnSpellSelected, weaponPools, spellPools);
-
-            _events = events;
+           _events = events;
             _screenSwitcher = screenSwitcher;
             _screenSwitcher.HideAllScreensInstantly();
             _screenSwitcher.ShowScreen(ScreenType.PreparationForTheGame);
@@ -102,12 +93,8 @@ namespace Code.Main
             _loseScreenActivator?.Dispose();
             _winScreenActivator?.Dispose();
             
-            _weaponRandomGenerator?.Dispose();
+            _onClickProjectileThrower?.Dispose();
             
-            _gridPointSelector?.Dispose();
-            _spellVfxGenerator?.Dispose();
-            _projectileThrower?.Dispose();
-            _explosionHandler?.Dispose();
             _enemies?.Dispose();
             _commonEnemyMover?.Dispose();
         }
