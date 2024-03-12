@@ -18,14 +18,17 @@ namespace Code.Projectiles
         public OnClickProjectileThrower(ConfigHolder configHolder, InGameEvents events, PlayerProfile profile, UpgradeSystem upgradeSystem)
         {
             _weaponRandomGenerator = new WeaponRandomGenerator(configHolder.WeaponSpawnChanceConfig);
-            _spellVfxGenerator = new SpellVfxGenerator(configHolder.SpellsConfig, events.OnSpellSelected, events.OnSessionStart);
-            _explosionHandler = new(events.OnProjectileExploded, events.OnExplosionEnter, configHolder.SpellsConfig, new UpgradeService(profile.GetUpgrades(), upgradeSystem));
+            _weaponRandomGenerator.GenerateWeapon(out _, out _);
+            _weaponRandomGenerator.GenerateWeapon(out Weapon loadedWeapon,out _);
+            _weaponRandomGenerator.SendWeaponToLoadedPositionInstantly(loadedWeapon);
+            
             _gridPointSelector = new GridPointSelector(configHolder.AutofireConfig, events.OnProjectileDestinationSelected, events.OnSessionStart);
-
+            
+            _spellVfxGenerator = new SpellVfxGenerator(configHolder.SpellsConfig, events.OnSpellSelected, events.OnSessionStart);
+            
             var spellPools = _spellVfxGenerator.GetSpellPools;
             _projectileThrower = new(_weaponRandomGenerator, events.OnProjectileDestinationSelected, events.OnProjectileExploded, events.OnSpellSelected, spellPools);
-
-            
+            _explosionHandler = new(events.OnProjectileExploded, events.OnExplosionEnter, configHolder.SpellsConfig, new UpgradeService(profile.GetUpgrades(), upgradeSystem));
         }
 
         public void Dispose()
@@ -35,20 +38,6 @@ namespace Code.Projectiles
             _explosionHandler?.Dispose();
             _gridPointSelector?.Dispose();
             _projectileThrower?.Dispose();
-        }
-    }
-
-    public class ConfigHolder
-    {
-        public AutofireConfig AutofireConfig { get; }
-        public WeaponSpawnChanceConfig WeaponSpawnChanceConfig { get; }
-        public SpellsConfig SpellsConfig { get; }
-
-        public ConfigHolder(AutofireConfig autofireConfig, WeaponSpawnChanceConfig weaponSpawnChanceConfig, SpellsConfig spellsConfig)
-        {
-            AutofireConfig = autofireConfig;
-            WeaponSpawnChanceConfig = weaponSpawnChanceConfig;
-            SpellsConfig = spellsConfig;
         }
     }
 }

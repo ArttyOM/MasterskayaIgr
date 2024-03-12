@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using Code.DebugTools.Logger;
 using Code.Spells;
 using DG.Tweening;
@@ -49,17 +50,7 @@ namespace Code.Projectiles
         private IEnumerator BuildProjectileThenThrow((Vector2Int gridCoords, Vector3 worldPosition) destinationPoint)
         {
             var weapon = _spawnPoint.GetComponentInChildren<Weapon>();
-            //if (weapon is null)
-            // {
-            //    
-            //     float delay = WeaponRandomGenerator.Duration + 0.02f;
-            //     while (delay > 0f)
-            //     {
-            //         delay -= Time.deltaTime;
-            //         yield return null;
-            //     }
-            //     weapon = _spawnPoint.GetComponentInChildren<Weapon>();
-            // }
+
             var spell = _spawnPoint.GetComponentInChildren<Spell>();
             if (spell is null)
             {
@@ -77,14 +68,9 @@ namespace Code.Projectiles
 
             $"destination worldposition = {destinationPoint.worldPosition}".Colored(Color.cyan).Log();
             currentProjectile.transform.DOMove(destinationPoint.worldPosition, DestroyProjectileTime);
-            //     .OnComplete(() =>
-            // {
-            //     "Выстрел совершен".Colored(Color.cyan).Log();
-            //     _onExplosion.OnNext(new ExplosionData(weapon.GetProjectileType, spell.GetSpellType, destinationPoint.worldPosition,destinationPoint.gridCoords));
-            //     _weaponPools[weapon.GetProjectileType].Return(weapon);
-            //     _spellPools[spell.GetSpellType].Return(spell);
-            // });
-            _weaponGenerator.GenerateWeapon(out _, out _);
+
+            _weaponGenerator.GenerateWeapon(out Weapon loadedWeapon, out _);
+            _weaponGenerator.SendWeaponToLoadedPosition(loadedWeapon, new CancellationToken());
             
             float delay = DestroyProjectileTime;
             while (delay > 0f)
