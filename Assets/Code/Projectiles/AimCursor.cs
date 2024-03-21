@@ -13,6 +13,7 @@ namespace Code.Projectiles
 
         public void Hide()
         {
+            if (_spriteRenderer == null) return;
             _spriteRenderer.enabled = false;
         }
 

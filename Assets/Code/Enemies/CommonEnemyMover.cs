@@ -5,8 +5,6 @@ using Code.DebugTools.Logger;
 using MyBox;
 using UniRx;
 using UniRx.Triggers;
-using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace Code.Enemies
 {

@@ -38,7 +38,7 @@ namespace Code.Main
         private void LaunchTutorial()
         {
             var defaultLevel = _serviceLocator.LevelProgression.DefaultLevel;
-            _serviceLocator.LevelLoader.LoadLevelWithSceneIndex(defaultLevel.BuildIndex).Forget();
+            _serviceLocator.LevelLoader.LoadWithPrepare(defaultLevel.BuildIndex);
         }
     }
 }

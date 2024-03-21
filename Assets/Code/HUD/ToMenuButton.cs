@@ -1,7 +1,6 @@
 ﻿using System;
 using Code.DebugTools.Logger;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace Code.HUD
@@ -21,6 +20,7 @@ namespace Code.HUD
             _onMenuEvent = onMenuEvent;
 
             restartButton = gameObject.GetComponent<Button>();
+            restartButton.onClick.RemoveAllListeners();
             restartButton.onClick.AddListener(ToMenu);
         }
 

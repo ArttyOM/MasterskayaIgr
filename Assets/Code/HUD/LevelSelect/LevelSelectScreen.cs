@@ -16,7 +16,7 @@ namespace Code.HUD.LevelSelect
         [SerializeField] private Button _backButton;
         
 
-        public void Init(LevelProgression levelProgression, InGameEvents events, ScreenSwitcher switcher)
+        public void Init(LevelProgression levelProgression, InGameEvents events)
         {
             _backButton.onClick.AddListener(() =>
             {

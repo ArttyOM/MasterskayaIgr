@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using Code.DebugTools.Logger;
 using Code.Events;
-using Code.GameLoop;
 using UniRx;
 using UnityEngine;
 
@@ -14,15 +13,9 @@ namespace Code.HUD
         public ScreenSwitcher(InGameEvents events)
         {
             events.OnSessionStart.Subscribe(OnGameplayStart);
-            events.OnLevelEnd.Subscribe(OnLevelEnd);
             ReInit();
         }
 
-        private void OnLevelEnd(LevelEndResult result)
-        {
-            HideAllScreensInstantly();
-            ShowScreen(result == LevelEndResult.Win ? ScreenType.Victory : ScreenType.Defeat);
-        }
 
         private void OnGameplayStart(int x)
         {
@@ -60,7 +53,6 @@ namespace Code.HUD
                     screen.Show();
                 }    
             }
-            
         }
 
         public void HideScreenInstantly(ScreenType screenType)

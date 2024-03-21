@@ -12,22 +12,23 @@ namespace Code.HUD
         [SerializeField] private Transform _contentRoot;
         private List<SpellBuyItem> _items = new();
         
-        public void Render(SpellBook spellBook, SpellShop shop, ShopSystem shopSystem)
+        public void Render(SpellBook spellBook, SpellDefinitions spellDefinitions, ShopSystem shopSystem)
         {
             RemoveAllItems();
             foreach (var spell in shopSystem.GetSpellOffers())
             {
+                var definition = spellDefinitions.Get(spell);
+                if (definition == null) continue;
                 var spellItem = Instantiate(_itemPrefab, _contentRoot);
                 _items.Add(spellItem);
                 if (spellBook.IsUnlocked(spell))
                 {
-                    spellItem.Render(spell, shop.GetSprite(spell));
+                    spellItem.Render(spell, definition.GetIcon(), spellBook);
                 }
                 else
                 {
-                    spellItem.Render(spell, shop.GetCost(spell), shop.GetSprite(spell), shopSystem);    
+                    spellItem.Render(spell, definition.GetCost(), definition.GetIcon(), shopSystem);    
                 }
-                
             }
         }
 

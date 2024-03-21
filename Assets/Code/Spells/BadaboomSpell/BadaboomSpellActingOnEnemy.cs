@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using Code.DebugTools.Logger;
 using Code.Enemies;
+using Code.Upgrades;
 using MyBox;
 using UniRx;
 using UniRx.Diagnostics;
 using UnityEngine;
 
-namespace Code.Spells
+namespace Code.Spells.BadaboomSpell
 {
     public class BadaboomSpellActingOnEnemy: IDisposable, ISpellActingOnEnemy
     {
@@ -17,11 +18,13 @@ namespace Code.Spells
         private IObservable<(CommonEnemy, SpellExplosion)> _onEnemyExploded;
         private SpellBalanceConfig _megaSpellConfig;
         private SpellBalanceConfig _commonSpellConfig;
+        private UpgradeService _upgradeService;
 
         public void Init(IObservable<(CommonEnemy, SpellExplosion)> onEnemyExploded,
-            SpellBalanceConfig commonSpellBalance, SpellBalanceConfig megaSpellConfig)
+            SpellBalanceConfig commonSpellBalance, SpellBalanceConfig megaSpellConfig, UpgradeService upgradeService)
         {
             _megaSpellConfig = megaSpellConfig;
+            _upgradeService = upgradeService;
             _commonSpellConfig = commonSpellBalance;
             _onEnemyExploded = onEnemyExploded;
             _onEnemyExploadedSubscription = _onEnemyExploded
@@ -44,16 +47,16 @@ namespace Code.Spells
             var explosion = enemySpellPair.explosion;
             var enemy = enemySpellPair.enemy;
             
-
             float damage;
             if (explosion.isMega)
             {
-                damage = _megaSpellConfig.damage;
+                damage = _upgradeService.GetUpgradedValue(UpgradeTarget.SpellDamage, _megaSpellConfig.damage);
             }
             else
             {
-                damage = _commonSpellConfig.damage;
+                damage = _upgradeService.GetUpgradedValue(UpgradeTarget.SpellDamage, _commonSpellConfig.damage);
             }
+            $">>OnExplosion Badaboom с уроном {damage}".Log();
             enemy.GetHit(damage);
         }
     }

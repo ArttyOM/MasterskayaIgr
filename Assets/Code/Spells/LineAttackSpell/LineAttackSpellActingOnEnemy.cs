@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Code.Enemies;
+using Code.Upgrades;
 using UniRx;
 using UnityEngine;
 
@@ -9,6 +10,7 @@ namespace Code.Spells.LineAttackSpell
 {
     public class LineAttackSpellActingOnEnemy: IDisposable, ISpellActingOnEnemy
     {
+        private UpgradeService _upgradeService;
         public void Dispose()
         {
             
@@ -22,14 +24,15 @@ namespace Code.Spells.LineAttackSpell
                 enemy.GetObservableTrigger2DTrigger.OnTriggerEnter2DAsObservable()
                     .Subscribe(onNext: collider2D =>
                     {
-                        enemy.GetHit(spellConfig.damage);
+                        enemy.GetHit(_upgradeService.GetUpgradedValue(UpgradeTarget.SpellDamage, spellConfig.damage));
                     });
             }
         }
 
-        public void Init(IObservable<(CommonEnemy, SpellExplosion)> onEnemyExploded,
-            SpellBalanceConfig commonSpellBalance, SpellBalanceConfig megaSpellConfig)
+        public void Init(IObservable<(CommonEnemy, SpellExplosion)> onEnemyExploded, SpellBalanceConfig commonSpellBalance, SpellBalanceConfig megaSpellConfig,
+            UpgradeService upgradeService)
         {
+            
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Code.Enemies;
+using Code.Upgrades;
 using UniRx;
 using UnityEngine;
 
@@ -14,9 +15,11 @@ namespace Code.Spells.PoisonSpell
         private IObservable<(CommonEnemy, SpellExplosion)> _onEnemyExploded;
         private SpellBalanceConfig _megaSpellConfig;
         private SpellBalanceConfig _commonSpellConfig;
-        
+        private UpgradeService _upgradeService;
+
         public void Dispose()
         {
+            _onEnemyExploadedSubscription?.Dispose();
         }
 
         public void Act(SpellExplosion explosion, SpellBalanceConfig spellConfig)
@@ -24,8 +27,9 @@ namespace Code.Spells.PoisonSpell
         }
 
         public void Init(IObservable<(CommonEnemy, SpellExplosion)> onEnemyExploded,
-            SpellBalanceConfig commonSpellBalance, SpellBalanceConfig megaSpellConfig)
+            SpellBalanceConfig commonSpellBalance, SpellBalanceConfig megaSpellConfig, UpgradeService upgradeService)
         {
+            _upgradeService = upgradeService;
             _megaSpellConfig = megaSpellConfig;
             _commonSpellConfig = commonSpellBalance;
             _onEnemyExploded = onEnemyExploded;
@@ -54,7 +58,7 @@ namespace Code.Spells.PoisonSpell
                 damagePerSecond = _commonSpellConfig.damagePerSecond;
                 duration = _commonSpellConfig.duration;
             }
-            enemy.GetHit(damage);
+            enemy.GetHit(_upgradeService.GetUpgradedValue(UpgradeTarget.SpellDamage, damage));
             
             MainThreadDispatcher
                 .StartUpdateMicroCoroutine(PoisonDebuffMicrocoroutine(enemy ,damagePerSecond, duration));
@@ -62,15 +66,24 @@ namespace Code.Spells.PoisonSpell
         
         private IEnumerator PoisonDebuffMicrocoroutine(CommonEnemy enemy,float damagePerSecond, float duration)
         {
-            float deltaTime;
+            float deltaTime = 0;
             while (duration >= 0 && (enemy is not null))
             {
-                deltaTime = Time.deltaTime;
-                duration -= deltaTime;
-                enemy.GetHit(damagePerSecond * deltaTime);
+                deltaTime += Time.deltaTime;
+                duration -= Time.deltaTime;
+                if (enemy == null) yield break;
+                if (deltaTime >= 1f)
+                {
+                    enemy.GetHit(damagePerSecond * deltaTime);
+                    deltaTime = 0;
+                }
                 yield return null;
             }
-            
+
+            if (deltaTime > 0 && enemy != null)
+            {
+                enemy.GetHit(damagePerSecond * deltaTime);
+            }
         }
     }
 }

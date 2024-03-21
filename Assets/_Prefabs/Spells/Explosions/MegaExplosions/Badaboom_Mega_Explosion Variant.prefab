@@ -23944,6 +23944,10 @@ PrefabInstance:
       propertyPath: isMega
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7352555751725761917, guid: 9f4b48e668ccc624dbfd51c12b0cf9ea, type: 3}
+      propertyPath: spellType
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8421271254812265338, guid: 9f4b48e668ccc624dbfd51c12b0cf9ea, type: 3}
       propertyPath: m_LocalPosition.x
       value: -3.4
@@ -23986,11 +23990,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8939980229732775733, guid: 9f4b48e668ccc624dbfd51c12b0cf9ea, type: 3}
       propertyPath: m_LocalScale.x
-      value: 11.474118
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 8939980229732775733, guid: 9f4b48e668ccc624dbfd51c12b0cf9ea, type: 3}
       propertyPath: m_LocalScale.y
-      value: 11.424719
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 8939980229732775733, guid: 9f4b48e668ccc624dbfd51c12b0cf9ea, type: 3}
       propertyPath: m_LocalPosition.x

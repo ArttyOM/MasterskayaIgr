@@ -1,8 +1,13 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using Code.DebugTools.Logger;
 using Code.Spells;
+using Cysharp.Threading.Tasks;
 using DG.Tweening;
+using JetBrains.Annotations;
 using UniRx;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -12,20 +17,15 @@ namespace Code.Projectiles
 {
     public class WeaponRandomGenerator: IDisposable
     {
-        public WeaponRandomGenerator(WeaponSpawnChanceConfig weaponSpawnChanceConfig,
-            IObservable<SpellType> onSpellSelected, IObservable<int> eventsSessionStart)
+        public const float Duration = 0.04f;
+        
+        public WeaponRandomGenerator(WeaponSpawnChanceConfig weaponSpawnChanceConfig)
         {
             _nextWeaponSpawnPoint = Object.FindObjectOfType<NextWeaponSpawnPoint>();
             _currentWeaponSpawnPoint = Object.FindObjectOfType<CurrentWeaponSpawnPoint>();
             
             _weaponSpawnChanceConfig = weaponSpawnChanceConfig;
             CreatePools(weaponSpawnChanceConfig);
-
-            GenerateWeapon();
-            _onNextWeaponSubsctiption = onSpellSelected
-                .SkipUntil(eventsSessionStart)
-                .Subscribe(_ => GenerateWeapon());
-
         }
         
         private readonly Dictionary<ProjectileType, WeaponPool> _weaponPools = new();
@@ -36,7 +36,7 @@ namespace Code.Projectiles
         private readonly NextWeaponSpawnPoint _nextWeaponSpawnPoint;
         private readonly CurrentWeaponSpawnPoint _currentWeaponSpawnPoint;
 
-        private Weapon _currentWeapon;
+        private Weapon _loadedWeapon;
         private Weapon _nextWeapon;
 
 
@@ -46,6 +46,34 @@ namespace Code.Projectiles
         {
             _onNextWeaponSubsctiption?.Dispose();
         }
+        
+        public void GenerateWeapon(out Weapon loadedWeapon, out Weapon nextWeapon)
+        {
+            ">>GenerateWeapon".Colored(Color.green).Log();
+            
+            ProjectileType typeOfWeapon = GenarateRandomNextWeapon();
+            _loadedWeapon = _nextWeapon;
+            _nextWeapon = _weaponPools[typeOfWeapon].Rent();
+            _nextWeapon.transform.position = _nextWeaponSpawnPoint.transform.position;
+
+            nextWeapon = _nextWeapon;
+            loadedWeapon = _loadedWeapon;
+        }
+
+        public void SendWeaponToLoadedPositionInstantly(Weapon weapon)
+        {
+            var transform = _currentWeaponSpawnPoint.transform;
+            weapon.transform.position = transform.position;
+            weapon.transform.SetParent(transform);
+        }
+        
+        public async void SendWeaponToLoadedPosition(Weapon weapon, CancellationToken cancellationToken)
+        {
+            await weapon.transform.DOMove(_currentWeaponSpawnPoint.transform.position,
+                WeaponRandomGenerator.Duration).WithCancellation(cancellationToken);
+            weapon.transform.SetParent(_currentWeaponSpawnPoint.transform);
+        }
+        
 
         private void CreatePools(WeaponSpawnChanceConfig weaponSpawnChanceConfig)
         {
@@ -59,16 +87,7 @@ namespace Code.Projectiles
             }
         }
 
-        private void GenerateWeapon()
-        {
-            ">>GenerateWeapon".Colored(Color.green);
-            MoveNextWeaponToCurrentPosition();
 
-            ProjectileType typeOfWeapon = GenarateRandomNextWeapon();
-            _nextWeapon = _weaponPools[typeOfWeapon].Rent();
-            
-            _nextWeapon.transform.position = _nextWeaponSpawnPoint.transform.position;
-        }
 
         private ProjectileType GenarateRandomNextWeapon()
         {
@@ -95,18 +114,12 @@ namespace Code.Projectiles
             return ProjectileType.Beaver;
         }
 
-        private void MoveNextWeaponToCurrentPosition()
+        
+        private async Task MoveWeaponToPreparedPosition([NotNull] Weapon weapon)
         {
-            if (_nextWeapon != null)
-            {
-                if (_currentWeapon != null)
-                {
-                    _weaponPools[_currentWeapon.GetProjectileType].Return(_currentWeapon);
-                }
-                _currentWeapon = _nextWeapon;
-                _currentWeapon.transform.SetParent(_currentWeaponSpawnPoint.transform);
-                _currentWeapon.transform.DOMove(_currentWeaponSpawnPoint.transform.position, 0.4f);
-            }
+            //_weaponPools[_currentWeapon.GetProjectileType].Return(_currentWeapon);
+            weapon.transform.SetParent(_currentWeaponSpawnPoint.transform);
+            weapon.transform.DOMove(_currentWeaponSpawnPoint.transform.position, Duration);
         }
     }
 }

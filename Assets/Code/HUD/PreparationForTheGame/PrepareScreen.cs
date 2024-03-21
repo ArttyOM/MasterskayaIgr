@@ -1,6 +1,10 @@
-﻿using Code.Main;
+﻿using System;
+using System.Threading.Tasks;
+using Code.DebugTools.Logger;
+using Code.Main;
 using Code.Spells;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Code.HUD
 {
@@ -10,37 +14,42 @@ namespace Code.HUD
         [SerializeField] private ShopSpellsView _shopSpellsView;
         [SerializeField] private WalletView _walletView;
         [SerializeField] private UpgradesListView _upgradesView;
+        [SerializeField] private Button _startButton;
         
         private ServiceLocator _services;
         
-        public void Start()
+        public async void OnEnable()
         {
+            while (ServiceLocator.Instance == null)
+            {
+                await Task.Yield();
+            }
             _services = ServiceLocator.Instance;
-            _selectedSpells.SpellSelected += OnSpellSelected;
-            _upgradesView.UpgradeBought += OnUpgradeBought;
+            _startButton.onClick.RemoveAllListeners();
+            _startButton.onClick.AddListener(StartGame);
+            _services.ShopSystem.Changed += Render;
+            var spellBook = _services.Profile.GetSpellBook();
+            spellBook.Changed += Render;
             Render();
         }
 
-        private void OnUpgradeBought()
+        private void StartGame()
         {
-            _upgradesView.Render(_services.ShopSystem);
+            ">>StartSession sending event: onStartSessionEvent".Colored(Color.gray).Log();
+            _services.Events.OnSessionStart.OnNext(1);
         }
-
         private void Render()
         {
-            _selectedSpells.Render(_services.Profile.GetSpellBook());
+            _selectedSpells.Render(_services.Profile.GetSpellBook(), _services.SpellShop);
             _shopSpellsView.Render(_services.Profile.GetSpellBook(), _services.SpellShop, _services.ShopSystem);
             _upgradesView.Render(_services.ShopSystem);
-            _walletView.Render(_services.Profile.GetWallet());
+            _walletView.Render(_services.Profile.GetWallet(), _services.DropRewardsService);
         }
 
-        private void OnSpellSelected(SpellType spell, int slotIndex)
+        private void OnDisable()
         {
-            var spellBook = _services.Profile.GetSpellBook();
-            if (spellBook.TrySelect(spell, slotIndex))
-            {
-                Render();
-            }
+            if(_services != null)
+                _services.ShopSystem.Changed -= Render;
         }
     }
 }

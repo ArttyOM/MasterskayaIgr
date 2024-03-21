@@ -11,12 +11,14 @@ namespace Code.Events
     public class InGameEvents : IDisposable
     {
         public readonly Subject<Unit> OnStartSimulation = new();
-
-        
         
         public readonly Subject<int> OnLevelRestart = new();
         public readonly Subject<int> OnMenu = new();
         public readonly Subject<int> OnLevelStart = new();
+        
+        public readonly Subject<Unit> OnSettingsRequested = new();
+        public readonly Subject<Unit> OnGuideRequested = new();
+        
         public readonly Subject<Unit> OnLevelSelection = new();
         // Even for start game session after preparation - run enemies waves
         public readonly Subject<int> OnSessionStart = new();
@@ -28,7 +30,6 @@ namespace Code.Events
         public readonly Subject<ExplosionData> OnProjectileExploded =  new();
         public readonly Subject<(CommonEnemy, SpellExplosion)> OnExplosionEnter = new();
         public readonly Subject<CommonEnemy> OnEnemyDead = new();
-
 
         public void Dispose()
         {

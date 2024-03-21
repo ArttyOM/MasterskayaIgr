@@ -18,10 +18,10 @@ MonoBehaviour:
   - weaponPrefab: {fileID: 3713656484832161140, guid: 4eb3bcabc0e21cb45b901f05ff224958, type: 3}
     priority: 1
   - weaponPrefab: {fileID: 3713656484832161140, guid: d3f048526bca6a742bbd41bf8368254c, type: 3}
-    priority: 1
+    priority: 0
   - weaponPrefab: {fileID: 3713656484832161140, guid: d9a9eea7cdb3ddd489b4c5ea37e4a452, type: 3}
     priority: 1
   - weaponPrefab: {fileID: 3713656484832161140, guid: b6d58a919b8673249bb2ecb63d0e0251, type: 3}
-    priority: 1
+    priority: 0
   - weaponPrefab: {fileID: 3713656484832161140, guid: 61ad9fddca0261e449ee0c343736adc6, type: 3}
-    priority: 1
+    priority: 0

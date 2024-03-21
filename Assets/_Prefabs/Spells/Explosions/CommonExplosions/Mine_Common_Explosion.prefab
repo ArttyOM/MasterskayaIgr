@@ -14091,7 +14091,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1229041976549247883, guid: 5b23ce1e8ce140f4182e4076025af347, type: 3}
       propertyPath: m_Color.a
-      value: 0.58431375
+      value: 0.09803922
       objectReference: {fileID: 0}
     - target: {fileID: 7670719965070498834, guid: 5b23ce1e8ce140f4182e4076025af347, type: 3}
       propertyPath: m_Name
@@ -14139,7 +14139,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8397531402381156958, guid: 5b23ce1e8ce140f4182e4076025af347, type: 3}
       propertyPath: spellType
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

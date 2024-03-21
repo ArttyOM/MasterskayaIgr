@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Code.HUD;
 using Code.Saves;
 using Code.Spells;
 using Code.Upgrades;
@@ -12,10 +13,11 @@ namespace Code.PregameShop
     {
         private const int MaxUpgradeCount = 4;
         private readonly PlayerProfile _player;
-        private readonly SpellShop _spellShop;
+        private readonly SpellDefinitions _spellShop;
         private readonly UpgradeSystem _upgradeSystem;
+        public event Action Changed;
 
-        public ShopSystem(PlayerProfile player, SpellShop spellShop, UpgradeSystem upgradeSystem)
+        public ShopSystem(PlayerProfile player, SpellDefinitions spellShop, UpgradeSystem upgradeSystem)
         {
             _player = player;
             _spellShop = spellShop;
@@ -31,11 +33,7 @@ namespace Code.PregameShop
 
         public IEnumerable<SpellType> GetSpellOffers()
         {
-            foreach (var spell in Enum.GetValues(typeof(SpellType)))
-            {
-                var spellType = (SpellType)spell;
-                yield return spellType;
-            }
+            return _spellShop.GetAll();
         }
 
 
@@ -46,16 +44,18 @@ namespace Code.PregameShop
             if (_player.GetWallet().TrySpend(upgradeDefinition.GetCost()))
             {
                 _player.GetUpgrades().TryUpgrade(upgradeDefinition.GetID());
+                Changed?.Invoke();
             }
         }
 
-        public bool CanBuy(SpellType spell) => _player.GetWallet().CanSpend(_spellShop.GetCost(spell));
+        public bool CanBuy(SpellType spell) => _player.GetWallet().CanSpend(_spellShop.Get(spell).GetCost());
 
         public void Buy(SpellType spell)
         {
-            if (_player.GetWallet().TrySpend(_spellShop.GetCost(spell)))
+            if (_player.GetWallet().TrySpend(_spellShop.Get(spell).GetCost()))
             {
                 _player.GetSpellBook().TryUnlock(spell);
+                Changed?.Invoke();
             }
         }
     }

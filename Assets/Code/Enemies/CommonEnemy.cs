@@ -1,11 +1,11 @@
 ﻿using System;
 using Code.DebugTools.Logger;
+using Code.Main;
 using Code.Spells;
 using UniRx;
-using UniRx.Diagnostics;
 using UniRx.Triggers;
 using UnityEngine;
-using UnityEngine.Serialization;
+using UnityEngine.UI;
 
 namespace Code.Enemies
 {
@@ -17,6 +17,7 @@ namespace Code.Enemies
         private float _maxHP = 20f;
         private float _baseSpeed;
         public float currentSpeed;
+        private Slider _hpVisual;
 
         private IDisposable _onTriggerEnterSubscription;
         private IDisposable _onCollisionStaySubscription;
@@ -38,7 +39,9 @@ namespace Code.Enemies
             if (_rigidbody2D is null) _rigidbody2D = FindKinematicRigidbody();
             GetObservableCollision2DTrigger = GetComponentInChildren<ObservableCollision2DTrigger>();
             GetObservableTrigger2DTrigger = GetComponentInChildren<ObservableTrigger2DTrigger>();
-
+            _hpVisual = GetComponentInChildren<Slider>();
+            _hpVisual.value = 1f;
+            
             _baseSpeed = config.moveSpeed;
             currentSpeed = _baseSpeed;
             _maxHP = config.hitPoints;
@@ -47,12 +50,12 @@ namespace Code.Enemies
             _onTriggerEnterSubscription = GetObservableTrigger2DTrigger.OnTriggerEnter2DAsObservable()
                 .Subscribe(trigger =>
                 {
-                    var explosion = trigger.GetComponent<SpellColliderProvider>().GetComponentInParent<SpellExplosion>();
+                    var explosion = trigger.GetComponentInChildren<SpellColliderProvider>().GetComponentInParent<SpellExplosion>();
                     if (explosion is not null)
                     {
                         _onExplosionEnter.OnNext(new (this,explosion));
                     }
-                    "OnTriggerEnter>>".Colored(Color.red).Log();
+                    ">>OnTriggerEnter".Colored(Color.red).Log();
                 });
 
             _onCollisionStaySubscription = GetObservableCollision2DTrigger.OnCollisionStay2DAsObservable()
@@ -76,14 +79,23 @@ namespace Code.Enemies
             }
         }
 
-        public void GetHit(float damage)
+        public bool _dead;
+
+        public void GetHit(float damage, bool impact = true)
         {
             var name = this.name;
+            var damageFloored = Mathf.FloorToInt(damage);
+            if(damageFloored > 0 && impact)
+                ServiceLocator.Instance.DamageNumbers.Spawn(damageFloored, this.transform.position);
             $">>GetHit {name} got {damage} damage".Colored(Color.cyan).Log();
 
             _currentHP -= damage;
-            if (_currentHP <= 0)
+
+            _hpVisual.value = _currentHP / _maxHP;
+            
+            if (_currentHP <= 0 && !_dead)
             {
+                _dead = true;
                 Destroy(this.gameObject);
                 _onEnemyDead.OnNext(this);
             }

@@ -1,4 +1,5 @@
 using Code.Projectiles;
+using MyBox;
 using UnityEngine;
 
 namespace Code.Spells
@@ -13,8 +14,11 @@ namespace Code.Spells
         [SerializeField] public ProjectileType megaCastWeaponType;
 
         [SerializeField] public SpellBalanceConfig commonSpellBalance;
+        
+        [ConditionalField(true, nameof(IsSpellWithMega))]
         [SerializeField] public SpellBalanceConfig megaSpellBalance;
-
+        private bool IsSpellWithMega() => megaCastWeaponType != ProjectileType.None;
+        
         public void OnBeforeSerialize()
         {
             commonSpellBalance.spellType = spellType;

@@ -2,11 +2,12 @@
 {
     public enum ProjectileType
     {
-        Bottle,
-        Sneaker,
-        Beaver,
-        Propeller,
-        Container,
-        Tire,
+        None = 0,
+        Bottle = 1,
+        Sneaker = 2,
+        Beaver = 3,
+        Propeller = 4,
+        Container = 5,
+        Tire = 6,
     }
 }

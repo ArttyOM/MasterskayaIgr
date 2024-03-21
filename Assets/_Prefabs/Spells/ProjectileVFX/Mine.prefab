@@ -10,11 +10,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -122031665928744457, guid: 337a1ccd9e38b5843b5deb5833f953b8, type: 3}
       propertyPath: _spellType
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 4252794239918870732, guid: 337a1ccd9e38b5843b5deb5833f953b8, type: 3}
       propertyPath: m_Name
-      value: Poision 2
+      value: Mine
       objectReference: {fileID: 0}
     - target: {fileID: 6753542712930060112, guid: 337a1ccd9e38b5843b5deb5833f953b8, type: 3}
       propertyPath: m_LocalPosition.x

@@ -14,26 +14,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyConfigs:
   - enemyType: 0
-    _prefab: {fileID: 3059764289421639699, guid: 22a9f60eb28194f39932e8926869437a, type: 3}
+    prefab: {fileID: 0}
     enemyStats:
       name: zombie
       destroyInSec: 60
-      hitPoints: 40
+      hitPoints: 200
       moveSpeed: 1
+      KillReward: 15
       damagePerSecond: 0
   - enemyType: 1
-    _prefab: {fileID: 7941115708784967379, guid: ad6b0d10946d145c5b99d24b70d0c932, type: 3}
+    prefab: {fileID: 0}
     enemyStats:
       name: soldier
-      destroyInSec: 120
-      hitPoints: 20
+      destroyInSec: 100
+      hitPoints: 60
       moveSpeed: 2
+      KillReward: 5
       damagePerSecond: 0
   - enemyType: 2
-    _prefab: {fileID: 2320970803429265612, guid: 2f91ca8780e4c4289819086874b3a1e8, type: 3}
+    prefab: {fileID: 0}
     enemyStats:
       name: rider
       destroyInSec: 120
-      hitPoints: 20
+      hitPoints: 40
       moveSpeed: 3
+      KillReward: 10
       damagePerSecond: 0
