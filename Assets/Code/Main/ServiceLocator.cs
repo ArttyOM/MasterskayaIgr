@@ -37,6 +37,7 @@ namespace Code.Main
         [SerializeField] private GameplayScreen _gameplayScreen;
         [SerializeField] private PrepareScreen _prepareScreen;
         [SerializeField] private DamageNumbersManager _damageNumbers;
+        [SerializeField] private AppodealManager _appodealManager;
         
         
         
@@ -74,6 +75,7 @@ namespace Code.Main
 
         public PrepareScreen PrepareScreen => _prepareScreen;
         public GameplayScreen GameplayScreen => _gameplayScreen;
+        public AppodealManager AppodealManager => _appodealManager;
 
         public SpellsConfig SpellsConfig;
 

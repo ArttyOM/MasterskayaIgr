@@ -36,6 +36,7 @@ Transform:
   - {fileID: 2323104381832727082}
   - {fileID: 6007792606397764808}
   - {fileID: 8420128330299630631}
+  - {fileID: 3858077183921823597}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3386472195450378218
@@ -66,6 +67,51 @@ MonoBehaviour:
   _damageNumbers: {fileID: 8133980162647989093}
   _defaultProfile: {fileID: 11400000, guid: f79130e7b1d57244c95def84023d4a8c, type: 2}
   SpellsConfig: {fileID: 11400000, guid: 5d318abb0db3b8b4f905d82cf98033fd, type: 2}
+--- !u!1 &7203088837534259426
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3858077183921823597}
+  - component: {fileID: 2885536508275190081}
+  m_Layer: 0
+  m_Name: AppodealManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3858077183921823597
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7203088837534259426}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1787528897753967554}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2885536508275190081
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7203088837534259426}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6994a1f63c2aff441856adc12689fcd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  testingMode: 1
 --- !u!1001 &1444949659247824223
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -1,5 +1,8 @@
 ﻿using System;
+using AppodealAds.Unity.Api;
+using AppodealAds.Unity.Common;
 using Code.DebugTools.Logger;
+using Code.Main;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -28,7 +31,12 @@ namespace Code.HUD
         private void Restart()
         {
             ">>Restart sending event: onRestartEvent".Colored(Color.gray).Log();
+
+            if(Appodeal.isLoaded(Appodeal.INTERSTITIAL)) {
+                Appodeal.show(Appodeal.INTERSTITIAL);
+            }
             _onRestartEvent.OnNext(_sceneIndexToRestart);
         }
+        
     }
 }

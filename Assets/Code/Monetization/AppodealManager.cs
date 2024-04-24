@@ -5,7 +5,7 @@ using TMPro;
 public class AppodealManager : MonoBehaviour, IRewardedVideoAdListener
 {
     // Ключ приложения 
-    private const string APP_KEY = "";
+    private const string APP_KEY = "6229ebe3dc9363ce9ed42a4539dded8fc5f39ea263aa59b7";
     
     //Режим тестовой рекламы
     [SerializeField] private bool testingMode;
@@ -35,6 +35,8 @@ public class AppodealManager : MonoBehaviour, IRewardedVideoAdListener
         Appodeal.initialize(APP_KEY, Appodeal.INTERSTITIAL| Appodeal.REWARDED_VIDEO);
         
         Appodeal.setRewardedVideoCallbacks(this);
+
+        Appodeal.setAutoCache(Appodeal.INTERSTITIAL, true);
     }
 
     #region Rewarded Video callback handlers
